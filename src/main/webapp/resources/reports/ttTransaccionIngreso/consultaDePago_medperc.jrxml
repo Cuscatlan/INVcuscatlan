@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consultaDePago_medperc" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e4159622-22b9-4d49-ad4c-10a489ebd390">
+	<property name="ireport.zoom" value="3.1384283767210093"/>
+	<property name="ireport.x" value="933"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_SK_INGRESO" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT NVL(EFEC,0) AS EFECTIVO, NVL(CHQ_PRO,0) + NVL(CHQ_AJE,0) AS CHEQUES, NVL(TJE_CRED,0) + NVL(TJE_DEB,0) AS TARJETAS, NVL(NCTP,0) AS NCTP,
+              NVL(LOTE,0) + NVL(ATF,0) AS LOTE_ATF,
+              NVL(EFEC,0)+ NVL(CHQ_PRO,0) + NVL(CHQ_AJE,0) + NVL(TJE_CRED,0) + NVL(TJE_DEB,0) +  NVL(NCTP,0)+ NVL(LOTE,0) + NVL(ATF,0) AS TOTAL FROM
+    (
+         SELECT  DIS.SK_MEDIO_PERCEPCION as SK_MEDIO_PERCEPCION, DIS.MONTO AS MONTO FROM
+        TT_DIST_DET_MEDP DIS, TT_INGRESOS_DETALLE DET
+        WHERE DIS.SK_INGRESO_DETALLE = DET.SK_INGRESO_DETALLE
+
+           AND DET.SK_INGRESO = $P{P_SK_INGRESO}
+      )
+      PIVOT(
+        SUM(MONTO)
+        FOR SK_MEDIO_PERCEPCION IN (
+        1 AS "EFEC",
+        2 AS "CHQ_PRO",
+        3 AS "CHQ_AJE",
+        4 AS "TJE_CRED",
+        5 AS "TJE_DEB",
+        6 AS "NCTP",
+        7 AS "LOTE" ,
+        11 AS "ATF")
+      )]]>
+	</queryString>
+	<field name="EFECTIVO" class="java.math.BigDecimal"/>
+	<field name="CHEQUES" class="java.math.BigDecimal"/>
+	<field name="TARJETAS" class="java.math.BigDecimal"/>
+	<field name="NCTP" class="java.math.BigDecimal"/>
+	<field name="LOTE_ATF" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="10" backcolor="#CCCCCC" uuid="fbc18ba6-5ade-4712-bbbc-e750a1eff08c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="10" width="555" height="20" uuid="31f7a07b-c7a2-4631-9857-0a0cf22e7776"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEDIOS DE PERCEPCION]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="524" y="0" width="32" height="20" backcolor="#CCCCCC" uuid="e3d670f5-1e5f-43d9-bde0-079413f8e6fc"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="88" height="20" uuid="4caaafef-026c-4ab4-83d2-1bf634b53816"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="174" y="0" width="88" height="20" uuid="ff0b0e2c-abbf-4e90-83bd-3ec578d9fc16"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TAR. CRED/DEB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="436" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="89184f85-b446-4edf-af00-efb074c15a41"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[TOTAL PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="0" width="88" height="20" uuid="66eec5e7-05d0-463b-a631-e9e0c2932775"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NCTP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="0" width="88" height="20" uuid="70fe7e3d-9915-4834-81d2-d5a0be67ecc1"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LOTE/ATF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="0" width="88" height="20" uuid="45ef1ef8-440d-4070-8f20-d9054913b332"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[CHEQUES]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="20" width="525" height="15" backcolor="#CCCCCC" uuid="ec6118d8-9cd6-4c8e-8c84-260c11535dca"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="c8bdcd62-0bbf-428c-a949-105f829b7095"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EFECTIVO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="174" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2014b431-a389-4778-bf51-630d07bc8a28"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TARJETAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="261" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="c0362a07-f783-4ae5-8596-5b9fe87a62d0"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCTP}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="348" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="588fc3ef-5527-40ce-9fc0-fbaa47831ede"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOTE_ATF}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="87" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a840cda9-007e-454f-ab56-94114041be5b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CHEQUES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="436" y="0" width="88" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e041ec86-9231-4ea1-9f44-502112b9f47b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="525" y="0" width="31" height="35" backcolor="#CCCCCC" uuid="c2f76601-c9c6-4b46-bf99-eac13f722303"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</detail>
+</jasperReport>

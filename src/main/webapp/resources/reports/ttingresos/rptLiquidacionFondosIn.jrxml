@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptLiquidacionFondos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="94a465d4-b816-45ce-8e8b-f112ce4b44e7">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="154"/>
+	<parameter name="P_F_INI" class="java.lang.String"/>
+	<parameter name="P_F_FIN" class="java.lang.String"/>
+	<parameter name="P_USER" class="java.lang.String"/>
+	<parameter name="cadena" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_COLECTURIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select reg.* from
+(
+select
+b.n_orden_report
+,'Fondo General' as fondo
+,a.importe
+,b.descripcion from
+(
+select
+reg.sk_tipo_fondo
+,reg.descripcion
+,sum(importe) as importe
+from
+(
+select
+ing.sk_tipo_fondo
+,mp.sk_medio_percepcion as descripcion
+,mp.importe
+from
+tt_ingresos_medios_perc mp
+,tt_ingresos ing
+,ct_colecturias_finales cf
+where
+mp.sk_transaccion_ingreso=ing.sk_transaccion_ingreso
+$P!{cadena}
+$P!{P_COLECTURIA}
+and sk_tipo_fondo=1
+and mp.sk_medio_percepcion in(1,14,4,7,6)
+)reg
+group by descripcion,reg.sk_tipo_fondo
+)a right join
+(
+select sk_medio_percepcion,descripcion,n_orden_report from ct_medio_percepcion where sk_medio_percepcion in(1,14,4,7,6)
+)b
+on
+a.descripcion=b.sk_medio_percepcion
+
+
+union all
+
+
+select
+b.n_orden_report,
+'Fondos Ajenos en Custodia' as fondo
+,a.importe
+,b.descripcion from
+(
+select
+reg.sk_tipo_fondo
+,reg.descripcion
+,sum(importe) as importe
+from
+(
+select
+--(select descripcion from ct_medio_percepcion where  sk_medio_percepcion= mp.sk_medio_percepcion) as descripcion
+ing.sk_tipo_fondo
+,mp.sk_medio_percepcion as descripcion
+,mp.importe
+from
+tt_ingresos_medios_perc mp
+,tt_ingresos ing
+,ct_colecturias_finales cf
+where
+mp.sk_transaccion_ingreso=ing.sk_transaccion_ingreso
+$P!{cadena}
+$P!{P_COLECTURIA}
+and sk_tipo_fondo=2
+and mp.sk_medio_percepcion in(1,14,4,7,6)
+)reg
+group by descripcion,reg.sk_tipo_fondo
+)a right join
+(
+select sk_medio_percepcion,descripcion,n_orden_report from ct_medio_percepcion where sk_medio_percepcion in(1,14,4,7,6)
+)b
+on
+a.descripcion=b.sk_medio_percepcion
+
+
+union all
+
+
+select
+b.n_orden_report,
+'Fondo de Actividades Especiales' as fondo
+,a.importe
+,b.descripcion from
+(
+select
+reg.sk_tipo_fondo
+,reg.descripcion
+,sum(importe) as importe
+from
+(
+select
+--(select descripcion from ct_medio_percepcion where  sk_medio_percepcion= mp.sk_medio_percepcion) as descripcion
+ing.sk_tipo_fondo
+,mp.sk_medio_percepcion as descripcion
+,mp.importe
+from
+tt_ingresos_medios_perc mp
+,tt_ingresos ing
+,ct_colecturias_finales cf
+where
+mp.sk_transaccion_ingreso=ing.sk_transaccion_ingreso
+$P!{cadena}
+$P!{P_COLECTURIA}
+and sk_tipo_fondo=3
+and mp.sk_medio_percepcion in(1,14,4,7,6)
+)reg
+group by descripcion,reg.sk_tipo_fondo
+)a right join
+(
+select sk_medio_percepcion,descripcion,n_orden_report from ct_medio_percepcion where sk_medio_percepcion in(1,14,4,7,6)
+)b
+on
+a.descripcion=b.sk_medio_percepcion)reg
+group by
+fondo,n_orden_report,importe,descripcion
+order by
+fondo]]>
+	</queryString>
+	<field name="N_ORDEN_REPORT" class="java.math.BigDecimal"/>
+	<field name="FONDO" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<variable name="total" class="java.math.BigDecimal" resetType="Group" resetGroup="FONDO" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+	</variable>
+	<group name="FONDO">
+		<groupExpression><![CDATA[$F{FONDO}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField>
+					<reportElement x="0" y="0" width="340" height="20" uuid="19949f29-5f1d-4896-96c8-65a3598d510b"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FONDO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="29">
+				<staticText>
+					<reportElement x="0" y="0" width="240" height="20" uuid="b3c570d7-dd79-4c52-a227-2a073eeab5b9"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField pattern="###0.00" isBlankWhenNull="true">
+					<reportElement x="240" y="0" width="100" height="20" uuid="da1f0b3f-97b8-49ce-a0dd-c3d0ab4e7fde"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA[$V{total}==null?0.00:$V{total}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="e46e9c32-99fd-4176-bde2-aa82335a4aa2"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LIQUIDACION POR FONDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20" uuid="768cd33f-b22d-4787-8455-9f0cfccdb35d"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="555" height="20" uuid="23885dac-cbba-4226-a8c2-62cd70094009"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUENTA BANCARIA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="183" y="60" width="100" height="20" uuid="05d58a27-254e-41df-a8d7-d2875423b8f9"/>
+				<textFieldExpression><![CDATA[$P{P_F_INI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="60" width="24" height="20" uuid="06346c55-1d1d-45d1-a961-6b006cf872cb"/>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="153" y="60" width="30" height="20" uuid="2fd25a3c-371b-4008-8abb-d4e8fa777e7d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="317" y="60" width="100" height="20" uuid="f5753a89-2b7f-42b0-a5eb-4a06a730fa70"/>
+				<textFieldExpression><![CDATA[$P{P_F_FIN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="240" height="24" uuid="7135aaba-90c6-4118-ab10-e052b4feb8db"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="100" height="24" uuid="b2b8a9bc-e530-47e9-8628-d7c7e802585d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARCIAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="-1" width="240" height="23" uuid="b79649d6-c7ed-47bc-9036-e86925af9bf6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="240" y="0" width="100" height="22" uuid="acd9f4d4-7156-407c-ba87-fe233897c8ad"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{IMPORTE}==null?0.00:$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="456" y="0" width="59" height="20" uuid="f573aeca-3cee-4ad2-9e52-ab2351a207b2"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="10ba491f-a36a-4a57-87f1-febcfbaea723"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENERADO POR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="515" y="0" width="37" height="20" uuid="d08ab9bc-a744-4045-ae52-755f2fc37f41"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="68143ee0-1086-47c2-8eb9-c463fc7780a7"/>
+				<textFieldExpression><![CDATA[$P{P_USER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="18" splitType="Stretch"/>
+	</summary>
+</jasperReport>

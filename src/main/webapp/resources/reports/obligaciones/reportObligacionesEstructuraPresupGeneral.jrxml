@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportObligacionesEstructuraPresupGeneral" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="42523a69-e391-4c22-bde2-4c73ff17a5be">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct
+SUM( NVL((select teo.monto-sum(monto_pagar) from tt_solicitud_pago_doc where  sk_documento_respaldo_enc=tdr.sk_documento_respaldo_enc and sk_especifico_obl=teo.sk_especifico_obl),0)) as totalGeneral
+from
+TC_OBLIGACION tco,
+CC_ESTADO_OBLIGACION ceo,
+TC_DOCUMENTO_RESPALDO_ENC tdr,
+TC_OBL_BENEF tob,
+TT_BENEFICIARIO ct,
+TC_ESPECIFICO_OBL teo,
+VTB_TRX_SALDOSCOMPRO VTT,
+VTB_CI_FUENTE_FINANC VFF,
+VTB_CP_PROG_PRESUP cpp,
+VTB_CP_SUB_PRG_PRES csp,
+VTB_CP_ACTIVIDAD cat,
+VTB_CP_PROY_INVE_PUBL vpo,
+VTB_CI_CONVENIO con
+WHERE
+tco.sk_obligacion          =tdr.SK_OBLIGACION
+AND tco.SK_ESTADO_OBLIGACION=ceo.SK_ESTADO_OBLIGACION
+AND tco.ID_DOC_COMPROMISO        =VTT.DOCID
+AND tco.SK_OBLIGACION            = TOB.SK_OBLIGACION
+AND tob.SK_BENEFICIARIO          =ct.SK_BENEFICIARIO
+AND tdr.sk_obligacion=teo.sk_obligacion
+and tdr.SK_DOCUMENTO_RESPALDO_ENC=teo.SK_DOCUMENTO_RESPALDO_ENC
+AND VTT.IDFUENTEFINAN            =VFF.SK_FUENTE_FINANC
+AND vtt.idprograma               =cpp.sK_PROG_PRESUP
+AND vtt.idsubprograma            =csp.sprg_id
+AND vtt.idactividad              =cat.id
+AND vtt.idproyecto = vpo.proy_id
+AND VTT.IDCONVENIO=con.id
+AND (  $P{institucion}             IS NULL
+OR $P{institucion}                 = tco.sk_institucion)
+AND (  $P{ejercicio}               IS NULL
+OR $P{ejercicio}                    = tco.EJERCICIO)]]>
+	</queryString>
+	<field name="TOTALGENERAL" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="671" y="0" width="60" height="20" backcolor="#CCCCCC" uuid="39d119ed-cbd7-4adc-b940-3aa9c47b71f4"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TOTAL GENERAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="731" y="0" width="60" height="20" backcolor="#CCCCCC" uuid="82943f01-253d-47d5-a160-f7e8c4955368"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTALGENERAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

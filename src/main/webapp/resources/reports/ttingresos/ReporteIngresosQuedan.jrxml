@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteIngresosQuedan" language="groovy" pageWidth="500" pageHeight="561" whenNoDataType="AllSectionsNoDetail" columnWidth="460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49b90ec4-eec4-48b5-829e-56793e44066b">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_TRANSACCION" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_NCTP" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+    (select numero_quedan from DBASITEP.NC_NOTA_CRED@SAFI2SITEP where nume_nota_cred = $P{P_NCTP}) as num_quedan,
+    (select fecha_ingreso from tt_ingresos where sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as fecha_ingreso,
+    (select caja from tt_ingresos where sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as caja,
+    (select r.s_nombres || ' ' || r.s_1ape_rasoc || ' ' || r.s_2ape_abrev from VIEW_VW_RC_RUCSAFI r, DBASITEP.NC_NOTA_CRED@SAFI2SITEP n where r.nit = n.nit and rownum = 1) as razon,
+    (select sum(monto) from tt_dist_det_medp d, tt_ingresos_detalle t, tt_ingresos i
+      where d.sk_ingreso_detalle = t.sk_ingreso_detalle and t.sk_ingreso = i.sk_ingreso
+      and i.sk_transaccion_ingreso = $P{P_TRANSACCION} and d.sk_medio_percepcion = 6) as sum_monto,
+    (select a.s_nombres_usuario || ' ' || a.s_apellidos_usuario from ad_usuario a, tt_ingresos t
+      where a.c_cod_usuario = t.s_crea_usuario and t.sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as usuario,
+    (select c.domicilio from ct_colecturias_finales c, ct_usuarios_colecturia u, tt_transaccion_ingreso i
+      where i.sk_usuarios_colecturia = u.sk_usuarios_colecturia and u.sk_colecturias_finales = c.sk_colecturias_finales
+      and i.sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as domicilio,
+    (select to_char(fecha_ingreso, 'Month') from tt_ingresos  where sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as mes,
+    (select pr_num_a_letras.NumTex((select to_char(fecha_ingreso, 'YY') from tt_ingresos  where sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1)) from dual) as anio,
+    (select nit from DBASITEP.NC_NOTA_CRED@SAFI2SITEP where nume_nota_cred = $P{P_NCTP}) as nit_nctp,
+    (select nume_nota_cred from DBASITEP.NC_NOTA_CRED@SAFI2SITEP where nume_nota_cred = $P{P_NCTP}) as cod_nctp,
+    (select pr_num_a_letras.NumTex((select saldo from DBASITEP.NC_NOTA_CRED@SAFI2SITEP where nume_nota_cred = $P{P_NCTP})) from dual) as saldo_letra_1,
+    (select saldo from DBASITEP.NC_NOTA_CRED@SAFI2SITEP where nume_nota_cred = $P{P_NCTP}) as saldo_num,
+    (select c.denominacion_colecturia from ct_colecturias_finales c, ct_usuarios_colecturia u, tt_transaccion_ingreso i
+      where i.sk_usuarios_colecturia = u.sk_usuarios_colecturia and u.sk_colecturias_finales = c.sk_colecturias_finales
+      and i.sk_transaccion_ingreso = $P{P_TRANSACCION} and rownum = 1) as den_colecturia,
+    d.monto, i.num_documento, v.descripcion from tt_dist_det_medp d, tt_ingresos_detalle t,
+    tt_ingresos i, tt_transaccion_ingreso ti, vtb_ci_clasif_ing_gas v
+where d.sk_ingreso_detalle = t.sk_ingreso_detalle and t.sk_ingreso = i.sk_ingreso
+  and i.sk_transaccion_ingreso = ti.sk_transaccion_ingreso and  t.sk_claeco_ing_gas = v.sk_claeco_ing_gas
+  and ti.sk_transaccion_ingreso = $P{P_TRANSACCION} and d.sk_medio_percepcion = 6]]>
+	</queryString>
+	<field name="NUM_QUEDAN" class="java.math.BigDecimal"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="CAJA" class="java.math.BigDecimal"/>
+	<field name="RAZON" class="java.lang.String"/>
+	<field name="SUM_MONTO" class="java.math.BigDecimal"/>
+	<field name="USUARIO" class="java.lang.String"/>
+	<field name="DOMICILIO" class="java.lang.String"/>
+	<field name="MES" class="java.lang.String"/>
+	<field name="ANIO" class="java.lang.String"/>
+	<field name="NIT_NCTP" class="java.lang.String"/>
+	<field name="COD_NCTP" class="java.lang.String"/>
+	<field name="SALDO_LETRA_1" class="java.lang.String"/>
+	<field name="SALDO_NUM" class="java.math.BigDecimal"/>
+	<field name="DEN_COLECTURIA" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="NUM_DOCUMENTO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="88" y="3" width="295" height="12" uuid="86382061-5236-4f7b-9290-1e02fdc7bcb4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="27" width="387" height="12" uuid="11329e61-7fdf-49cd-b72c-9e2a59de6afa"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<text><![CDATA[(No negociable)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="82" y="15" width="339" height="12" uuid="f08e9973-0c0d-4fcb-b9a8-eae2d97ffc47"/>
+				<textElement>
+					<font fontName="Verdana" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA['QUEDAN DE NOTA DE CREDITO DEL TESORO PUBLICO No. ' + $F{NUM_QUEDAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="163" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="91" width="88" height="13" uuid="13385e94-b686-4b79-b8ea-90c951d61922"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="104" width="88" height="13" uuid="4c1320fa-e0d7-42cc-9292-20c2ff960726"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Número de Caja:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="117" width="88" height="13" uuid="048037b1-db45-4404-a959-2d1c430f7a07"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre del Titular:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="130" width="88" height="13" uuid="1e537bbe-3ab5-4274-b7b2-08d08e4efc62"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[NIT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="152" width="146" height="11" uuid="58f976b9-a383-4222-9efa-35bf165b3878"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[NUMERO DE DOCUMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="152" width="210" height="11" uuid="996cb473-36ce-48f3-aa6a-00a1ad8110cc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO DE OBLIGACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="356" y="152" width="104" height="11" uuid="0af31537-9538-404f-bdb9-00c1e9b60022"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="88" y="91" width="100" height="13" uuid="a01f8fc5-0e3d-471b-998a-a3c263b73542"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="104" width="100" height="13" uuid="182ada32-2adb-40ab-ba74-68a43d5f4ad0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="117" width="250" height="13" uuid="999a3a85-3584-434a-9bc7-d046722cd23b"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAZON}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="130" width="139" height="13" uuid="7728aafb-d5ab-4aca-b49d-5fc798695add"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIT_NCTP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="460" height="91" uuid="390a764d-3cd6-4c57-9bbe-f9bcdcfcff94"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+					<paragraph lineSpacing="Fixed" lineSpacingSize="10.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA['Queda en nuestro poder la Nota de Crédito del Tesoro Público No. ' + $F{COD_NCTP} + ' a favor de '
++ $F{RAZON} + '; con No. de Identificación Tributaria NIT: ' + $F{NIT_NCTP} + ', por un valor de '
++ $F{SALDO_LETRA_1} + ' ' + ($F{SALDO_NUM}.remainder(BigDecimal.ONE).toString().split('\\.').length == 2 ? $F{SALDO_NUM}.remainder(BigDecimal.ONE).toString().split('\\.')[1] : "00") + '/100 ' +
+'DOLARES DE LOS ESTADOS UNIDOS DE AMERICA ($' + $F{SALDO_NUM} + '), la que fue entregada a DGT en concepto de: Pago de Impuestos.\n' +
+'El detalle de los pagos de las obligaciones a favor del Gobierno Central con la mencionada Nota de Crédito ' +
+'del Tesoro Público efectuados en Colecturía: ' + $F{DEN_COLECTURIA} + ', es el siguiente:']]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="356" y="0" width="104" height="15" uuid="c403b18a-462e-47ce-ba1a-6d7dc140f0a1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="146" height="15" uuid="7e8e51bd-4f00-4393-b59b-9668c46542ae"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_DOCUMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="146" y="0" width="210" height="15" uuid="aa0a7d6e-0b79-4a2c-bacc-0225c7ea8529"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="5" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="225" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="180" width="290" height="10" uuid="194b04c6-815b-40f9-a95b-01923f723a04"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL CAJERO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="175" width="285" height="1" uuid="930a4e25-38b8-422a-8394-34eb66f36f4a"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="304" y="135" width="154" height="88" uuid="6b857584-7933-4b8d-b920-30a2f36ba144"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="309" y="135" width="138" height="20" uuid="ba40a2ae-2970-466b-91bc-14469312a35e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="158" width="31" height="10" uuid="eb3e1173-854a-4d7a-bd04-2fc21fb5dab2"/>
+				<textElement>
+					<font fontName="Verdana" size="5"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="346" y="164" width="102" height="1" uuid="41dd68bb-4b82-4243-9fdd-dbdcefc241ef"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="311" y="168" width="30" height="10" uuid="630e328d-a982-490b-aaca-5a0f17f2fba5"/>
+				<textElement>
+					<font fontName="Verdana" size="5"/>
+				</textElement>
+				<text><![CDATA[NOMBRE:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="346" y="174" width="102" height="1" uuid="b59cb972-643e-4580-8de7-060f9137be42"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="310" y="183" width="138" height="1" uuid="7a632ad5-e874-4ef3-a890-b186d9eb7d2b"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="313" y="188" width="28" height="10" uuid="7da1ddaa-860a-434f-98ed-c7524b6f6935"/>
+				<textElement>
+					<font fontName="Verdana" size="5"/>
+				</textElement>
+				<text><![CDATA[DUI:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="346" y="194" width="102" height="1" uuid="70a0d7c1-3f65-4fdc-b950-81cad7480131"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="313" y="206" width="28" height="8" uuid="ce336097-bcdb-4ade-8187-e640f15c33d3"/>
+				<textElement>
+					<font fontName="Verdana" size="5"/>
+				</textElement>
+				<text><![CDATA[FIRMA:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="346" y="213" width="102" height="1" uuid="8c4db909-0281-4b42-9edd-c920398be08d"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="3" y="157" width="100" height="18" uuid="f0bbb2d8-61a8-473b-bd0a-d5e1926dbb9d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="118" width="285" height="29" uuid="22327bb3-8859-4199-86a3-3092a8f6c857"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DOMICILIO} + ", a los " + new SimpleDateFormat("d").format($F{FECHA_INGRESO}) + " días del mes de " +
+$F{MES} + ' de dos mil ' + $F{ANIO} + '.']]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="34" y="64" width="426" height="22" uuid="f4bbe596-4fb1-4e13-aa7a-3ba7e0c593d1"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[a) Retiro de la nueva Nota de Crédito del Tesoro Público ante la Unidad de Asesoría legal de la Dirección General de Tesorería, si el monto del remanente es superior a cincuenta dólares ($50.00).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="87" width="426" height="22" uuid="ff22a040-423c-4b68-be11-3c1726bd7301"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[b) Solicitar ante la Dirección financiera correspondiente la redención o pago de remanentes menores o iguales a cincuenta dólares ($50.00).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="11" width="356" height="11" uuid="20984af4-5766-418c-befc-fcfdc8e66d00"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[REMANENTE A FAVOR DEL TITULAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="356" height="11" uuid="99477f6c-f905-4da7-8ff4-55c949f60235"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL PAGADO]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="356" y="0" width="104" height="11" uuid="688416a4-41eb-4d00-bb97-064bca856d23"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUM_MONTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="356" y="11" width="104" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="cd627312-9036-40cd-a256-25b40556b699"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Verdana" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_NUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="32" width="455" height="32" uuid="5a199461-887f-4087-a07c-837cf590b43c"/>
+				<textElement>
+					<font fontName="Verdana" size="8"/>
+					<paragraph lineSpacing="Fixed" lineSpacingSize="10.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA['El presente Quedan no es negociable y constituye un respaldo documental que ampara al titular de la NCTP No.' + $F{COD_NCTP} + ' el ejercicio de las gestiones siguientes:']]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

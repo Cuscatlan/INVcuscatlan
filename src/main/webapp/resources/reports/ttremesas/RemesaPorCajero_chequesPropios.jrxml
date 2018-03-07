@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RemesaPorCajero_chequesPropios" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="592" leftMargin="0" rightMargin="20" topMargin="0" bottomMargin="0" uuid="7b70e361-1163-4fc8-a4ee-1e23a041d4a5">
+	<property name="ireport.zoom" value="3.138428376721006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="DSResumen" uuid="60d15127-e645-456b-876b-a3037b7ffc33">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT
+remesa.NUM_REMESA,
+remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS total_efectivo,
+remesa.IMPORTE_CHEQUES_PROPIOS , remesa.IMPORTE_CHEQUES_AJENOS ,
+remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS +
+remesa.IMPORTE_CHEQUES_PROPIOS + remesa.IMPORTE_CHEQUES_AJENOS total_remesa
+FROM TT_REMESAS remesa LEFT JOIN CT_COLECTURIAS_FINALES colecturia ON remesa.SK_COLECTURIA_FINAL = colecturia.SK_COLECTURIAS_FINALES
+LEFT JOIN CT_CUENTAS_OPERATIVAS cuenta ON remesa.SK_CUENTA_OPERATIVA = cuenta.SK_CUENTAS_OPERATIVAS
+WHERE colecturia.SK_COLECTURIAS_FINALES = $P{COLECTURIA}
+AND remesa.NUM_CAJA = $P{CAJA}
+AND remesa.FECHA_INGRESO = $P{FECHA}
+AND remesa.SK_CUENTA_OPERATIVA = $P{CUENTA}]]>
+		</queryString>
+		<field name="NUM_REMESA" class="java.math.BigDecimal"/>
+		<field name="TOTAL_EFECTIVO" class="java.math.BigDecimal"/>
+		<field name="IMPORTE_CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+		<field name="IMPORTE_CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+		<field name="TOTAL_REMESA" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_EFECTIVO" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{TOTAL_EFECTIVO}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_CHEQUES_PROPIOS" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_PROPIOS}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_REMESA_AJENAS" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_AJENOS}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_TOTAL_REMSA" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="DSChequesPropios" uuid="23d20a35-4ee6-4761-9320-b2fab57dea3d">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT BANCO.DENOMINACION_BANCO ,IMP.NUM_CHEQUE, IMP.IMPORTE
+    FROM TT_INGRESOS ING
+    JOIN TT_TRANSACCION_INGRESO TRAING ON TRAING.SK_TRANSACCION_INGRESO = ING.SK_TRANSACCION_INGRESO
+    JOIN TT_INGRESOS_MEDIOS_PERC IMP ON TRAING.SK_TRANSACCION_INGRESO = IMP.SK_TRANSACCION_INGRESO
+    JOIN CT_BANCO BANCO ON IMP.SK_BANCO = BANCO.SK_BANCO
+    WHERE IMP.SK_BANCO = (SELECT SK_BANCO FROM CT_CUENTAS_OPERATIVAS WHERE SK_CUENTAS_OPERATIVAS = $P{CUENTA})
+        AND ING.CAJA = $P{CAJA}
+        AND ING.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+        AND ING.FECHA_INGRESO = $P{FECHA}
+        AND IMP.SK_MEDIO_PERCEPCION = 2]]>
+		</queryString>
+		<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+		<field name="NUM_CHEQUE" class="java.lang.String"/>
+		<field name="IMPORTE" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_IMPORTE" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="DSChequesAjenos" uuid="9a400fa2-fd5d-4d91-aaea-02c81bc17794">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT BANCO.DENOMINACION_BANCO ,IMP.NUM_CHEQUE, IMP.IMPORTE
+    FROM TT_INGRESOS ING
+    JOIN TT_TRANSACCION_INGRESO TRAING ON TRAING.SK_TRANSACCION_INGRESO = ING.SK_TRANSACCION_INGRESO
+    JOIN TT_INGRESOS_MEDIOS_PERC IMP ON TRAING.SK_TRANSACCION_INGRESO = IMP.SK_TRANSACCION_INGRESO
+    JOIN CT_BANCO BANCO ON IMP.SK_BANCO = BANCO.SK_BANCO
+    WHERE IMP.SK_BANCO != (SELECT SK_BANCO FROM CT_CUENTAS_OPERATIVAS WHERE SK_CUENTAS_OPERATIVAS = $P{CUENTA})
+        AND ING.CAJA = $P{CAJA}
+        AND ING.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+        AND ING.FECHA_INGRESO = $P{FECHA}
+        AND IMP.SK_MEDIO_PERCEPCION = 2]]>
+		</queryString>
+		<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+		<field name="NUM_CHEQUE" class="java.lang.String"/>
+		<field name="IMPORTE" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_IMPORTE" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="COLECTURIA" class="java.lang.Integer"/>
+	<parameter name="CAJA" class="java.lang.String"/>
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="CUENTA" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT BANCO.DENOMINACION_BANCO, IMP.NUM_CHEQUE, IMP.IMPORTE
+                FROM TT_INGRESOS ING
+                JOIN TT_TRANSACCION_INGRESO TRAING ON TRAING.SK_TRANSACCION_INGRESO = ING.SK_TRANSACCION_INGRESO
+                JOIN TT_INGRESOS_MEDIOS_PERC IMP ON TRAING.SK_TRANSACCION_INGRESO = IMP.SK_TRANSACCION_INGRESO
+                LEFT JOIN CT_BANCO BANCO ON IMP.SK_BANCO = BANCO.SK_BANCO
+                WHERE ING.CAJA = $P{CAJA}
+                    AND  ING.SK_CUENTAS_OPERATIVAS = $P{CUENTA}
+                    AND ING.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+                    AND TRUNC(ING.FECHA_INGRESO) = $P{FECHA}
+                    AND IMP.SK_MEDIO_PERCEPCION = 2]]>
+	</queryString>
+	<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+	<field name="NUM_CHEQUE" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<variable name="IMPORTE_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="0" width="174" height="20" uuid="dd70030b-f52e-4819-8c78-0b5f3bbc889d"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalle de Cheques propios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="20" width="62" height="15" uuid="41e76600-48d4-4c92-939e-2170db58dca3"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[No. Cheque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="15" uuid="68949197-897a-450d-9943-864a412934de"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Banco Emisor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="20" width="100" height="15" uuid="31763c20-82d0-48f9-b3bf-e75abe6067e4"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Prevent">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="15" uuid="28c2dc59-dd66-4546-bf5c-2b1de52ada61"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DENOMINACION_BANCO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="62" height="15" uuid="fea3b5c0-312c-47a9-a399-a30f9cf2b6bf"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NUM_CHEQUE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="162" y="0" width="100" height="15" uuid="7f3b3585-f5fe-48e1-8f95-74fc6d10d8ee"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="15" splitType="Stretch">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="162" y="0" width="100" height="15" uuid="cf22ffde-a9a0-40ba-80ab-36383433c6bf"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{IMPORTE_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="162" height="15" uuid="28b43b7e-41fa-4ae9-9bb4-c74ef634991b"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

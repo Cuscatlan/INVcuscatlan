@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportListadoIncos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a9f2e51d-e1dc-4559-a8c0-af6d0bcaff1f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="estadoFinanc" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[" and  C.Sk_Estado_Financ = 1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IncosFinanc" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[" and C.Sk_Incos_Estado_Financ in (3,4)"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.codigo as codfin,a.descripcion as descFin,b.codigo as codIncos,b.descripcion as descIncos from Cc_Estados_Financieros a ,Cc_Incos_Estados_Financieros b ,
+Cc_Estados_Financieros_X_Incos c
+where B.Sk_Incos_Estado_Financ = C.Sk_Incos_Estado_Financ
+AND A.Sk_Estado_Financ = C.Sk_Estado_Financ
+$P!{estadoFinanc}$P!{IncosFinanc}
+order by a.codigo,b.codigo]]>
+	</queryString>
+	<field name="CODFIN" class="java.lang.String"/>
+	<field name="DESCFIN" class="java.lang.String"/>
+	<field name="CODINCOS" class="java.lang.String"/>
+	<field name="DESCINCOS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="79310cef-bcbe-45c4-8333-6a19f1b43328"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LISTADO DE INCONSISTENCIAS DE LOS ESTADOS FINANCIEROS"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="81" splitType="Stretch">
+			<staticText>
+				<reportElement x="127" y="61" width="150" height="20" uuid="2f875155-dd7a-4649-9163-c06c1e5f4188"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Descripción Estado Financiero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="61" width="154" height="20" uuid="7df1dded-30e5-44c8-b22c-8ad7ba9f2a26"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Incosistencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="61" width="123" height="20" uuid="6f07944f-59c8-4733-af6d-a2fd5a7ba358"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Codigo de Incosistencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="61" width="127" height="20" uuid="493b1cc7-5d40-48b5-9b35-6c4e9e604335"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Codigo Estado Financiero]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="127" y="17" width="150" height="20" uuid="41fe5b84-5c6a-440b-a07d-027240ed5cd2"/>
+				<textFieldExpression><![CDATA[$F{DESCFIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="17" width="127" height="20" uuid="c86c8da2-18ac-4e10-ab85-11005205c71a"/>
+				<textFieldExpression><![CDATA[$F{CODFIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="277" y="17" width="123" height="20" uuid="7f507fda-5346-4aea-8685-1e86b9893620"/>
+				<textFieldExpression><![CDATA[$F{CODINCOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="17" width="154" height="20" uuid="d96bf7f4-f3da-4f63-900d-90e71aa6b7d6"/>
+				<textFieldExpression><![CDATA[$F{DESCINCOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

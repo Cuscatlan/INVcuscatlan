@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Lotespagados" language="groovy" pageWidth="2900" pageHeight="842" columnWidth="2860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aca1bdab-b69f-4831-a5c8-91b6a276bbfd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_SK_EJERCICIO" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_NUMEROLOTE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MONTOLOTE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[ select L.SK_LOTE SK_LOTE, D.SK_LOTE_DET,  L.EJERCICIO EJERCICIO, ( SELECT DESCRIPCION FROM VTB_CI_TIPO_PRESUP WHERE ID = L.SK_TIPO_PRESUPUESTO)  TIPOPRESUPUESTO    ,
+ L.NUM_LOTE , D.CICLO CICLO_LOTE ,
+D.TIPO_OPERACION TIPO_OPERACION ,
+L.FECHA_AUTORIZADO FECHA_AUTORIZACION, D.TIPO_MOVIMIENTO TIPO_MOVIMIENTO, D.INSTRUCCION_PAGO_BCR INSTRUCCION_BCR,
+D.FECHA_INST_PAGO_BCR FECHA_PROCESO_BCR,  L.MONTO   MONTO_LOTE , D.MONTO_TOTAL_LOTE MONTO_DET,
+UPPER((select NOMBRE_ESTADO from ct_estado_lote where sk_estado_lote = l.sk_estado) ) ESTADO_LOTE
+from TT_LOTE L, TT_LOTE_DET D where L.SK_LOTE = D.SK_LOTE   AND L.EJERCICIO = 2017
+]]>
+	</queryString>
+	<field name="SK_LOTE" class="java.math.BigDecimal"/>
+	<field name="SK_LOTE_DET" class="java.math.BigDecimal"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<field name="TIPOPRESUPUESTO" class="java.lang.String"/>
+	<field name="NUM_LOTE" class="java.math.BigDecimal"/>
+	<field name="CICLO_LOTE" class="java.lang.String"/>
+	<field name="TIPO_OPERACION" class="java.math.BigDecimal"/>
+	<field name="FECHA_AUTORIZACION" class="java.sql.Timestamp"/>
+	<field name="TIPO_MOVIMIENTO" class="java.lang.String"/>
+	<field name="INSTRUCCION_BCR" class="java.lang.String"/>
+	<field name="FECHA_PROCESO_BCR" class="oracle.sql.TIMESTAMP"/>
+	<field name="MONTO_LOTE" class="java.math.BigDecimal"/>
+	<field name="MONTO_DET" class="java.math.BigDecimal"/>
+	<field name="ESTADO_LOTE" class="java.lang.String"/>
+	<group name="SKEJERCICIO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{SK_LOTE}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="424" y="25" width="110" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="7ae39da3-dd93-48ac-82e1-c963b9a0f998"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{NUM_LOTE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="0" y="25" width="63" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="c474a045-cc21-4576-88c5-e1075a848bda"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{EJERCICIO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="63" y="25" width="361" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="9512150e-dd6a-460e-8fa9-dd6130b1aaf5"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{TIPOPRESUPUESTO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="534" y="25" width="168" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="43e29c2f-9a1c-48ab-8dd1-a59b3fb28134"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{FECHA_AUTORIZACION}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="702" y="25" width="196" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="e62c71f3-0337-4721-9007-17beb3bb48c5"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{MONTO_LOTE}==null? new BigDecimal(0) : $F{MONTO_LOTE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="898" y="25" width="1962" height="25" uuid="3aac6ce0-ac40-4710-bb8e-5987ad54ee97"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="63" y="0" width="361" height="25" backcolor="#CCCCCC" uuid="d1445406-d960-4dae-9597-3490c4ca49fb"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TP/STP]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="424" y="0" width="110" height="25" backcolor="#CCCCCC" uuid="777d00b8-b015-4fed-b189-0f27771e13d0"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[No LOTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="63" height="25" backcolor="#CCCCCC" uuid="94390d61-5178-42ca-af8f-dfa08309b7b1"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[EJERCICIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="534" y="0" width="168" height="25" backcolor="#CCCCCC" uuid="83d4975f-502f-4628-a8df-624fee5b8ffa"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA AUTORIZACION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="702" y="0" width="196" height="25" backcolor="#CCCCCC" uuid="d5be5fe0-a5c7-4394-9892-de53f04b7274"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[MONTO LOTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="898" y="0" width="1962" height="25" backcolor="#CCCCCC" uuid="db04b432-2be0-4d57-91ca-d832474ce3aa"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="2860" height="65" uuid="5832f24a-a4cf-459b-b5b5-3295de08a013"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERIO DE HACIENDA" + "\n" +
+"DIRECCION GENERAL DE TESORERIA" + "\n" +
+"DIVISION DE PROGRAMACION FINANCIERA"	+ "\n" +
+"INFORME DE LOTES PAGADOS " + "\n" +
+"FECHA DE GENERACIÓN: " + new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+</jasperReport>

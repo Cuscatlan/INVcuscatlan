@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjecucionPresupEgresos" pageWidth="1200" pageHeight="1100" whenNoDataType="AllSectionsNoDetail" columnWidth="1160" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d27dcb41-a4c2-465b-aad6-ae0adff46f9a">
+	<property name="ireport.zoom" value="1.9487171000000039"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_FECHA_DESDE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_FECHA_HASTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ENTIDAD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_IMG_LEFT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_CENTER" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_RIGHT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_EJERCICIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_MES" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_INSTITUCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SUB_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_PROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_SUB_SPROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_OBJE_ESPECIFICO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_SUBCUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_CUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_RUBRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_NIVEL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP_DESC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_CONVENIO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_ORG_FIN" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_UFI" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_CLASIF_ORGA_FINA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_PROYECTO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ACTIVIDAD" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_OBRRA_TAREA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_TIPO_MOVIMIENTO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_FUENTE_FINANC" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_FUNCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SECT_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SUBSECT_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_GRUPO_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_DIV_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_YEAR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_VALOR_MONETARIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_SK_PERIODO" class="java.lang.Integer" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+CODIGO,
+PKG_ESTADO_PRESUP.GET_NOTA_EXPLICATIVA_PRESUP($P{P_SK_PERIODO}, CODIGO) AS  NOTA,
+CONCEPTO,
+PR_VOTADO,
+PR_MODIFICACIONES,
+PR_MODIFICADO,
+PR_EJECUCION,
+PR_SALDO,
+NIVEL,
+GRP_CLASIFICA
+FROM (
+--RUBRO
+SELECT t.CODIGO AS CODIGO,
+       '' AS NOTA,
+       (CASE
+                WHEN NIVEL = 'ESPECIFICO' THEN
+                    '      '||(SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+                ELSE
+                    (SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+       END) AS CONCEPTO,
+       DECODE($P{P_VALOR_MONETARIO},'ABS',T.PR_VOTADO/1,DECODE($P{P_VALOR_MONETARIO},'MILES',T.PR_VOTADO/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',T.PR_VOTADO/1000000,T.PR_VOTADO))) AS PR_VOTADO,
+       DECODE($P{P_VALOR_MONETARIO},'ABS',T.PR_MODIFICACIONES/1,DECODE($P{P_VALOR_MONETARIO},'MILES',T.PR_MODIFICACIONES/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',T.PR_MODIFICACIONES/1000000,T.PR_MODIFICACIONES))) AS PR_MODIFICACIONES,
+       DECODE($P{P_VALOR_MONETARIO},'ABS',T.PR_MODIFICADO/1,DECODE($P{P_VALOR_MONETARIO},'MILES',T.PR_MODIFICADO/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',T.PR_MODIFICADO/1000000,T.PR_MODIFICADO))) AS PR_MODIFICADO,
+       DECODE($P{P_VALOR_MONETARIO},'ABS',T.PR_EJECUCION/1,DECODE($P{P_VALOR_MONETARIO},'MILES',T.PR_EJECUCION/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',T.PR_EJECUCION/1000000,T.PR_EJECUCION))) AS PR_EJECUCION,
+       DECODE($P{P_VALOR_MONETARIO},'ABS',T.PR_SALDO/1,DECODE($P{P_VALOR_MONETARIO},'MILES',T.PR_SALDO/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',T.PR_SALDO/1000000,T.PR_SALDO))) AS PR_SALDO,
+       T.NIVEL,
+       (CASE
+            WHEN t.CODIGO LIKE '21%' THEN --GASTOS CORRIENTES
+              1
+            WHEN t.CODIGO LIKE '22%' THEN --GASTOS DE CAPITAL
+              2
+            WHEN t.CODIGO LIKE '23%' THEN --APLICACIONES FINANCIERAS
+              3
+            WHEN t.CODIGO LIKE '24%' THEN --CONTRIBUCIONES ESPECIALES
+              4
+            ELSE
+              5
+           END
+       ) AS GRP_CLASIFICA
+
+FROM (
+
+select SUBSTR(OBJEGASTO,0,3) AS CODIGO,
+SUM(p.VOTADO) AS PR_VOTADO,
+SUM(p.MODIFICADO) AS PR_MODIFICACIONES,
+SUM(p.COMPROMETIDO) AS PR_MODIFICADO,
+SUM(p.DEVENGADO) AS PR_EJECUCION,
+SUM(p.DISPONPEP) AS PR_SALDO,
+'RUBRO' AS NIVEL
+from
+VTB_TRX_SALDOSPEP p INNER JOIN VTB_CI_INSTITUCION ins ON p.IDINSTITUCION = ins.SK_INSTITUCION
+where
+    ( $P{P_EJERCICIO} IS NULL OR  $P{P_EJERCICIO} = p.EJERCICIO) AND
+    ( $P{P_MES} IS NULL OR  $P{P_MES} = p.MES) AND
+    ( $P{P_INSTITUCION} IS NULL OR  $P{P_INSTITUCION} = p.IDINSTITUCION) AND
+    ( $P{P_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.TIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_TIPO_PRESUP')) AND
+    ( $P{P_SUB_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.SUBTIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_SUB_TIPO_PRESUP')) AND
+    ( $P{P_CLASIF_ORGA_FINA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDORGFIN = i.DAT AND i.CODIGO = 'P_CLASIF_ORGA_FINA')) AND
+    ( $P{P_ID_PROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_PROGRAMA')) AND
+    ( $P{P_ID_SUB_SPROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_SUB_SPROGRAMA')) AND
+    ( $P{P_PROYECTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_PROYECTO')) AND
+    ( $P{P_ACTIVIDAD} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ACTIVIDAD')) AND
+    ( $P{P_OBRRA_TAREA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_OBRRA_TAREA')) AND
+    ( $P{P_ID_TIPO_MOVIMIENTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_TIPO_MOVIMIENTO')) AND
+    ( $P{P_ID_FUENTE_FINANC} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDFUENTEFINAN =i.DAT  AND i.CODIGO = 'P_ID_FUENTE_FINANC')) AND
+    ( $P{P_FUNCION} IS NULL OR EXISTS ( SELECT 1  FROM VTB_CP_SUB_PRG_PRES a INNER JOIN VTB_CI_CLASIF_FUNC bclase ON (a.CLASEFUN_ID = bclase.SK_CLASIF_FUNC) INNER JOIN VTB_CI_CLASIF_FUNC bgrp ON bclase.PADRE_ID = bgrp.SK_CLASIF_FUNC INNER JOIN VTB_CI_CLASIF_FUNC bdiv ON bgrp.PADRE_ID = bdiv.SK_CLASIF_FUNC WHERE a.PRG_ID = p.IDPROGRAMA  AND  EXISTS( SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE bdiv.SK_CLASIF_FUNC = i.DAT AND i.CODIGO = 'P_FUNCION' )) ) AND
+    ( $P{P_SECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SECT_INST AND i.CODIGO = 'P_SECT_INST')) AND
+    ( $P{P_SUBSECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SUBSECT_INST AND i.CODIGO = 'P_SUBSECT_INST')) AND
+    ( $P{P_GRUPO_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_GRUPO_INST AND i.CODIGO = 'P_GRUPO_INST')) AND
+    ( $P{P_DIV_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_DIV_INST AND i.CODIGO = 'P_DIV_INST')) AND
+    ( $P{P_ID_UFI} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDUFI = i.DAT AND i.CODIGO = 'P_ID_UFI')) AND
+    ( $P{P_ID_CONVENIO} IS NULL OR  $P{P_ID_CONVENIO} = p.IDCONVENIO)
+group by SUBSTR(OBJEGASTO,0,3)
+) t UNION
+--CUENTA
+SELECT t.CODIGO AS CODIGO,
+       '' AS NOTA,
+       (CASE
+                WHEN NIVEL = 'ESPECIFICO' THEN
+                    '      '||(SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+                ELSE
+                    (SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+       END) AS CONCEPTO,
+       T.PR_VOTADO,
+       T.PR_MODIFICACIONES,
+       T.PR_MODIFICADO,
+       T.PR_EJECUCION,
+       T.PR_SALDO,
+       T.NIVEL,
+       (CASE
+            WHEN t.CODIGO LIKE '21%' THEN --GASTOS CORRIENTES
+              1
+            WHEN t.CODIGO LIKE '22%' THEN --GASTOS DE CAPITAL
+              2
+            WHEN t.CODIGO LIKE '23%' THEN --APLICACIONES FINANCIERAS
+              3
+            WHEN t.CODIGO LIKE '24%' THEN --CONTRIBUCIONES ESPECIALES
+              4
+            ELSE
+              5
+           END
+       ) AS GRP_CLASIFICA
+
+FROM (
+
+select SUBSTR(OBJEGASTO,0,4) AS CODIGO,
+SUM(p.VOTADO) AS PR_VOTADO,
+SUM(p.MODIFICADO) AS PR_MODIFICACIONES,
+SUM(p.COMPROMETIDO) AS PR_MODIFICADO,
+SUM(p.DEVENGADO) AS PR_EJECUCION,
+SUM(p.DISPONPEP) AS PR_SALDO,
+'CUENTA' AS NIVEL
+from
+VTB_TRX_SALDOSPEP p INNER JOIN VTB_CI_INSTITUCION ins ON p.IDINSTITUCION = ins.SK_INSTITUCION
+where
+    ( $P{P_EJERCICIO} IS NULL OR  $P{P_EJERCICIO} = p.EJERCICIO) AND
+    ( $P{P_MES} IS NULL OR  $P{P_MES} = p.MES) AND
+    ( $P{P_INSTITUCION} IS NULL OR  $P{P_INSTITUCION} = p.IDINSTITUCION) AND
+    ( $P{P_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.TIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_TIPO_PRESUP')) AND
+    ( $P{P_SUB_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.SUBTIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_SUB_TIPO_PRESUP')) AND
+    ( $P{P_CLASIF_ORGA_FINA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDORGFIN = i.DAT AND i.CODIGO = 'P_CLASIF_ORGA_FINA')) AND
+    ( $P{P_ID_PROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_PROGRAMA')) AND
+    ( $P{P_ID_SUB_SPROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_SUB_SPROGRAMA')) AND
+    ( $P{P_PROYECTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_PROYECTO')) AND
+    ( $P{P_ACTIVIDAD} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ACTIVIDAD')) AND
+    ( $P{P_OBRRA_TAREA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_OBRRA_TAREA')) AND
+    ( $P{P_ID_TIPO_MOVIMIENTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_TIPO_MOVIMIENTO')) AND
+    ( $P{P_ID_FUENTE_FINANC} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDFUENTEFINAN =i.DAT  AND i.CODIGO = 'P_ID_FUENTE_FINANC')) AND
+    ( $P{P_FUNCION} IS NULL OR EXISTS ( SELECT 1  FROM VTB_CP_SUB_PRG_PRES a INNER JOIN VTB_CI_CLASIF_FUNC bclase ON (a.CLASEFUN_ID = bclase.SK_CLASIF_FUNC) INNER JOIN VTB_CI_CLASIF_FUNC bgrp ON bclase.PADRE_ID = bgrp.SK_CLASIF_FUNC INNER JOIN VTB_CI_CLASIF_FUNC bdiv ON bgrp.PADRE_ID = bdiv.SK_CLASIF_FUNC WHERE a.PRG_ID = p.IDPROGRAMA  AND  EXISTS( SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE bdiv.SK_CLASIF_FUNC = i.DAT AND i.CODIGO = 'P_FUNCION' )) ) AND
+    ( $P{P_SECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SECT_INST AND i.CODIGO = 'P_SECT_INST')) AND
+    ( $P{P_SUBSECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SUBSECT_INST AND i.CODIGO = 'P_SUBSECT_INST')) AND
+    ( $P{P_GRUPO_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_GRUPO_INST AND i.CODIGO = 'P_GRUPO_INST')) AND
+    ( $P{P_DIV_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_DIV_INST AND i.CODIGO = 'P_DIV_INST')) AND
+    ( $P{P_ID_UFI} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDUFI = i.DAT AND i.CODIGO = 'P_ID_UFI')) AND
+    ( $P{P_ID_CONVENIO} IS NULL OR  $P{P_ID_CONVENIO} = p.IDCONVENIO)
+group by SUBSTR(OBJEGASTO,0,4)
+) t
+UNION
+--SUBCUENTA
+SELECT t.CODIGO AS CODIGO,
+       '' AS NOTA,
+       (CASE
+                WHEN NIVEL = 'ESPECIFICO' THEN
+                    '      '||(SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+                ELSE
+                    (SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+       END) AS CONCEPTO,
+       T.PR_VOTADO,
+       T.PR_MODIFICACIONES,
+       T.PR_MODIFICADO,
+       T.PR_EJECUCION,
+       T.PR_SALDO,
+       T.NIVEL,
+       (CASE
+            WHEN t.CODIGO LIKE '21%' THEN --GASTOS CORRIENTES
+              1
+            WHEN t.CODIGO LIKE '22%' THEN --GASTOS DE CAPITAL
+              2
+            WHEN t.CODIGO LIKE '23%' THEN --APLICACIONES FINANCIERAS
+              3
+            WHEN t.CODIGO LIKE '24%' THEN --CONTRIBUCIONES ESPECIALES
+              4
+            ELSE
+              5
+           END
+       ) AS GRP_CLASIFICA
+
+FROM (
+
+select SUBSTR(OBJEGASTO,0,5) AS CODIGO,
+SUM(p.VOTADO) AS PR_VOTADO,
+SUM(p.MODIFICADO) AS PR_MODIFICACIONES,
+SUM(p.COMPROMETIDO) AS PR_MODIFICADO,
+SUM(p.DEVENGADO) AS PR_EJECUCION,
+SUM(p.DISPONPEP) AS PR_SALDO,
+'SUBCUENTA' AS NIVEL
+from
+VTB_TRX_SALDOSPEP p INNER JOIN VTB_CI_INSTITUCION ins ON p.IDINSTITUCION = ins.SK_INSTITUCION
+where
+    ( $P{P_EJERCICIO} IS NULL OR  $P{P_EJERCICIO} = p.EJERCICIO) AND
+    ( $P{P_MES} IS NULL OR  $P{P_MES} = p.MES) AND
+    ( $P{P_INSTITUCION} IS NULL OR  $P{P_INSTITUCION} = p.IDINSTITUCION) AND
+    ( $P{P_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.TIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_TIPO_PRESUP')) AND
+    ( $P{P_SUB_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.SUBTIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_SUB_TIPO_PRESUP')) AND
+    ( $P{P_CLASIF_ORGA_FINA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDORGFIN = i.DAT AND i.CODIGO = 'P_CLASIF_ORGA_FINA')) AND
+    ( $P{P_ID_PROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_PROGRAMA')) AND
+    ( $P{P_ID_SUB_SPROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_SUB_SPROGRAMA')) AND
+    ( $P{P_PROYECTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_PROYECTO')) AND
+    ( $P{P_ACTIVIDAD} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ACTIVIDAD')) AND
+    ( $P{P_OBRRA_TAREA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_OBRRA_TAREA')) AND
+    ( $P{P_ID_TIPO_MOVIMIENTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_TIPO_MOVIMIENTO')) AND
+    ( $P{P_ID_FUENTE_FINANC} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDFUENTEFINAN =i.DAT  AND i.CODIGO = 'P_ID_FUENTE_FINANC')) AND
+    ( $P{P_FUNCION} IS NULL OR EXISTS ( SELECT 1  FROM VTB_CP_SUB_PRG_PRES a INNER JOIN VTB_CI_CLASIF_FUNC bclase ON (a.CLASEFUN_ID = bclase.SK_CLASIF_FUNC) INNER JOIN VTB_CI_CLASIF_FUNC bgrp ON bclase.PADRE_ID = bgrp.SK_CLASIF_FUNC INNER JOIN VTB_CI_CLASIF_FUNC bdiv ON bgrp.PADRE_ID = bdiv.SK_CLASIF_FUNC WHERE a.PRG_ID = p.IDPROGRAMA  AND  EXISTS( SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE bdiv.SK_CLASIF_FUNC = i.DAT AND i.CODIGO = 'P_FUNCION' )) ) AND
+    ( $P{P_SECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SECT_INST AND i.CODIGO = 'P_SECT_INST')) AND
+    ( $P{P_SUBSECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SUBSECT_INST AND i.CODIGO = 'P_SUBSECT_INST')) AND
+    ( $P{P_GRUPO_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_GRUPO_INST AND i.CODIGO = 'P_GRUPO_INST')) AND
+    ( $P{P_DIV_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_DIV_INST AND i.CODIGO = 'P_DIV_INST')) AND
+    ( $P{P_ID_UFI} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDUFI = i.DAT AND i.CODIGO = 'P_ID_UFI')) AND
+    ( $P{P_ID_CONVENIO} IS NULL OR  $P{P_ID_CONVENIO} = p.IDCONVENIO)
+group by SUBSTR(OBJEGASTO,0,5)
+) t
+UNION
+--ESPECIFICO
+SELECT t.CODIGO AS CODIGO,
+       '' AS NOTA,
+       (CASE
+                WHEN NIVEL = 'ESPECIFICO' THEN
+                    '      '||(SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+                ELSE
+                    (SELECT DESCRIPCION FROM VTB_CI_CLASIF_ING_GAS WHERE CLAECO_ING_GAS = T.CODIGO)
+       END) AS CONCEPTO,
+       T.PR_VOTADO,
+       T.PR_MODIFICACIONES,
+       T.PR_MODIFICADO,
+       T.PR_EJECUCION,
+       T.PR_SALDO,
+       T.NIVEL,
+       (CASE
+            WHEN t.CODIGO LIKE '21%' THEN --GASTOS CORRIENTES
+              1
+            WHEN t.CODIGO LIKE '22%' THEN --GASTOS DE CAPITAL
+              2
+            WHEN t.CODIGO LIKE '23%' THEN --APLICACIONES FINANCIERAS
+              3
+            WHEN t.CODIGO LIKE '24%' THEN --CONTRIBUCIONES ESPECIALES
+              4
+            ELSE
+              5
+           END
+       ) AS GRP_CLASIFICA
+
+FROM (
+
+select SUBSTR(OBJEGASTO,0,7) AS CODIGO,
+SUM(p.VOTADO) AS PR_VOTADO,
+SUM(p.MODIFICADO) AS PR_MODIFICACIONES,
+SUM(p.COMPROMETIDO) AS PR_MODIFICADO,
+SUM(p.DEVENGADO) AS PR_EJECUCION,
+SUM(p.DISPONPEP) AS PR_SALDO,
+'ESPECIFICO' AS NIVEL
+from
+VTB_TRX_SALDOSPEP p INNER JOIN VTB_CI_INSTITUCION ins ON p.IDINSTITUCION = ins.SK_INSTITUCION
+WHERE
+    ( $P{P_EJERCICIO} IS NULL OR  $P{P_EJERCICIO} = p.EJERCICIO) AND
+    ( $P{P_MES} IS NULL OR  $P{P_MES} = p.MES) AND
+    ( $P{P_INSTITUCION} IS NULL OR  $P{P_INSTITUCION} = p.IDINSTITUCION) AND
+    ( $P{P_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.TIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_TIPO_PRESUP')) AND
+    ( $P{P_SUB_TIPO_PRESUP} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.SUBTIPOPRESUPUESTOID = i.DAT AND i.CODIGO = 'P_SUB_TIPO_PRESUP')) AND
+    ( $P{P_CLASIF_ORGA_FINA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDORGFIN = i.DAT AND i.CODIGO = 'P_CLASIF_ORGA_FINA')) AND
+    ( $P{P_ID_PROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_PROGRAMA')) AND
+    ( $P{P_ID_SUB_SPROGRAMA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_SUB_SPROGRAMA')) AND
+    ( $P{P_PROYECTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_PROYECTO')) AND
+    ( $P{P_ACTIVIDAD} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ACTIVIDAD')) AND
+    ( $P{P_OBRRA_TAREA} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_OBRRA_TAREA')) AND
+    ( $P{P_ID_TIPO_MOVIMIENTO} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE 1=1 AND i.CODIGO = 'P_ID_TIPO_MOVIMIENTO')) AND
+    ( $P{P_ID_FUENTE_FINANC} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDFUENTEFINAN =i.DAT AND i.CODIGO = 'P_ID_FUENTE_FINANC')) AND
+    ( $P{P_FUNCION} IS NULL OR EXISTS ( SELECT 1  FROM VTB_CP_SUB_PRG_PRES a INNER JOIN VTB_CI_CLASIF_FUNC bclase ON (a.CLASEFUN_ID = bclase.SK_CLASIF_FUNC) INNER JOIN VTB_CI_CLASIF_FUNC bgrp ON bclase.PADRE_ID = bgrp.SK_CLASIF_FUNC INNER JOIN VTB_CI_CLASIF_FUNC bdiv ON bgrp.PADRE_ID = bdiv.SK_CLASIF_FUNC WHERE a.PRG_ID = p.IDPROGRAMA  AND  EXISTS( SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE bdiv.SK_CLASIF_FUNC = i.DAT AND i.CODIGO = 'P_FUNCION' )) ) AND
+    ( $P{P_SECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SECT_INST AND i.CODIGO = 'P_SECT_INST')) AND
+    ( $P{P_SUBSECT_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_SUBSECT_INST AND i.CODIGO = 'P_SUBSECT_INST')) AND
+    ( $P{P_GRUPO_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_GRUPO_INST AND i.CODIGO = 'P_GRUPO_INST')) AND
+    ( $P{P_DIV_INST} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE i.DAT = ins.SK_DIV_INST AND i.CODIGO = 'P_DIV_INST')) AND
+    ( $P{P_ID_UFI} IS NULL OR EXISTS (SELECT 1 FROM TT_ESTADO_PRESUP_PAR_XML i WHERE p.IDUFI = i.DAT AND i.CODIGO = 'P_ID_UFI')) AND
+    ( $P{P_ID_CONVENIO} IS NULL OR  $P{P_ID_CONVENIO} = p.IDCONVENIO)
+group by SUBSTR(OBJEGASTO,0,7)
+) t ) p
+ORDER BY p.CODIGO]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="NOTA" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="PR_VOTADO" class="java.math.BigDecimal"/>
+	<field name="PR_MODIFICACIONES" class="java.math.BigDecimal"/>
+	<field name="PR_MODIFICADO" class="java.math.BigDecimal"/>
+	<field name="PR_EJECUCION" class="java.math.BigDecimal"/>
+	<field name="PR_SALDO" class="java.math.BigDecimal"/>
+	<field name="NIVEL" class="java.lang.String"/>
+	<field name="GRP_CLASIFICA" class="java.math.BigDecimal"/>
+	<variable name="GRP_CLASIFICA_SUM_VOTADO" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_VOTADO}]]></variableExpression>
+	</variable>
+	<variable name="GRP_CLASIFICA_SUM_MODIFICACIONES" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_MODIFICACIONES}]]></variableExpression>
+	</variable>
+	<variable name="GRP_CLASIFICA_SUM_PR_MODIFICADO" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_MODIFICADO}]]></variableExpression>
+	</variable>
+	<variable name="GRP_CLASIFICA_SUM_PR_EJECUCION" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_EJECUCION}]]></variableExpression>
+	</variable>
+	<variable name="GRP_CLASIFICA_SUM_PR_SALDO" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_SALDO}]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CLASIFICA_SUM_VOTADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ELEMENTO" ) ? $F{PR_VOTADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CLASIFICA_SUM_MODIFICACIONES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ELEMENTO" ) ? $F{PR_MODIFICACIONES} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CLASIFICA_SUM_PR_MODIFICADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ELEMENTO" ) ? $F{PR_MODIFICADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CLASIFICA_SUM_PR_EJECUCION" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ELEMENTO" ) ? $F{PR_EJECUCION} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CLASIFICA_SUM_PR_SALDO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ELEMENTO" ) ? $F{PR_SALDO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_RUBRO_SUM_VOTADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "RUBRO" ) ? $F{PR_VOTADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_RUBRO_SUM_MODIFICACIONES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "RUBRO" ) ? $F{PR_MODIFICACIONES} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_RUBRO_SUM_PR_MODIFICADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "RUBRO" ) ? $F{PR_MODIFICADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_RUBRO_SUM_PR_EJECUCION" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "RUBRO" ) ? $F{PR_EJECUCION} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_RUBRO_SUM_PR_SALDO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "RUBRO" ) ? $F{PR_SALDO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CUENTA_SUM_VOTADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "CUENTA" ) ? $F{PR_VOTADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CUENTA_SUM_MODIFICACIONES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "CUENTA" ) ? $F{PR_MODIFICACIONES} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CUENTA_SUM_PR_MODIFICADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "CUENTA" ) ? $F{PR_MODIFICADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CUENTA_SUM_PR_EJECUCION" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "CUENTA" ) ? $F{PR_EJECUCION} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_CUENTA_SUM_PR_SALDO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "CUENTA" ) ? $F{PR_SALDO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_SUBCUENTA_SUM_VOTADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "SUBCUENTA" ) ? $F{PR_VOTADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_SUBCUENTA_SUM_MODIFICACIONES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "SUBCUENTA" ) ? $F{PR_MODIFICACIONES} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_SUBCUENTA_SUM_PR_MODIFICADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "SUBCUENTA" ) ? $F{PR_MODIFICADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_SUBCUENTA_SUM_PR_EJECUCION" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "SUBCUENTA" ) ? $F{PR_EJECUCION} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_SUBCUENTA_SUM_PR_SALDO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "SUBCUENTA" ) ? $F{PR_SALDO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_ESPECIFICO_SUM_VOTADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ESPECIFICO" ) ? $F{PR_VOTADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_ESPECIFICO_SUM_MODIFICACIONES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ESPECIFICO" ) ? $F{PR_MODIFICACIONES} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_ESPECIFICO_SUM_PR_MODIFICADO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ESPECIFICO" ) ? $F{PR_MODIFICADO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_ESPECIFICO_SUM_PR_EJECUCION" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ESPECIFICO" ) ? $F{PR_EJECUCION} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<variable name="SUMY_ESPECIFICO_SUM_PR_SALDO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NIVEL}.equals( "ESPECIFICO" ) ? $F{PR_SALDO} : new BigDecimal("0.00")]]></variableExpression>
+	</variable>
+	<group name="GRP_CLASIFICA">
+		<groupExpression><![CDATA[$F{GRP_CLASIFICA}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="1160" height="20" uuid="a926948d-af9a-4e27-b220-eba7703a4159"/>
+					<textFieldExpression><![CDATA[$F{GRP_CLASIFICA}.equals( new Long(1) ) ? "Gastos Corrientes" :
+    $F{GRP_CLASIFICA}.equals( new Long(2) ) ? "Gastos de Capital" :
+		$F{GRP_CLASIFICA}.equals( new Long(3) ) ? "Aplicaciones Financieras" :
+					$F{GRP_CLASIFICA}.equals( new Long(4) ) ? "Contribuciones Especiales" : ""]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="0" y="0" width="626" height="20" uuid="7b909c49-c4a1-4c08-bb3b-e432ba92fef5"/>
+					<textElement textAlignment="Center">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="626" y="0" width="106" height="20" uuid="8043e99b-1aa9-4997-b04d-73e891189bf3"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_VOTADO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="732" y="0" width="106" height="20" uuid="9ab58612-7392-40db-9d18-62d1754c3236"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_MODIFICACIONES}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="838" y="0" width="106" height="20" uuid="20e46637-c52b-4b45-9344-35499dbfe975"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_PR_MODIFICADO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="944" y="0" width="106" height="20" uuid="32f56fd5-11dd-446a-912f-311ea782b32b"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_PR_EJECUCION}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="1049" y="0" width="111" height="20" uuid="f74b9122-61c1-4d6b-9f26-1de3758fda2e"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_PR_SALDO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="1160" height="20" uuid="e2dc6e1a-202a-4723-8957-96117b3492e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE EJECUCIÓN PRESUPUESTARIA DE EGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="310" height="20" uuid="7206949e-3c5b-4ba8-b6b4-5fed276c28d9"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="427" y="40" width="152" height="20" uuid="d01e78d1-6f03-493d-8de5-037bfdfcbd58"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="40" width="117" height="20" uuid="0e53228c-6e0d-4984-9d53-1824d02a82a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_DESDE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="579" y="40" width="133" height="20" uuid="a328bd8d-ddd4-4f7c-afed-c1d2e75aa066"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_HASTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="1160" height="20" uuid="ba9b827b-b574-4e61-be4b-1bb68f3f6ba8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{P_ENTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="736" y="40" width="424" height="20" uuid="a401258b-947a-4a8a-91c2-68358e27a2e8"/>
+				<textFieldExpression><![CDATA[$P{P_YEAR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="712" y="40" width="24" height="20" uuid="eea4c1cd-6bca-402c-b1e3-46d2bd1d7211"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="310" height="22" uuid="d7188b8a-8f71-44a9-bb97-d233bce9510d"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO DE PRESUPUESTO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="310" y="0" width="850" height="22" uuid="4a0ae070-21ad-494f-855a-e0ccd7c9e502"/>
+				<textFieldExpression><![CDATA[$P{P_TIPO_PRESUP_DESC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="52" height="29" uuid="8a2074b1-76d7-48bd-9497-fbb4ca50d719"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="52" y="0" width="468" height="29" uuid="e4af87ac-6d24-414b-8d7a-51517fc8be55"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="0" width="106" height="29" uuid="c26729b8-a148-4562-875b-3f9650c1ce5b"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTA No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="626" y="0" width="106" height="29" uuid="fad62cb5-33ef-4796-8ced-f78a14889498"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRESUPUESTO VOTADO (INICIAL)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="732" y="0" width="106" height="29" uuid="4184b59b-ffe3-4869-b1fd-3be64af16a7b"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MODIFICACIONES AL PRESUPUESTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="838" y="0" width="106" height="29" uuid="18802581-fa19-4fe9-9bfd-6ddf3795bda4"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRESUPUESTO MODIFICADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="944" y="0" width="106" height="29" uuid="638a4486-fa00-47e2-9b9a-60fae9929ad9"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EJECUCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1049" y="0" width="111" height="29" uuid="d3b42f29-3cc9-4aef-851e-1318359e81a2"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO PRESUPUESTARIO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="52" height="20" uuid="1527ed35-c830-4da4-8e50-cb0d2001c51d"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="52" y="0" width="468" height="20" uuid="24ed1e51-a372-4b4d-8ceb-9a6c9d2494ee"/>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="520" y="0" width="106" height="20" uuid="a08ed735-9b6b-4b90-8f11-d0302f877a3a"/>
+				<textFieldExpression><![CDATA[$F{NOTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="0" width="106" height="20" uuid="3cda6c3a-a469-4f48-91fa-530a9d92575e"/>
+				<textFieldExpression><![CDATA[$F{PR_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="0" width="106" height="20" uuid="af34b122-4de7-41f1-953a-6f240552d3bf"/>
+				<textFieldExpression><![CDATA[$F{PR_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="0" width="106" height="20" uuid="5b59f86f-a640-4a45-8d65-a1fa4bcfac77"/>
+				<textFieldExpression><![CDATA[$F{PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="0" width="106" height="20" uuid="71798c39-9793-46bd-9e52-91e127c63dd0"/>
+				<textFieldExpression><![CDATA[$F{PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="0" width="111" height="20" uuid="6d4470d6-dad8-40ea-b796-5d308df7c8c9"/>
+				<textFieldExpression><![CDATA[$F{PR_SALDO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="148" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="626" height="20" uuid="8d30b35d-2ddc-4e97-9ab1-a446dd02863f"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE CLASIFICACIÓN ECONIMICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="626" height="20" uuid="a88329b4-f21f-495a-918e-b74e588d6377"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE RUBRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="626" height="20" uuid="2d14b30c-55c6-469d-b0ee-7b3825b52ff1"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="626" height="20" uuid="3d6ec7e1-8f6f-4d04-abce-3327b4256a15"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE SUB-CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="626" height="20" uuid="d2958210-6183-4f84-a2a5-3edbe13a0633"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DE OBJETO ESPECIFICO]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="0" width="106" height="20" uuid="b9d80d06-c249-448d-9948-558a4462d9e2"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CLASIFICA_SUM_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="0" width="106" height="20" uuid="a5fdeb03-e6e8-4d21-ae38-f9b628e25cd4"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CLASIFICA_SUM_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="0" width="106" height="20" uuid="c1217c60-c81b-4a60-ab22-5f716c6bd524"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CLASIFICA_SUM_PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="0" width="106" height="20" uuid="0509a622-4432-4e2a-95a7-a7531adeb24f"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CLASIFICA_SUM_PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="0" width="111" height="20" uuid="af2b8c26-57e4-4a34-858a-33c7479177d5"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CLASIFICA_SUM_PR_SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="20" width="106" height="20" uuid="4ab96eb8-aeb5-4228-b4e3-180a49746e09"/>
+				<textFieldExpression><![CDATA[$V{SUMY_RUBRO_SUM_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="20" width="106" height="20" uuid="1ba9285b-efb3-4aaf-b711-a10ce11149f5"/>
+				<textFieldExpression><![CDATA[$V{SUMY_RUBRO_SUM_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="20" width="106" height="20" uuid="9cb983de-80ce-46cb-9c61-b2b923e82127"/>
+				<textFieldExpression><![CDATA[$V{SUMY_RUBRO_SUM_PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="20" width="106" height="20" uuid="1eaee56e-7d9f-43dd-a13a-e4a61b698a9d"/>
+				<textFieldExpression><![CDATA[$V{SUMY_RUBRO_SUM_PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="20" width="111" height="20" uuid="19c2f3e3-678f-446a-a360-2cd1b3c49d8f"/>
+				<textFieldExpression><![CDATA[$V{SUMY_RUBRO_SUM_PR_SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="40" width="106" height="20" uuid="904afeeb-4f5e-402a-8627-5aae9ce27f0e"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CUENTA_SUM_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="40" width="106" height="20" uuid="0285d120-3971-4bc6-baee-8ad55c18d41b"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CUENTA_SUM_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="40" width="106" height="20" uuid="308be831-388b-48bf-a5f9-ca0f4a41ed45"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CUENTA_SUM_PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="40" width="106" height="20" uuid="b83ffe16-15f7-4694-82ab-fe3255ba894f"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CUENTA_SUM_PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="40" width="111" height="20" uuid="4a20d480-8df6-4b01-a26c-8505ee565e0e"/>
+				<textFieldExpression><![CDATA[$V{SUMY_CUENTA_SUM_PR_SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="60" width="106" height="20" uuid="db174fea-53be-4b1c-a07b-4671e66e43ee"/>
+				<textFieldExpression><![CDATA[$V{SUMY_SUBCUENTA_SUM_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="60" width="106" height="20" uuid="e2248927-a437-4deb-a3e5-b6c7c312a715"/>
+				<textFieldExpression><![CDATA[$V{SUMY_SUBCUENTA_SUM_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="60" width="106" height="20" uuid="073c8c40-c920-4b99-84cf-7270a601363e"/>
+				<textFieldExpression><![CDATA[$V{SUMY_SUBCUENTA_SUM_PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="60" width="106" height="20" uuid="fa422c01-cf38-4c42-969d-3f39feff1fe1"/>
+				<textFieldExpression><![CDATA[$V{SUMY_SUBCUENTA_SUM_PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="60" width="111" height="20" uuid="cb3888bb-5bec-4a60-aece-ad00fb79cdb3"/>
+				<textFieldExpression><![CDATA[$V{SUMY_SUBCUENTA_SUM_PR_SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="626" y="80" width="106" height="20" uuid="43b35975-7906-4a06-9a8a-44ab46cbc4d8"/>
+				<textFieldExpression><![CDATA[$V{SUMY_ESPECIFICO_SUM_VOTADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="732" y="80" width="106" height="20" uuid="3bf1a98e-e55e-42f8-88ce-3454d67b89bd"/>
+				<textFieldExpression><![CDATA[$V{SUMY_ESPECIFICO_SUM_MODIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="838" y="80" width="106" height="20" uuid="325e04bb-185e-442c-be4c-778213b30c67"/>
+				<textFieldExpression><![CDATA[$V{SUMY_ESPECIFICO_SUM_PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="944" y="80" width="106" height="20" uuid="4ace0ff9-2aff-432d-80a3-8d96a3b20e72"/>
+				<textFieldExpression><![CDATA[$V{SUMY_ESPECIFICO_SUM_PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="1049" y="80" width="111" height="20" uuid="3929dd47-f017-4fa6-8b72-6ea35a382c3a"/>
+				<textFieldExpression><![CDATA[$V{SUMY_ESPECIFICO_SUM_PR_SALDO}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Left">
+				<reportElement x="0" y="100" width="205" height="48" uuid="ab63fdb4-1f94-4921-8510-de130c946000"/>
+				<imageExpression><![CDATA[$P{P_IMG_LEFT}]]></imageExpression>
+			</image>
+			<image hAlign="Center">
+				<reportElement x="205" y="100" width="723" height="48" uuid="5fe1a1f9-4bf8-4003-bebb-b878a57fb7f8"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_CENTER}]]></imageExpression>
+			</image>
+			<image hAlign="Right">
+				<reportElement x="928" y="100" width="232" height="48" uuid="ae7e041a-b104-4e16-a33f-85116c4177b3"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_RIGHT}]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>

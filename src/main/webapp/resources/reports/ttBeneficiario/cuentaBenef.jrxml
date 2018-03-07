@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cuentaBenef" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d7a69c71-8534-4f1f-a357-580c2fde8273">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="706"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Home\\Downloads\\iReport-5.6.0\\TESORERIA\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skBeneficiarioMaster" class="java.lang.String"/>
+	<parameter name="skBeneficiarioSubReport" class="java.lang.String"/>
+	<parameter name="user" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+( CASE WHEN CTABANC.SK_TIPO_INSTRUCCION=1 THEN 'LOCAL' ELSE 'INTERNACIONAL' END ) TIPO_INSTRUCCION,
+(SELECT DENOMINACION_BANCO FROM CT_BANCO WHERE SK_BANCO=CTABANC.SK_BANCO) BANCO,
+NUMERO_CUENTA,
+NOMBRE_CUENTA,
+(SELECT DESCRIPCION FROM CT_TIPO_CUENTA WHERE SK_TIPO_CUENTA=CTABANC.SK_TIPO_CUENTA) TIPO_CUENTA,
+(SELECT DESCRIPCION FROM VTB_CI_MONEDA WHERE ID=CTABANC.SK_MONEDA) MONEDA,
+IBAN,
+ABA,
+COD_ERROR,
+(SELECT AK_ESTADO_BENEF || '-' || DESCRIPCION FROM CT_ESTADO_BENEF WHERE SK_ESTADO_BENEF=CTABANC.SK_ESTADO_BENEF) ESTADO,
+(SELECT DENOMINACION_BANCO FROM CT_BANCO WHERE SK_BANCO=(SELECT SK_BANCO FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) ) BANCO_INTERM,
+(SELECT NUMERO_CUENTA FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) NUM_CUENTA_INTERM,
+(SELECT NOMBRE_CUENTA FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) NOMBRE_CUENTA_INTERM,
+(SELECT DESCRIPCION FROM CT_TIPO_CUENTA WHERE SK_TIPO_CUENTA=(SELECT SK_TIPO_CUENTA FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) ) TIPO_CUENTA_INTERM,
+(SELECT DESCRIPCION FROM VTB_CI_MONEDA WHERE ID=(SELECT SK_MONEDA FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) ) MONEDA_INTERM,
+(SELECT IBAN FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) IBAN_INTERM,
+(SELECT ABA FROM TT_CUENTA_BANCARIA WHERE MK_CUENTA_BANCARIA=CTABANC.SK_CUENTA_BANCARIA) ABA_INTERM
+FROM TT_CUENTA_BANCARIA CTABANC
+WHERE MK_CUENTA_BANCARIA IS NULL AND SK_BENEFICIARIO=$P{skBeneficiarioMaster}]]>
+	</queryString>
+	<field name="TIPO_INSTRUCCION" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="NOMBRE_CUENTA" class="java.lang.String"/>
+	<field name="TIPO_CUENTA" class="java.lang.String"/>
+	<field name="MONEDA" class="java.lang.String"/>
+	<field name="IBAN" class="java.lang.String"/>
+	<field name="ABA" class="java.lang.String"/>
+	<field name="COD_ERROR" class="java.math.BigDecimal"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="BANCO_INTERM" class="java.lang.String"/>
+	<field name="NUM_CUENTA_INTERM" class="java.lang.String"/>
+	<field name="NOMBRE_CUENTA_INTERM" class="java.lang.String"/>
+	<field name="TIPO_CUENTA_INTERM" class="java.lang.String"/>
+	<field name="MONEDA_INTERM" class="java.lang.String"/>
+	<field name="IBAN_INTERM" class="java.lang.String"/>
+	<field name="ABA_INTERM" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="207" height="20" uuid="56a09bdf-ed83-499b-966f-fcf2e3cb9562"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="207" height="20" uuid="71e68f74-ef63-4906-bf5d-338a84d958db"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="207" height="20" uuid="a73c649c-c981-43c9-8b9c-a015a63ae19b"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE CUENTA DE BENEFICIARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="0" width="38" height="20" uuid="ed8762b8-8668-4540-9879-b2afe95ad993"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="20" width="38" height="20" uuid="9c669e4f-1eba-49c8-a7d4-d3ad65eb886c"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="60" width="200" height="39" uuid="47173e38-7cea-46ca-912c-03912a50fe7a"/>
+				<subreportParameter name="skBeneficiarioSubReport">
+					<subreportParameterExpression><![CDATA[$P{skBeneficiarioSubReport}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cuentaBenef_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="496" y="0" width="76" height="20" uuid="c40ffc08-1ac6-42e3-a3e7-d73ed54067ad"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="496" y="20" width="76" height="20" uuid="ba0595fe-56cd-4730-8e93-f94fdb0aaa8f"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="10" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="227" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="27" width="100" height="20" uuid="8a17590e-5722-45c6-a0ec-8783c0e1a702"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_INSTRUCCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="27" width="100" height="20" uuid="78c6b740-2cb7-4fa4-9b68-f9f563c1897c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo Instrucción]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="46" width="100" height="20" uuid="097b39bc-3d81-46c5-b1bd-ff5eab21a835"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="46" width="100" height="20" uuid="d3592fa3-9df5-47f5-828f-ce5913b188ba"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="66" width="100" height="20" uuid="d9d3ac9a-1a05-48d0-82eb-dd752c082879"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="66" width="100" height="20" uuid="e968606e-b2cf-4364-911e-0f7aafbbe9d8"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[No. Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="86" width="100" height="20" uuid="be99931e-37f3-4cd2-83ad-07e859ceb508"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="86" width="100" height="20" uuid="70c5c3fb-2274-42e5-bfc2-21eff4638ad0"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="106" width="100" height="20" uuid="42d31d27-ab67-43bb-8ce4-c29e6ae74f50"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="106" width="100" height="20" uuid="6eeff83d-4ae6-4309-9b90-6cc07b99f857"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="126" width="100" height="20" uuid="7fa2d715-dc0e-4ab5-a596-8177e173a040"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONEDA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="126" width="100" height="20" uuid="f3bacd4c-6050-4f6e-9d5b-217469a6b153"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Moneda Cta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="146" width="100" height="20" uuid="7e224c36-4af9-4471-9197-a69904544591"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IBAN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="146" width="100" height="20" uuid="249ad1b9-9653-4d0e-ad46-e22d685fd4a8"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[IBAN]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="166" width="100" height="20" uuid="85132d22-1750-4f18-80d8-9eb2a2932025"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="166" width="100" height="20" uuid="55f61701-30d2-482e-a290-eb2f10892ff2"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[ABA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="186" width="100" height="20" uuid="ca74963c-b568-466e-9000-f316814bd237"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COD_ERROR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="186" width="100" height="20" uuid="77a350e4-694d-406c-990a-223671761abd"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Código Error]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="107" y="206" width="100" height="20" uuid="bd7958f4-b498-4108-a1cb-adfd7c419022"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="206" width="100" height="20" uuid="ab1e644b-a13d-4015-a149-5f5328835bd2"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="29" width="100" height="20" uuid="66b59cc2-a1fa-48f5-8eb9-9d8539ffd3c8"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BANCO_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="29" width="100" height="20" uuid="63e93d6b-e0b6-4101-8298-7b357893552d"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="48" width="100" height="20" uuid="4de4cc85-d536-4ff8-ab30-9b459a486c47"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_CUENTA_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="48" width="100" height="20" uuid="9cbddbf6-4c5b-4f77-aa62-3169a339c5e7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[No. Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="68" width="100" height="20" uuid="c6619d11-b27a-4f37-a018-8e33ab9eb5bb"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_CUENTA_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="68" width="100" height="20" uuid="f082e4f9-3b58-42e9-a48f-e7f5cb39d85b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="88" width="100" height="20" uuid="7de22ffd-e92f-4284-bcfc-ac996126c208"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_CUENTA_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="88" width="100" height="20" uuid="7a9d3789-6e76-4c9d-ab23-1ce9e89de58e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo Cuenta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="108" width="100" height="20" uuid="a48f7cd7-f0cd-491a-ad12-f211e59415ff"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONEDA_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="108" width="100" height="20" uuid="239740bc-c09c-4277-a3bd-207e3d4e3cff"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Moneda Cta]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="128" width="100" height="20" uuid="879c37a2-a4ef-44f7-a1ef-6f57c4497033"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IBAN_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="128" width="100" height="20" uuid="62ce51cd-a726-4612-b6bb-6927674b5a65"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[IBAN]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="148" width="100" height="20" uuid="e042d008-3351-432a-abbe-15aacc263756"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABA_INTERM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="148" width="100" height="20" uuid="702ebf89-4a5e-4966-9e7e-4a140112c669"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[ABA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="7" y="6" width="193" height="20" uuid="9626efdb-4ea2-4d6d-8a0f-20e9c686157e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="8" y="6" width="100" height="20" uuid="8929b2f4-d79a-44d3-b5ba-60298c73f6f1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUENTA BANCARIA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="280" y="6" width="199" height="20" uuid="f1d0d214-c2bd-4683-a1a1-f1d53dfa7dca"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="281" y="6" width="120" height="20" uuid="fc38f602-3730-4b4c-b2a9-78b82ff8a875"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO INTERMEDIARIO]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="13" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="0" width="80" height="12" uuid="c56eeece-bcfd-4053-a0bc-01bac0b12aae"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="0" width="40" height="12" uuid="86c3d955-54ad-47ab-bc2d-50a609ef590f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="19" splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="401">
+			<subreport>
+				<reportElement x="10" y="70" width="200" height="39" uuid="6772e816-cfd9-4442-b6d3-f9925c950387"/>
+				<subreportParameter name="skBeneficiarioSubReport">
+					<subreportParameterExpression><![CDATA[$P{skBeneficiarioSubReport}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cuentaBenef_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="10" y="10" width="207" height="20" uuid="cb161538-8497-4e74-b969-bf52a91d25f2"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="10" width="38" height="20" uuid="e0e2f891-8458-45fc-9e5b-9770ad9c5cca"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="30" width="207" height="20" uuid="de9c20cc-3ed1-41f6-9bb5-1a227c808027"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="30" width="38" height="20" uuid="e73baa9e-b394-4e70-84dc-7e647cee2239"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="50" width="207" height="20" uuid="a0ce2170-a60b-4819-992b-39863f5a5f64"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE CUENTA DE BENEFICIARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="139" y="381" width="299" height="20" uuid="64447866-4062-4934-ba96-9fc082d7e4c3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRARON CUENTAS BANCARIAS ASOCIADAS]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

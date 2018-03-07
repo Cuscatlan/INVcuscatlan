@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportObligacionesEstructuraPresupDet" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="660d4478-f7fa-4d36-a0bf-3ff31415bbac">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="sinstitucion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct
+pkg_utils_obligacion.OBTENER_NIT_BENEF(tco.ID_DOC_COMPROMISO)    AS nitbenef,
+  ct.NOMBRES || ' ' || ct.PRIMER_APELLIDO || ' ' || ct.SEGUNDO_APELLIDO    AS nombrebenef,
+  tco.SK_OBLIGACION                                  AS skobligacion,
+  tco.monto as montoobligacion,
+  ceo.DESCRIPCION AS estadoobligacion,
+  VFF.descripcion                                                  AS SFUENTE,
+  cpp.nombre_programa                                              AS programa,
+  csp.descripcion                                                  AS subprograma,
+  cat.descripcion                                                  AS actividad,
+  vpo.proy_desc AS proyecto,
+  'ESPECIFICO 1' as especifico,
+  con.descripcion as convenio,
+tdr.sk_obligacion,
+tdr.sk_documento_respaldo_enc,
+teo.sk_especifico_obl,
+'especifico' as specifico,
+teo.monto,
+ NVL((select teo.monto-sum(monto_pagar) from tt_solicitud_pago_doc where  sk_documento_respaldo_enc=tdr.sk_documento_respaldo_enc and sk_especifico_obl=teo.sk_especifico_obl),0) as saldo
+from
+TC_OBLIGACION tco,
+CC_ESTADO_OBLIGACION ceo,
+TC_DOCUMENTO_RESPALDO_ENC tdr,
+TC_OBL_BENEF tob,
+TT_BENEFICIARIO ct,
+TC_ESPECIFICO_OBL teo,
+VTB_TRX_SALDOSCOMPRO VTT,
+VTB_CI_FUENTE_FINANC VFF,
+VTB_CP_PROG_PRESUP cpp,
+VTB_CP_SUB_PRG_PRES csp,
+VTB_CP_ACTIVIDAD cat,
+VTB_CP_PROY_INVE_PUBL vpo,
+VTB_CI_CONVENIO con
+WHERE
+tco.sk_obligacion          =tdr.SK_OBLIGACION
+AND tco.SK_ESTADO_OBLIGACION=ceo.SK_ESTADO_OBLIGACION
+AND tco.ID_DOC_COMPROMISO        =VTT.DOCID
+AND tco.SK_OBLIGACION            = TOB.SK_OBLIGACION
+AND tob.SK_BENEFICIARIO          =ct.SK_BENEFICIARIO
+AND tdr.sk_obligacion=teo.sk_obligacion
+and tdr.SK_DOCUMENTO_RESPALDO_ENC=teo.SK_DOCUMENTO_RESPALDO_ENC
+AND VTT.IDFUENTEFINAN            =VFF.SK_FUENTE_FINANC
+AND vtt.idprograma               =cpp.sK_PROG_PRESUP
+AND vtt.idsubprograma            =csp.sprg_id
+AND vtt.idactividad              =cat.id
+AND vtt.idproyecto = vpo.proy_id
+AND VTT.IDCONVENIO=con.id
+AND ($P{institucion}              IS NULL
+OR   $P{institucion}           = tco.sk_institucion)
+AND (  $P{ejercicio}              IS NULL
+OR $P{ejercicio}                  = tco.EJERCICIO)]]>
+	</queryString>
+	<field name="NITBENEF" class="java.lang.String"/>
+	<field name="NOMBREBENEF" class="java.lang.String"/>
+	<field name="SKOBLIGACION" class="java.math.BigDecimal"/>
+	<field name="MONTOOBLIGACION" class="java.math.BigDecimal"/>
+	<field name="ESTADOOBLIGACION" class="java.lang.String"/>
+	<field name="SFUENTE" class="java.lang.String"/>
+	<field name="PROGRAMA" class="java.lang.String"/>
+	<field name="SUBPROGRAMA" class="java.lang.String"/>
+	<field name="ACTIVIDAD" class="java.lang.String"/>
+	<field name="PROYECTO" class="java.lang.String"/>
+	<field name="ESPECIFICO" class="java.lang.String"/>
+	<field name="CONVENIO" class="java.lang.String"/>
+	<field name="SK_OBLIGACION" class="java.math.BigDecimal"/>
+	<field name="SK_DOCUMENTO_RESPALDO_ENC" class="java.math.BigDecimal"/>
+	<field name="SK_ESPECIFICO_OBL" class="java.math.BigDecimal"/>
+	<field name="SPECIFICO" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="SALDO" class="java.math.BigDecimal"/>
+	<variable name="SALDO_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="17">
+			<textField>
+				<reportElement x="0" y="0" width="791" height="17" uuid="3ce6e9d2-429d-4e3b-b56c-b487d980045c"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{institucion} + " " + $P{sinstitucion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="60" height="32" uuid="a48abebf-1e07-447d-86e2-a03d2aab874e"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NITBENEF}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="0" width="71" height="32" uuid="f873a645-d36e-4e1b-a85b-1f785ee70bb3"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBREBENEF}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="131" y="0" width="60" height="32" uuid="2e7c1b6d-5838-4c53-acb0-c9c9cf888b32"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SKOBLIGACION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="191" y="0" width="60" height="32" uuid="436cdbe0-6c23-4203-8b4c-49ea05b5ca15"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="251" y="0" width="60" height="32" uuid="a68440f2-3fa0-45b1-97a5-e08b2fd9e60c"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADOOBLIGACION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="311" y="0" width="60" height="32" uuid="e12c11cc-5e48-4756-8fa7-f9cc6c8d5500"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFUENTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="431" y="0" width="60" height="32" uuid="d8e8cec3-2a50-43a8-976b-6b02ef070591"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUBPROGRAMA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="491" y="0" width="60" height="32" uuid="f90a2ed2-d5c8-4f48-9c8e-f4aeeff8405a"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="551" y="0" width="60" height="32" uuid="171bb01c-9e49-409e-9fbc-a0c8c3f454c6"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="611" y="0" width="60" height="32" uuid="867c4199-48db-46b5-8873-672779ef717d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPECIFICO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="671" y="0" width="60" height="32" uuid="1f514eb0-0092-4e3a-b538-dfa279137243"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONVENIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="731" y="0" width="60" height="32" uuid="b17577f8-cc74-46d9-abee-b82e6ba9ae71"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="371" y="0" width="60" height="32" uuid="42e7cd16-66b2-4f50-9e72-8ca63b6821c3"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROGRAMA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="671" y="0" width="60" height="20" backcolor="#CCCCCC" uuid="91027201-2714-45da-8436-d2b6627d0e4b"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TOTAL SALDO]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="731" y="0" width="60" height="20" backcolor="#CCCCCC" uuid="a08e87a1-0086-4be8-84a1-50021d4b70c4"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SALDO_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RemesaPorCajero" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7b70e361-1163-4fc8-a4ee-1e23a041d4a5">
+	<property name="ireport.zoom" value="3.138428376721006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="960"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="DSResumen" uuid="60d15127-e645-456b-876b-a3037b7ffc33">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT
+remesa.NUM_REMESA,
+remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS total_efectivo,
+remesa.IMPORTE_CHEQUES_PROPIOS , remesa.IMPORTE_CHEQUES_AJENOS ,
+remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS +
+remesa.IMPORTE_CHEQUES_PROPIOS + remesa.IMPORTE_CHEQUES_AJENOS total_remesa
+FROM TT_REMESAS remesa LEFT JOIN CT_COLECTURIAS_FINALES colecturia ON remesa.SK_COLECTURIA_FINAL = colecturia.SK_COLECTURIAS_FINALES
+LEFT JOIN CT_CUENTAS_OPERATIVAS cuenta ON remesa.SK_CUENTA_OPERATIVA = cuenta.SK_CUENTAS_OPERATIVAS
+WHERE colecturia.SK_COLECTURIAS_FINALES = $P{COLECTURIA}
+AND remesa.NUM_CAJA = $P{CAJA}
+AND remesa.FECHA_INGRESO = $P{FECHA}
+AND remesa.SK_CUENTA_OPERATIVA = $P{CUENTA}]]>
+		</queryString>
+		<field name="NUM_REMESA" class="java.math.BigDecimal"/>
+		<field name="TOTAL_EFECTIVO" class="java.math.BigDecimal"/>
+		<field name="IMPORTE_CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+		<field name="IMPORTE_CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+		<field name="TOTAL_REMESA" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_EFECTIVO" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{TOTAL_EFECTIVO}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_CHEQUES_PROPIOS" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_PROPIOS}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_REMESA_AJENAS" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_AJENOS}]]></variableExpression>
+		</variable>
+		<variable name="TOTAL_TOTAL_REMSA" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="DSChequesPropios" uuid="23d20a35-4ee6-4761-9320-b2fab57dea3d">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT BANCO.DENOMINACION_BANCO ,IMP.NUM_CHEQUE, IMP.IMPORTE
+    FROM TT_INGRESOS ING
+    JOIN TT_TRANSACCION_INGRESO TRAING ON TRAING.SK_TRANSACCION_INGRESO = ING.SK_TRANSACCION_INGRESO
+    JOIN TT_INGRESOS_MEDIOS_PERC IMP ON TRAING.SK_TRANSACCION_INGRESO = IMP.SK_TRANSACCION_INGRESO
+    JOIN CT_BANCO BANCO ON IMP.SK_BANCO = BANCO.SK_BANCO
+    WHERE IMP.SK_BANCO = (SELECT SK_BANCO FROM CT_CUENTAS_OPERATIVAS WHERE SK_CUENTAS_OPERATIVAS = $P{CUENTA})
+        AND ING.CAJA = $P{CAJA}
+        AND ING.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+        AND ING.FECHA_INGRESO = $P{FECHA}
+        AND IMP.SK_MEDIO_PERCEPCION = 2]]>
+		</queryString>
+		<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+		<field name="NUM_CHEQUE" class="java.lang.String"/>
+		<field name="IMPORTE" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_IMPORTE" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="DSChequesAjenos" uuid="9a400fa2-fd5d-4d91-aaea-02c81bc17794">
+		<parameter name="COLECTURIA" class="java.lang.String"/>
+		<parameter name="CAJA" class="java.lang.String"/>
+		<parameter name="FECHA" class="java.lang.String"/>
+		<parameter name="CUENTA" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT BANCO.DENOMINACION_BANCO ,IMP.NUM_CHEQUE, IMP.IMPORTE
+    FROM TT_INGRESOS ING
+    JOIN TT_TRANSACCION_INGRESO TRAING ON TRAING.SK_TRANSACCION_INGRESO = ING.SK_TRANSACCION_INGRESO
+    JOIN TT_INGRESOS_MEDIOS_PERC IMP ON TRAING.SK_TRANSACCION_INGRESO = IMP.SK_TRANSACCION_INGRESO
+    JOIN CT_BANCO BANCO ON IMP.SK_BANCO = BANCO.SK_BANCO
+    WHERE IMP.SK_BANCO != (SELECT SK_BANCO FROM CT_CUENTAS_OPERATIVAS WHERE SK_CUENTAS_OPERATIVAS = $P{CUENTA})
+        AND ING.CAJA = $P{CAJA}
+        AND ING.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+        AND ING.FECHA_INGRESO = $P{FECHA}
+        AND IMP.SK_MEDIO_PERCEPCION = 2]]>
+		</queryString>
+		<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+		<field name="NUM_CHEQUE" class="java.lang.String"/>
+		<field name="IMPORTE" class="java.math.BigDecimal"/>
+		<variable name="TOTAL_IMPORTE" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="COLECTURIA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[7]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CAJA" class="java.lang.String"/>
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="CUENTA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[66]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT remesa.NUM_REMESA,colecturia.DENOMINACION_COLECTURIA, remesa.S_CREA_USUARIO ,
+remesa.NUM_CAJA , cuenta.NUMERO_CUENTA, remesa.FECHA_INGRESO ,
+remesa.BOLSA,
+remesa.BILLETE_100,
+remesa.BILLETE_50,
+remesa.BILLETE_20,
+remesa.BILLETE_10,
+remesa.BILLETE_5,
+remesa.BILLETE_1,
+remesa.MONEDAS,
+remesa.IMPORTE_CHEQUES_PROPIOS,
+remesa.IMPORTE_CHEQUES_AJENOS,
+SUM(remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS) total_efectivo,
+SUM(remesa.BILLETE_100*100 + remesa.BILLETE_50*50 + remesa.BILLETE_20*20 + remesa.BILLETE_10*10 + remesa.BILLETE_5*5 + remesa.BILLETE_1*1 + remesa.MONEDAS +
+remesa.IMPORTE_CHEQUES_PROPIOS + remesa.IMPORTE_CHEQUES_AJENOS) total_remesa
+FROM TT_REMESAS remesa LEFT JOIN CT_COLECTURIAS_FINALES colecturia ON remesa.SK_COLECTURIA_FINAL = colecturia.SK_COLECTURIAS_FINALES
+LEFT JOIN CT_CUENTAS_OPERATIVAS cuenta ON remesa.SK_CUENTA_OPERATIVA = cuenta.SK_CUENTAS_OPERATIVAS
+WHERE remesa.SK_COLECTURIA_FINAL = $P{COLECTURIA}
+AND remesa.NUM_CAJA = $P{CAJA}
+AND TRUNC(remesa.FECHA_INGRESO) = $P{FECHA}
+AND remesa.SK_CUENTA_OPERATIVA = $P{CUENTA}
+GROUP BY colecturia.DENOMINACION_COLECTURIA, remesa.S_CREA_USUARIO, remesa.NUM_CAJA, cuenta.NUMERO_CUENTA, remesa.FECHA_INGRESO,
+remesa.BOLSA,remesa.BILLETE_100,
+remesa.BILLETE_50,
+remesa.BILLETE_20,
+remesa.BILLETE_10,
+remesa.BILLETE_5,
+remesa.BILLETE_1,
+remesa.MONEDAS,
+remesa.IMPORTE_CHEQUES_PROPIOS,
+remesa.IMPORTE_CHEQUES_AJENOS,
+remesa.NUM_REMESA
+order by remesa.NUM_REMESA]]>
+	</queryString>
+	<field name="NUM_REMESA" class="java.math.BigDecimal"/>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="S_CREA_USUARIO" class="java.lang.String"/>
+	<field name="NUM_CAJA" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="BOLSA" class="java.lang.String"/>
+	<field name="BILLETE_100" class="java.math.BigDecimal"/>
+	<field name="BILLETE_50" class="java.math.BigDecimal"/>
+	<field name="BILLETE_20" class="java.math.BigDecimal"/>
+	<field name="BILLETE_10" class="java.math.BigDecimal"/>
+	<field name="BILLETE_5" class="java.math.BigDecimal"/>
+	<field name="BILLETE_1" class="java.math.BigDecimal"/>
+	<field name="MONEDAS" class="java.math.BigDecimal"/>
+	<field name="IMPORTE_CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+	<field name="IMPORTE_CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+	<field name="TOTAL_EFECTIVO" class="java.math.BigDecimal"/>
+	<field name="TOTAL_REMESA" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_EFECTIVO_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_EFECTIVO}]]></variableExpression>
+	</variable>
+	<variable name="IMPORTE_CHEQUES_PROPIOS_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_PROPIOS}]]></variableExpression>
+	</variable>
+	<variable name="IMPORTE_CHEQUES_AJENOS_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE_CHEQUES_AJENOS}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_REMESA_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_100_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_100}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_50_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_50}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_20_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_20}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_10_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_10}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_5_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_5}]]></variableExpression>
+	</variable>
+	<variable name="BILLETE_1_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{BILLETE_1}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement x="26" y="17" width="62" height="15" uuid="bced2cac-b4b0-4def-9fe4-bfc44d9ca226"/>
+				<text><![CDATA[Cajero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="32" width="62" height="15" uuid="707957d1-5fa6-4de3-9ff1-d056a366da8a"/>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="47" width="62" height="15" uuid="96268142-2051-4615-8f7f-7e31987b3466"/>
+				<text><![CDATA[Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="62" width="62" height="15" uuid="886682c5-fb09-4cc2-9e6e-a3139ddd7a2c"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="77" width="62" height="15" uuid="4e4a7c8e-b0d5-4abc-a815-021ea078ccd6"/>
+				<text><![CDATA[No. Bolsa:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="2" width="300" height="15" uuid="c34e15ab-021d-4d1c-a180-b947541290ef"/>
+				<textFieldExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="17" width="300" height="15" uuid="64a4e21a-a70f-43ee-8b6d-4cef650de9e6"/>
+				<textFieldExpression><![CDATA[$F{S_CREA_USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="32" width="300" height="15" uuid="7da34b29-fd3b-429c-9bb7-e7b88109aad1"/>
+				<textFieldExpression><![CDATA[$F{NUM_CAJA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="47" width="300" height="15" uuid="ce833b54-c351-4198-be71-c7bd45fb0285"/>
+				<textFieldExpression><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="88" y="62" width="300" height="15" uuid="ffce0880-b322-41c8-a171-a862a408658d"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_INGRESO})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="77" width="300" height="15" uuid="714044de-ed24-4b21-b760-31b4f3b4d6b4"/>
+				<textFieldExpression><![CDATA[$F{BOLSA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="2" width="62" height="15" uuid="ab9f0ec9-36b9-4759-8df0-0d2aff235783"/>
+				<text><![CDATA[Colecturia:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="50">
+			<staticText>
+				<reportElement x="26" y="15" width="100" height="20" uuid="c292c46d-d07b-4518-a23e-c941870305af"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resumen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="35" width="62" height="15" uuid="7446c161-1cd1-4f0d-b7f8-efa2bb7b6501"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[No: Remesa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="35" width="100" height="15" uuid="9e1ca6c0-fb54-4713-b959-e2564e1efbef"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="35" width="100" height="15" uuid="049f63da-1095-44b5-b527-4e4c0ebb25ba"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Cheques Propios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="35" width="100" height="15" uuid="eb9f7dd5-c8ca-42b7-9c53-22431d650202"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Cheques Ajenos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="35" width="100" height="15" uuid="390cde7b-5b5a-4238-9ec2-5100a068bfe8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Total Remesa]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Prevent">
+			<textField>
+				<reportElement x="26" y="0" width="62" height="15" uuid="6a8c1306-38d5-4c14-ae6e-351eed715cb2"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_REMESA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="88" y="0" width="100" height="15" uuid="f77823d8-9f91-4e52-b9ca-f3a203b4d25b"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_EFECTIVO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="0" width="100" height="15" uuid="0d34d2ab-71ea-4a55-8c76-9caceb87808a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IMPORTE_CHEQUES_PROPIOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="288" y="0" width="100" height="15" uuid="a9b27987-30f3-48f0-b9e0-858238e310fe"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IMPORTE_CHEQUES_AJENOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="388" y="0" width="100" height="15" uuid="3799c15a-74f0-43a9-b86f-4bc3c2b21179"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_REMESA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="399" splitType="Stretch">
+			<staticText>
+				<reportElement style="table_TD" positionType="Float" x="26" y="379" width="180" height="20" uuid="ea4944c1-a606-4644-8abd-2dd1f53e324c"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement style="table_TD" positionType="Float" mode="Opaque" x="206" y="379" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="05d68f9e-f76c-4e03-9a9e-24f9d848f5c8"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_REMESA_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="32" width="162" height="20" uuid="9f4c2ce9-f461-4261-a2ba-6202d78038a3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalle de Efectivo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="52" width="100" height="15" uuid="0bdcf7f0-fecf-4c34-a055-d0dae6e445ca"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tipo de Billete:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="142" width="100" height="15" uuid="c49befbe-6350-400f-9605-4c3bad019bc2"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="157" width="100" height="15" uuid="7ac9f34a-a9e7-48e6-861f-5a564ca15fd4"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Monedas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="112" width="100" height="15" uuid="4bf4e795-f726-44d9-90e3-6804fa24d6ab"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="127" width="100" height="15" uuid="47d0e98e-3a9d-45dd-b7be-d5cc81a41dff"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="97" width="100" height="15" uuid="d8f9b5d7-faf4-4b18-936c-d422ce0f5b80"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="67" width="100" height="15" uuid="e38a1da4-3a8f-4f96-99ad-116137344c03"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[100]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="82" width="100" height="15" uuid="caa41e11-bf10-4830-a042-372d72ef09d1"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[50]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="52" width="62" height="15" uuid="2d286995-00fc-4178-bfcb-eeebabd5051c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="52" width="100" height="15" uuid="988ddb02-cdc7-49e3-b96f-36550b8d441f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="157" width="100" height="15" uuid="55eb35e4-ec80-4e34-b5de-e2d4d16c7f04"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MONEDAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="67" width="100" height="15" uuid="0d7eb344-97c6-464f-8885-e3f44390d1cc"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_100_1}.multiply(new java.math.BigDecimal(100))]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="97" width="100" height="15" uuid="fbb9715f-85a6-40e6-8672-18c436bb907e"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_20_1}.multiply(new java.math.BigDecimal(20))]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="142" width="100" height="15" uuid="8620009e-29ef-46f4-8298-9f9c2fad955b"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_1_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="82" width="100" height="15" uuid="d0bfcedd-7d4e-483e-89d4-309266494242"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_50_1}.multiply(new java.math.BigDecimal(50))]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="127" width="100" height="15" uuid="1f148bf2-cdad-425b-b21c-c2f97ac914f0"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_5_1}.multiply(new java.math.BigDecimal(5))]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="112" width="100" height="15" uuid="930cc311-6502-4e69-9cf8-7b8d5b5733b0"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{BILLETE_10_1}.multiply(new java.math.BigDecimal(10))]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="172" width="100" height="15" uuid="064c0a48-d176-4a0d-8cf3-6595ee998079"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{TOTAL_EFECTIVO_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="88" y="0" width="100" height="15" uuid="fe92cc4b-831b-4464-90f8-a654af8e528d"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_EFECTIVO_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="0" width="100" height="15" uuid="314b1440-db74-4c63-8454-2284bc33cc6e"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IMPORTE_CHEQUES_PROPIOS_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="288" y="0" width="100" height="15" uuid="c42d7ce8-6336-4ff0-8049-cda67cf15787"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IMPORTE_CHEQUES_AJENOS_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="388" y="0" width="100" height="15" uuid="367a6822-af56-4fe9-a81d-c67577b8e53e"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_REMESA_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="67" width="62" height="15" uuid="c0d85937-0b8a-4ca9-b060-f645078e8130"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_100_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="82" width="62" height="15" uuid="0d446a90-53d0-4c2f-a1bf-2fe6f934d743"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_50_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="97" width="62" height="15" uuid="1aab256a-67a9-40af-83b2-fb381d588286"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_20_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="112" width="62" height="15" uuid="be7b9a66-aec0-4a59-bb37-a3a4f6b6fd6c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_10_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="127" width="62" height="15" uuid="8bf6f773-64d2-4363-806c-258f69cb3382"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_5_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="142" width="62" height="15" uuid="9dd69b81-21bc-4459-9bb9-0c8d75c4afd1"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BILLETE_1_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="0" width="62" height="15" uuid="7b5d5b90-4945-49e6-a48f-10ec2fb9fd76"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="157" width="62" height="15" uuid="1445562c-2880-49a9-b8d8-7359dcf03642"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="172" width="62" height="15" uuid="5c3a9aa1-5f3a-4fc8-9126-3b0f23acbdbb"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="172" width="100" height="15" uuid="badca7d5-d58e-4121-8f32-6b03c10b5e01"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="26" y="209" width="462" height="65" uuid="009c55d4-39c7-41c8-bbdb-9de59864c057"/>
+				<subreportParameter name="FECHA">
+					<subreportParameterExpression><![CDATA[$P{FECHA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="COLECTURIA">
+					<subreportParameterExpression><![CDATA[$P{COLECTURIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="CUENTA">
+					<subreportParameterExpression><![CDATA[$P{CUENTA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="CAJA">
+					<subreportParameterExpression><![CDATA[$P{CAJA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "RemesaPorCajero_chequesPropios.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="26" y="297" width="462" height="65" uuid="aed4600a-8132-4807-8c2d-5b5ba0900a39"/>
+				<subreportParameter name="FECHA">
+					<subreportParameterExpression><![CDATA[$P{FECHA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="COLECTURIA">
+					<subreportParameterExpression><![CDATA[$P{COLECTURIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="CUENTA">
+					<subreportParameterExpression><![CDATA[$P{CUENTA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="CAJA">
+					<subreportParameterExpression><![CDATA[$P{CAJA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "RemesaPorCajero_chequesAjenos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+	<noData>
+		<band height="167">
+			<staticText>
+				<reportElement x="26" y="76" width="62" height="20" uuid="e05e1de5-3a49-47bf-a975-503c3c9a44d4"/>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="116" width="62" height="20" uuid="52568c2d-2a94-4db9-8c65-4e973a4192ca"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="36" width="62" height="20" uuid="50639779-4ab3-4a99-8dd0-caa0155ad155"/>
+				<text><![CDATA[Colecturia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="96" width="62" height="20" uuid="0e774c7d-08e1-4c56-9dc7-7909f09616a0"/>
+				<text><![CDATA[Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="56" width="62" height="20" uuid="60605248-64b1-441b-9059-6dd19fe12ba4"/>
+				<text><![CDATA[Cajero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="136" width="62" height="20" uuid="619739e5-3665-455e-8670-a29589a8a82f"/>
+				<text><![CDATA[No. Bolsa:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="16" width="298" height="20" uuid="33ed96b5-95b1-4bc3-8149-90aceb582b70"/>
+				<text><![CDATA[No se encontraron registros para los parametros ingresados]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

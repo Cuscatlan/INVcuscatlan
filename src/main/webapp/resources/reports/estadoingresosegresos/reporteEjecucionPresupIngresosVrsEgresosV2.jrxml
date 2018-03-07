@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjecucionPresupIngresosVrsEgresosV2" pageWidth="1000" pageHeight="1100" whenNoDataType="AllSectionsNoDetail" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d27dcb41-a4c2-465b-aad6-ae0adff46f9a">
+	<property name="ireport.zoom" value="1.9487171000000039"/>
+	<property name="ireport.x" value="465"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_FECHA_DESDE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_FECHA_HASTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ENTIDAD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_IMG_LEFT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_CENTER" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_RIGHT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_EJERCICIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_MES" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_INSTITUCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SUB_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_PROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_SUB_SPROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_OBJE_ESPECIFICO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_SUBCUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_CUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_RUBRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_EJCUTADO_SUPERAVIT" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="P_MODIFICADO_SUPERAVIT" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP_DESC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_UFI" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_CLASIF_ORGA_FINA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_PROYECTO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ACTIVIDAD" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_OBRRA_TAREA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_TIPO_MOVIMIENTO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_FUENTE_FINANC" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_FUNCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SECT_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SUBSECT_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_GRUPO_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_DIV_INST" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_CONVENIO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_YEAR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_VALOR_MONETARIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_SK_PERIODO" class="java.lang.Integer" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select     T.CLAECO_ING_GAS AS CODIGO,
+               (CASE
+                    WHEN NIVEL = 'ESPECIFICO' THEN
+                        '      '||DESCRIPCION
+                    ELSE
+                        DESCRIPCION
+                END) AS CONCEPTO,
+               PKG_ESTADO_PRESUP.GET_NOTA_EXPLICATIVA_PRESUP($P{P_SK_PERIODO}, t.CLAECO_ING_GAS) AS NOTA,
+               PKG_ESTADO_PRESUP.FN_GET_MONTO_ESTADO_PRESUP_EG(
+                 P_EJERCICIO => $P{P_EJERCICIO},
+                 P_MES => $P{P_MES},
+                 P_INSTITUCION =>$P{P_INSTITUCION},
+                 P_TIPO_PRESUP => $P{P_TIPO_PRESUP},
+                 P_SUB_TIPO_PRESUP => $P{P_SUB_TIPO_PRESUP},
+                 P_CLAECO_ING_GAS => t.CLAECO_ING_GAS,
+                 P_COLUMN_NAME => 'COMPROMETIDO',
+                 P_CLASIF_ORGA_FINA  => $P{P_CLASIF_ORGA_FINA}  ,
+                 P_ID_PROGRAMA       => $P{P_ID_PROGRAMA},
+                 P_ID_SUB_SPROGRAMA  => $P{P_ID_SUB_SPROGRAMA},
+                 P_PROYECTO          => $P{P_PROYECTO},
+                 P_ACTIVIDAD         => $P{P_ACTIVIDAD},
+                 P_OBRRA_TAREA       => $P{P_OBRRA_TAREA},
+                 P_ID_TIPO_MOVIMIENTO  => $P{P_ID_TIPO_MOVIMIENTO},
+                 P_ID_FUENTE_FINANC    => $P{P_ID_FUENTE_FINANC},
+                 P_FUNCION             => $P{P_FUNCION},
+                 P_SECT_INST           => $P{P_SECT_INST},
+                 P_SUBSECT_INST        => $P{P_SUBSECT_INST},
+                 P_GRUPO_INST          => $P{P_GRUPO_INST},
+                 P_DIV_INST            => $P{P_DIV_INST},
+                 P_ID_UFI              => $P{P_ID_UFI},
+                 P_ID_CONVENIO         => $P{P_ID_CONVENIO},
+                 P_VALOR_MONETARIO         => $P{P_VALOR_MONETARIO}
+               ) AS PR_MODIFICADO,
+               PKG_ESTADO_PRESUP.FN_GET_MONTO_ESTADO_PRESUP_EG(
+                 P_EJERCICIO => $P{P_EJERCICIO},
+                 P_MES => $P{P_MES},
+                 P_INSTITUCION =>$P{P_INSTITUCION},
+                 P_TIPO_PRESUP => $P{P_TIPO_PRESUP},
+                 P_SUB_TIPO_PRESUP => $P{P_SUB_TIPO_PRESUP},
+                 P_CLAECO_ING_GAS => t.CLAECO_ING_GAS,
+                 P_COLUMN_NAME => 'DEVENGADO',
+                 P_CLASIF_ORGA_FINA  => $P{P_CLASIF_ORGA_FINA}  ,
+                 P_ID_PROGRAMA       => $P{P_ID_PROGRAMA},
+                 P_ID_SUB_SPROGRAMA  => $P{P_ID_SUB_SPROGRAMA},
+                 P_PROYECTO          => $P{P_PROYECTO},
+                 P_ACTIVIDAD         => $P{P_ACTIVIDAD},
+                 P_OBRRA_TAREA       => $P{P_OBRRA_TAREA},
+                 P_ID_TIPO_MOVIMIENTO  => $P{P_ID_TIPO_MOVIMIENTO},
+                 P_ID_FUENTE_FINANC    => $P{P_ID_FUENTE_FINANC},
+                 P_FUNCION             => $P{P_FUNCION},
+                 P_SECT_INST           => $P{P_SECT_INST},
+                 P_SUBSECT_INST        => $P{P_SUBSECT_INST},
+                 P_GRUPO_INST          => $P{P_GRUPO_INST},
+                 P_DIV_INST            => $P{P_DIV_INST},
+                 P_ID_UFI              => $P{P_ID_UFI},
+                 P_ID_CONVENIO         => $P{P_ID_CONVENIO},
+                 P_VALOR_MONETARIO         => $P{P_VALOR_MONETARIO}
+               ) AS PR_EJECUCION,
+               t.NIVEL,
+              (CASE
+                WHEN t.CLAECO_ING_GAS LIKE '21%' THEN --GASTOS CORRIENTES
+                  1
+                WHEN t.CLAECO_ING_GAS LIKE '22%' THEN --GASTOS DE CAPITAL
+                  2
+                WHEN t.CLAECO_ING_GAS LIKE '23%' THEN --APLICACIONES FINANCIERAS
+                  3
+                WHEN t.CLAECO_ING_GAS LIKE '24%' THEN --CONTRIBUCIONES ESPECIALES
+                  4
+                ELSE
+                  5
+               END
+               ) AS GRP_CLASIFICA
+     from (
+               select DISTINCT
+               c.CLAECO_ING_GAS ,
+               c.DESCRIPCION,
+               c.NIVEL
+               from
+               VTB_CI_CLASIF_ING_GAS
+               c
+               where nivel = 'RUBRO'
+               AND c.CLAECO_ING_GAS like '2%'
+               order by c.CLAECO_ING_GAS
+    ) t]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="NOTA" class="java.lang.String"/>
+	<field name="PR_MODIFICADO" class="java.math.BigDecimal"/>
+	<field name="PR_EJECUCION" class="java.math.BigDecimal"/>
+	<field name="NIVEL" class="java.lang.String"/>
+	<field name="GRP_CLASIFICA" class="java.math.BigDecimal"/>
+	<variable name="GRP_CLASIFICA_SUM_PR_MODIFICADO" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_MODIFICADO}]]></variableExpression>
+	</variable>
+	<variable name="GRP_CLASIFICA_SUM_PR_EJECUCION" class="java.math.BigDecimal" resetType="Group" resetGroup="GRP_CLASIFICA" calculation="Sum">
+		<variableExpression><![CDATA[$F{PR_EJECUCION}]]></variableExpression>
+	</variable>
+	<group name="GRP_CLASIFICA">
+		<groupExpression><![CDATA[$F{GRP_CLASIFICA}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="961" height="20" uuid="a926948d-af9a-4e27-b220-eba7703a4159"/>
+					<textFieldExpression><![CDATA[$F{GRP_CLASIFICA}.equals( new Long(1) ) ? "Corrientes" :
+    $F{GRP_CLASIFICA}.equals( new Long(2) ) ? "De Capital" :
+		$F{GRP_CLASIFICA}.equals( new Long(3) ) ? "Aplicaciones Financieras" :
+					$F{GRP_CLASIFICA}.equals( new Long(4) ) ? "Contribuciones Especiales" : ""]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="0" y="0" width="737" height="20" uuid="7b909c49-c4a1-4c08-bb3b-e432ba92fef5"/>
+					<textElement textAlignment="Center">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="737" y="0" width="109" height="20" uuid="20e46637-c52b-4b45-9344-35499dbfe975"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_PR_MODIFICADO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+					<reportElement x="846" y="0" width="114" height="20" uuid="32f56fd5-11dd-446a-912f-311ea782b32b"/>
+					<textFieldExpression><![CDATA[$V{GRP_CLASIFICA_SUM_PR_EJECUCION}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="960" height="20" uuid="e2dc6e1a-202a-4723-8957-96117b3492e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE EJECUCIÓN PRESUPUESTARIA DE INGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="364" height="20" uuid="7206949e-3c5b-4ba8-b6b4-5fed276c28d9"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="40" width="132" height="20" uuid="d01e78d1-6f03-493d-8de5-037bfdfcbd58"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="364" y="40" width="95" height="20" uuid="0e53228c-6e0d-4984-9d53-1824d02a82a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_DESDE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="960" height="20" uuid="ba9b827b-b574-4e61-be4b-1bb68f3f6ba8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{P_ENTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="591" y="40" width="133" height="20" uuid="a328bd8d-ddd4-4f7c-afed-c1d2e75aa066"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_HASTA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="748" y="40" width="212" height="20" uuid="1b02bb94-37ab-42c3-b215-aabd8abf8a96"/>
+				<textFieldExpression><![CDATA[$P{P_YEAR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="724" y="40" width="24" height="20" uuid="32da4142-80f5-4112-8e58-eae0a174c91d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="310" height="22" uuid="6f847956-4044-41a8-b117-a6e306a68342"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO DE PRESUPUESTO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="310" y="0" width="650" height="22" uuid="ab868a44-0045-4411-af0d-f508845ebe91"/>
+				<textFieldExpression><![CDATA[$P{P_TIPO_PRESUP_DESC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="515" height="20" uuid="e4af87ac-6d24-414b-8d7a-51517fc8be55"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="515" y="0" width="221" height="20" uuid="c26729b8-a148-4562-875b-3f9650c1ce5b"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTA No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="736" y="0" width="111" height="20" uuid="18802581-fa19-4fe9-9bfd-6ddf3795bda4"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRESUPUESTO MODIFICADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="847" y="0" width="113" height="20" uuid="638a4486-fa00-47e2-9b9a-60fae9929ad9"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EJECUCIÓN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="52" height="20" uuid="1527ed35-c830-4da4-8e50-cb0d2001c51d"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="52" y="0" width="463" height="20" uuid="24ed1e51-a372-4b4d-8ceb-9a6c9d2494ee"/>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="515" y="0" width="222" height="20" uuid="a08ed735-9b6b-4b90-8f11-d0302f877a3a"/>
+				<textFieldExpression><![CDATA[$F{NOTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="736" y="0" width="111" height="20" uuid="5b59f86f-a640-4a45-8d65-a1fa4bcfac77"/>
+				<textFieldExpression><![CDATA[$F{PR_MODIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="847" y="0" width="114" height="20" uuid="71798c39-9793-46bd-9e52-91e127c63dd0"/>
+				<textFieldExpression><![CDATA[$F{PR_EJECUCION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="68" splitType="Stretch">
+			<image hAlign="Left">
+				<reportElement x="0" y="20" width="115" height="48" uuid="ab63fdb4-1f94-4921-8510-de130c946000"/>
+				<imageExpression><![CDATA[$P{P_IMG_LEFT}]]></imageExpression>
+			</image>
+			<image hAlign="Center">
+				<reportElement x="115" y="20" width="729" height="48" uuid="5fe1a1f9-4bf8-4003-bebb-b878a57fb7f8"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_CENTER}]]></imageExpression>
+			</image>
+			<image hAlign="Right">
+				<reportElement x="844" y="20" width="116" height="48" uuid="ae7e041a-b104-4e16-a33f-85116c4177b3"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_RIGHT}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="737" height="20" uuid="1509d0ae-8ddd-411f-b27a-4a37e7b68eaf"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUPERAVIT PRESUPUESTARIO]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="847" y="0" width="113" height="20" uuid="51852930-6eb7-4c5b-ad42-959a54ad7709"/>
+				<textFieldExpression><![CDATA[$P{P_EJCUTADO_SUPERAVIT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="737" y="0" width="110" height="20" uuid="b1c9830e-eba2-483b-b4ba-2b521f931303"/>
+				<textFieldExpression><![CDATA[$P{P_MODIFICADO_SUPERAVIT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

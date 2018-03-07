@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEstadoRendimientoFinancieroGub" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fac8473f-7a9b-4673-9061-8eaf9d21f531">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="parameter_report" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sk_periodo_gubernamental" class="java.lang.Integer" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sk_periodo_gubernamental_ant" class="java.lang.Integer" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="parameter_institucion" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dia" class="java.lang.String"/>
+	<parameter name="mes" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT orden,
+         extra_level,
+         codigo_padre_padre,
+         descripcion_padre_padre,
+         codigo_padre,
+         descripcion_padre,
+         codigo,
+         tabla_di.descripcion,
+         saldo,
+         saldo_anterior,
+         nivel,
+         cod_ufi,
+         f.descripcion as nombre_institucion,
+         label_sumatoria,
+         sumarDistintoOperaciones,
+         sumarXOperaciones,
+         mostrarXOperaciones,
+         noShow
+    FROM (  -- INGRESOS DE OPERACIONES
+            SELECT 1 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Ingresos de Operaciones' AS descripcion_padre_padre,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Ingresos de Operaciones' AS label_sumatoria,
+                   1 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   0 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+              SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '411%'
+                                  OR d.codigo LIKE '412%'
+                                  OR d.codigo LIKE '413%'
+                                  OR d.codigo LIKE '414%'
+                                  OR d.codigo LIKE '415%'
+                                  OR d.codigo LIKE '419%'
+                                  OR d.codigo LIKE '421%'
+                                  OR d.codigo LIKE '422%'
+                                  OR d.codigo LIKE '429%'
+                                  OR d.codigo LIKE '431%'
+                                  OR d.codigo LIKE '432%'
+                                  OR d.codigo LIKE '433%'
+                                  OR d.codigo LIKE '434%'
+                                  OR d.codigo LIKE '439%'
+                                  OR d.codigo LIKE '441%'
+                                  OR d.codigo LIKE '442%'
+                                  OR d.codigo LIKE '443%'
+                                  OR d.codigo LIKE '444%'
+                                  OR d.codigo LIKE '451%'
+                                  OR d.codigo LIKE '452%'
+                                  OR d.codigo LIKE '461%'
+                                  OR d.codigo LIKE '462%'
+                                  OR d.codigo LIKE '492%'
+                                  OR d.codigo LIKE '494%'
+                                  OR d.codigo LIKE '499%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- INGRESOS DE OPERACIONES. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '411%'
+                                  OR d.codigo LIKE '412%'
+                                  OR d.codigo LIKE '413%'
+                                  OR d.codigo LIKE '414%'
+                                  OR d.codigo LIKE '415%'
+                                  OR d.codigo LIKE '419%'
+                                  OR d.codigo LIKE '421%'
+                                  OR d.codigo LIKE '422%'
+                                  OR d.codigo LIKE '429%'
+                                  OR d.codigo LIKE '431%'
+                                  OR d.codigo LIKE '432%'
+                                  OR d.codigo LIKE '433%'
+                                  OR d.codigo LIKE '434%'
+                                  OR d.codigo LIKE '439%'
+                                  OR d.codigo LIKE '441%'
+                                  OR d.codigo LIKE '442%'
+                                  OR d.codigo LIKE '443%'
+                                  OR d.codigo LIKE '444%'
+                                  OR d.codigo LIKE '451%'
+                                  OR d.codigo LIKE '452%'
+                                  OR d.codigo LIKE '461%'
+                                  OR d.codigo LIKE '462%'
+                                  OR d.codigo LIKE '492%'
+                                  OR d.codigo LIKE '494%'
+                                  OR d.codigo LIKE '499%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- GASTOS DE OPERACIONES
+            SELECT 2 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Gastos de Operaciones' AS descripcion_padre_padre,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Gastos de Operaciones' AS label_sumatoria,
+                   2 AS sumarXOperaciones,
+                   1 AS mostrarXOperaciones,
+                   0 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+              SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '511%'
+                                  OR d.codigo LIKE '512%'
+                                  OR d.codigo LIKE '513%'
+                                  OR d.codigo LIKE '514%'
+                                  OR d.codigo LIKE '518%'
+                                  OR d.codigo LIKE '541%'
+                                  OR d.codigo LIKE '542%'
+                                  OR d.codigo LIKE '599%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- GASTOS DE OPERACIONES. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '511%'
+                                  OR d.codigo LIKE '512%'
+                                  OR d.codigo LIKE '513%'
+                                  OR d.codigo LIKE '514%'
+                                  OR d.codigo LIKE '518%'
+                                  OR d.codigo LIKE '541%'
+                                  OR d.codigo LIKE '542%'
+                                  OR d.codigo LIKE '599%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- GASTOS FINANCIEROS
+            SELECT 4 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Gastos financieros' AS descripcion_padre_padre,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Gastos financieros' AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+              SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (d.codigo LIKE '521%' OR d.codigo LIKE '529%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- GASTOS FINANCIEROS. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             g.descripcion AS descripcion_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (d.codigo LIKE '521%' OR d.codigo LIKE '529%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   descripcion_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- DETERIORO Y PERDIDAS DE ACTIVOS
+            SELECT 5 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Deterioro y pérdidas de activos' AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '4' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Resultados por deterioro y pérdidas de activos'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+                SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '493%'
+                                  OR d.codigo LIKE '495%'
+                                  OR d.codigo LIKE '515%'
+                                  OR d.codigo LIKE '516%'
+                                  OR d.codigo LIKE '517%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- DETERIORO Y PERDIDAS DE ACTIVOS. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '493%'
+                                  OR d.codigo LIKE '495%'
+                                  OR d.codigo LIKE '515%'
+                                  OR d.codigo LIKE '516%'
+                                  OR d.codigo LIKE '517%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- RESULTADOS POR VENTAS DE ACTIVOS
+            SELECT 6 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Resultados por ventas de activos' AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '4' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Resultados por ventas de activos' AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+                SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '445%'
+                                  OR d.codigo LIKE '446%'
+                                  OR d.codigo LIKE '532%'
+                                  OR d.codigo LIKE '533%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- RESULTADOS POR VENTAS DE ACTIVOS. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '445%'
+                                  OR d.codigo LIKE '446%'
+                                  OR d.codigo LIKE '532%'
+                                  OR d.codigo LIKE '533%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- RESULTADOS DE INVERSIONES PATRIMONIALES
+            SELECT 7 AS orden,
+                   '' AS extra_level,
+                   codigo_padre_padre,
+                   'Resultados de inversiones patrimoniales'
+                      AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '4' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total de Resultados de inversiones patrimoniales'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+                SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (d.codigo LIKE '496%' OR d.codigo LIKE '592%')
+                             AND   d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- RESULTADOS DE INVERSIONES PATRIMONIALES. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (d.codigo LIKE '496%' OR d.codigo LIKE '592%')
+                             AND d.nivel = 3
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            --RESULTADO POR TENENCIA POR Y RESULTADO POR EXPOSICION DE LA INFLAMACION
+            -- DIFERENCIAS DE CAMBIOS
+            SELECT 8 AS orden,
+                   'Diferencias de Cambios' AS extra_level,
+                   codigo_padre_padre,
+                   'Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '49' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+                SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '49101%'
+                                  OR d.codigo LIKE '49102%'
+                                  OR d.codigo LIKE '59101%'
+                                  OR d.codigo LIKE '59102%')
+                             AND d.nivel = 4
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- DIFERENCIAS DE CAMBIOS. PERIODO ANTERIOR.
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '49101%'
+                                  OR d.codigo LIKE '49102%'
+                                  OR d.codigo LIKE '59101%'
+                                  OR d.codigo LIKE '59102%')
+                             AND d.nivel = 4
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- RESULTADOS POR TENENCIA
+            SELECT 8 AS orden,
+                   'Resultados por tenencia' AS extra_level,
+                   codigo_padre_padre,
+                   'Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '49' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (
+                SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '59103%'
+                                  OR d.codigo LIKE '59104%'
+                                  OR d.codigo LIKE '59105%'
+                                  OR d.codigo LIKE '49103%'
+                                  OR d.codigo LIKE '49104%'
+                                  OR d.codigo LIKE '49105%')
+                             AND d.nivel = 4
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- RESULTADOS POR TENENCIA. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '59103%'
+                                  OR d.codigo LIKE '59104%'
+                                  OR d.codigo LIKE '59105%'
+                                  OR d.codigo LIKE '49103%'
+                                  OR d.codigo LIKE '49104%'
+                                  OR d.codigo LIKE '49105%')
+                             AND d.nivel = 4
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            SELECT 8 AS orden,
+                   'Resultados por exposición a la inflación' AS extra_level,
+                   codigo_padre_padre,
+                   'Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '491' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Total Resultados por tenencia y Resultado por Exposición de Inflación'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   1 AS sumarDistintoOperaciones,
+                   0 AS noShow
+              FROM (  -- RESULTADOS POR EXPOSICIÓN A LA INFLACION
+                       SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (   d.codigo LIKE '5910601%'
+                                  OR d.codigo LIKE '5910602%'
+                                  OR d.codigo LIKE '4910601%'
+                                  OR d.codigo LIKE '4910602%')
+                             AND d.nivel = 5
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- RESULTADOS POR EXPOSICIÓN A LA INFLACION. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (   d.codigo LIKE '5910601%'
+                                  OR d.codigo LIKE '5910602%'
+                                  OR d.codigo LIKE '4910601%'
+                                  OR d.codigo LIKE '4910602%')
+                             AND d.nivel = 5
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+          UNION ALL
+            -- PARTICIPACIÓN DE INTERESES MINORITARIOS EN EL RESULTADO NETO
+            SELECT 9 AS orden,
+                   'Intereses Minoritarios' AS extra_level,
+                   codigo_padre_padre,
+                   'Intereses Minoritarios' AS descripcion_padre_padre,
+                   codigo_padre,
+                   CASE codigo_padre_padre
+                      WHEN '496' THEN 'Resultados positivos'
+                      ELSE 'Resultados negativos'
+                   END
+                      AS descripcion_padre,
+                   codigo,
+                   descripcion,
+                   SUM (saldo) AS saldo,
+                   SUM (saldo_anterior) AS saldo_anterior,
+                   nivel,
+                   cod_ufi,
+                   'Participación de los intereses minoritarios en el resultado netro (*)'
+                      AS label_sumatoria,
+                   0 AS sumarXOperaciones,
+                   0 AS mostrarXOperaciones,
+                   0 AS sumarDistintoOperaciones,
+                   1 AS noShow
+              FROM (
+                    SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             SUM (saldos) AS saldo,
+                             0 AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental})
+                             AND (d.codigo LIKE '49602%' OR d.codigo LIKE '59202%')
+                             AND d.nivel = 5
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                    UNION ALL
+                      -- PARTICIPACIÓN DE INTERESES MINORITARIOS EN EL RESULTADO NETO. PERIODO ANTERIOR
+                      SELECT h.codigo AS codigo_padre_padre,
+                             g.codigo AS codigo_padre,
+                             d.codigo,
+                             d.descripcion,
+                             0 AS saldo,
+                             SUM (saldos) AS saldo_anterior,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi AS cod_ufi
+                        FROM tc_periodo_contable a,
+                             tc_periodos_contables_saldos b,
+                             cc_catalogo_cuenta d,
+                             cc_catalogo_cuenta g,
+                             cc_catalogo_cuenta h
+                       WHERE     a.sk_periodo_contable = b.sk_periodo
+                             AND b.sk_cuenta = d.sk_cuenta_contable
+                             AND d.id_parent = g.sk_cuenta_contable
+                             AND g.id_parent = h.sk_cuenta_contable
+							 and   a.sk_periodo_contable in ( select sk_periodo_contable from TC_PERIODO_CONTABLE where sk_periodo_gubernamental = $P{sk_periodo_gubernamental_ant})
+                             AND (d.codigo LIKE '49602%' OR d.codigo LIKE '59202%')
+                             AND d.nivel = 5
+		        $P!{parameter_report}
+                    GROUP BY d.codigo,
+                             d.descripcion,
+                             d.nivel,
+                             b.sk_cod_ufi_usefi,
+                             g.codigo,
+                             g.descripcion,
+                             h.codigo,
+                             h.descripcion
+                             )
+          GROUP BY codigo,
+                   descripcion,
+                   nivel,
+                   cod_ufi,
+                   codigo_padre,
+                   codigo_padre_padre
+                   ) TABLA_DI, vtb_ci_unidad_financ e, vtb_ci_institucion f
+WHERE  TABLA_DI.cod_ufi = e.sk_unidad_financ
+    and   e.institucion_id = f.sk_institucion
+    $P!{parameter_institucion}
+ORDER BY orden,
+         extra_level,
+         codigo_padre,
+         codigo]]>
+	</queryString>
+	<field name="ORDEN" class="java.math.BigDecimal"/>
+	<field name="EXTRA_LEVEL" class="java.lang.String"/>
+	<field name="CODIGO_PADRE_PADRE" class="java.lang.String"/>
+	<field name="DESCRIPCION_PADRE_PADRE" class="java.lang.String"/>
+	<field name="CODIGO_PADRE" class="java.lang.String"/>
+	<field name="DESCRIPCION_PADRE" class="java.lang.String"/>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="SALDO" class="java.math.BigDecimal"/>
+	<field name="SALDO_ANTERIOR" class="java.math.BigDecimal"/>
+	<field name="NIVEL" class="java.math.BigDecimal"/>
+	<field name="COD_UFI" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_INSTITUCION" class="java.lang.String"/>
+	<field name="LABEL_SUMATORIA" class="java.lang.String"/>
+	<field name="SUMARDISTINTOOPERACIONES" class="java.math.BigDecimal"/>
+	<field name="SUMARXOPERACIONES" class="java.math.BigDecimal"/>
+	<field name="MOSTRARXOPERACIONES" class="java.math.BigDecimal"/>
+	<field name="NOSHOW" class="java.math.BigDecimal"/>
+	<variable name="SALDO_ANTERIOR_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_ANTERIOR}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_5" class="java.math.BigDecimal" resetType="Group" resetGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_6" class="java.math.BigDecimal" resetType="Group" resetGroup="Nivel2" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_7" class="java.math.BigDecimal" resetType="Group" resetGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO}]]></variableExpression>
+	</variable>
+	<variable name="resultDistintoOperaciones" class="java.math.BigDecimal" incrementType="Group" incrementGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{SUMARDISTINTOOPERACIONES} == 1) ? $V{SALDO_5} : 0.0 )]]></variableExpression>
+	</variable>
+	<variable name="resultEjercicio" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{resultPorOperaciones}.subtract($V{resultDistintoOperaciones})]]></variableExpression>
+	</variable>
+	<variable name="resultPorOperaciones" class="java.math.BigDecimal" incrementType="Group" incrementGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{SUMARXOPERACIONES} == 1) ? $V{SALDO_5} : ( ($F{SUMARXOPERACIONES} == 2)  ? $V{SALDO_5}.negate() : 0.0 ) )]]></variableExpression>
+	</variable>
+	<variable name="SALDO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="extraLevel" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{DESCRIPCION_PADRE}.compareTo("Resultados negativos")) ? $F{SALDO} : $F{SALDO}.negate())]]></variableExpression>
+	</variable>
+	<variable name="interesesMinoritarios" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SALDO_1}]]></variableExpression>
+	</variable>
+	<variable name="resultFinal" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{resultEjercicio}.add( $V{interesesMinoritarios} )]]></variableExpression>
+	</variable>
+	<variable name="SALDO_ANTERIOR_2" class="java.math.BigDecimal" resetType="Group" resetGroup="extraLevel" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{DESCRIPCION_PADRE}.compareTo("Resultados negativos")) ? $F{SALDO_ANTERIOR} : $F{SALDO_ANTERIOR}.negate())]]></variableExpression>
+	</variable>
+	<variable name="SALDO_ANTERIOR_3" class="java.math.BigDecimal" resetType="Group" resetGroup="Nivel2" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_ANTERIOR}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_ANTERIOR_4" class="java.math.BigDecimal" incrementType="Group" incrementGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{SUMARXOPERACIONES} == 1) ? $V{SALDO_ANTERIOR_1} : ( ($F{SUMARXOPERACIONES} == 2)  ? $V{SALDO_ANTERIOR_1}.negate() : 0.0 ) )]]></variableExpression>
+	</variable>
+	<variable name="SALDO_ANTERIOR_5" class="java.math.BigDecimal" incrementType="Group" incrementGroup="Nivel1" calculation="Sum">
+		<variableExpression><![CDATA[( ($F{SUMARDISTINTOOPERACIONES} == 1) ? $V{SALDO_ANTERIOR_1} : 0.0 )]]></variableExpression>
+	</variable>
+	<variable name="resultEjercicio_anterior" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SALDO_ANTERIOR_4}.subtract($V{SALDO_ANTERIOR_5})]]></variableExpression>
+	</variable>
+	<variable name="interesesMinoritarios_anterior" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SALDO_ANTERIOR_2}]]></variableExpression>
+	</variable>
+	<variable name="resultFinal_anterior" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{resultEjercicio_anterior}.add($V{interesesMinoritarios_anterior})]]></variableExpression>
+	</variable>
+	<group name="Nivel1">
+		<groupExpression><![CDATA[$F{DESCRIPCION_PADRE_PADRE}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{NOSHOW} == 0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="344" height="20" uuid="b4363b50-12c5-4f39-8654-0808cab1aa1f"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DESCRIPCION_PADRE_PADRE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{NOSHOW} == 0]]></printWhenExpression>
+				<rectangle>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20" backcolor="#CCCCCC" uuid="f1b0c3b7-5ec0-4917-92fd-1ecef0481ef5"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="0" width="344" height="20" uuid="820f0d11-5b77-4ba2-b483-a83f3554e607"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LABEL_SUMATORIA}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="401" y="0" width="77" height="20" uuid="d2889fea-d9ae-466e-a92b-3d16f3ecf206"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_5}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="478" y="0" width="77" height="20" uuid="d8c64e1c-dac2-44e4-a3bd-57c64b68b506"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_ANTERIOR_1}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="27">
+				<printWhenExpression><![CDATA[$F{MOSTRARXOPERACIONES} == 1]]></printWhenExpression>
+				<rectangle>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="7" width="555" height="20" backcolor="#999999" uuid="56214155-3181-4060-8868-b1cb24e6fb6b"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="7" width="344" height="20" uuid="c6ad0805-e107-46c3-b3df-0b001b19ecff"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Resultado - ahorro (desahorro) - por operaciones]]></text>
+				</staticText>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="401" y="7" width="77" height="20" uuid="4442b633-d0bd-4dcb-b1aa-c5e8e0ac0e59"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{resultPorOperaciones}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="478" y="7" width="77" height="20" uuid="af6a59fc-fb24-4264-a1f9-07086a1465af"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_ANTERIOR_4}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="extraLevel">
+		<groupExpression><![CDATA[$F{EXTRA_LEVEL}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[($F{NIVEL} == 4 || $F{NIVEL} == 5) && $F{NOSHOW} == 0]]></printWhenExpression>
+				<textField>
+					<reportElement x="0" y="0" width="344" height="20" uuid="31ec4cae-209d-4fcf-82dc-3bf07de6e40c"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EXTRA_LEVEL}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="extraLevel" pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="401" y="0" width="77" height="20" uuid="5c8c7fc3-20d0-4e71-a037-462d89da8b15"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="extraLevel" pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="478" y="0" width="77" height="20" uuid="20a52db3-5695-40d9-97c7-8b1bf747cf3c"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_ANTERIOR_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Nivel2">
+		<groupExpression><![CDATA[$F{CODIGO_PADRE}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{NOSHOW} == 0]]></printWhenExpression>
+				<textField>
+					<reportElement x="16" y="0" width="328" height="20" uuid="e171658e-4b7f-4e55-8632-e7217fd5b9cb"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DESCRIPCION_PADRE}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Nivel2" pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="401" y="0" width="77" height="20" uuid="0734e028-c4c6-4a72-8421-333ad88dc6a5"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_6}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Nivel2" pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="478" y="0" width="77" height="20" uuid="ae79e383-0463-411e-926a-59159a612d1d"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SALDO_ANTERIOR_3}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="20" width="555" height="20" uuid="3efbbff7-d239-43e4-b40f-5a23f3dceda0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ESTADO DE RENDIMIENTO FINANCIERO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="555" height="20" uuid="5cf28b47-3eac-4c59-820c-72279e181a65"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- Al " + $P{dia} + " de " + $P{mes} + " de " + $P{anio} + " -"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="fa53344e-05bc-43e6-a382-ad8ae342fcfa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Direccion General de Contabilidad Gubernamental]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="344" height="20" uuid="69414083-42f7-4ccb-9e53-93cdc5f1ced8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[RESULTADOS POR OPERACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="0" width="77" height="20" uuid="fe89a6bb-34e1-423b-904e-11a64b8b8db4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="0" width="77" height="20" uuid="e39273dc-770f-4fbf-853f-1d058cafdd65"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Ejercicio - 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="0" width="57" height="20" uuid="69815720-1f34-4b44-97b0-559d6914f3a1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[No.Nota]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{NOSHOW} == 0]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="28" y="0" width="316" height="20" uuid="7dd90139-417e-411b-9c1e-fb9fb3aee1d0"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="401" y="0" width="77" height="20" uuid="dfd3b281-b471-4b4d-925d-95ea0553bf93"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="478" y="0" width="77" height="20" uuid="20bb4cc7-4e0c-4a08-8011-277bef5cb0f3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALDO_ANTERIOR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="122" splitType="Stretch">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="7" width="555" height="20" backcolor="#CCCCCC" uuid="d51efe92-4842-4a76-bca9-d0e714fa58b3"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="401" y="7" width="77" height="20" uuid="78e67474-1fe2-4904-bc92-8a63dc9abdf6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{resultDistintoOperaciones}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="7" width="344" height="20" uuid="ef375aea-2ef8-43b0-ace7-9dc7ca5a862d"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultado - ahorro (desahorro) - distinto de operaciones]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="33" width="555" height="20" backcolor="#999999" uuid="4641edfb-cd35-430f-9320-58d0ad589505"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="34" width="344" height="20" backcolor="#FFFFFF" uuid="d0e59438-7096-43c4-a020-e1d679185c97"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultado - ahorro (desahorro) - del Ejercicio]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="86" width="555" height="20" backcolor="#999999" uuid="d467fe5d-8110-4c27-84d9-c7271bf93540"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="60" width="344" height="20" uuid="517487e3-72cd-474d-b303-2c1e5c0b73df"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Participación de los intereses minoritarios en el resultado neto (*)]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="401" y="34" width="77" height="20" uuid="87bb3f28-7275-454f-b666-8c42118e6b78"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{resultEjercicio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="401" y="60" width="77" height="20" uuid="342f47c0-07f0-4613-979c-7efbb97ad641"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{interesesMinoritarios}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="86" width="344" height="20" backcolor="#FFFFFF" uuid="5e1ea660-128f-4d16-8eca-ecc7bbd93d23"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultado - ahorro (desahorro) - del Ejercicio atribuible al interés mayoritario (*)]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="401" y="86" width="77" height="20" uuid="d8015d58-c97b-4be6-9b62-96f33b83f8d0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{resultFinal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="478" y="7" width="77" height="20" uuid="90ccdd57-f7a4-4df8-9637-3d993f0658b2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SALDO_ANTERIOR_5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="478" y="33" width="77" height="20" uuid="ed6e5b53-06de-43ba-b300-88e521132b1a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{resultEjercicio_anterior}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="478" y="60" width="77" height="20" uuid="3863312a-f861-453d-aeb6-485b94aae87c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{interesesMinoritarios_anterior}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="478" y="86" width="77" height="20" uuid="a545cf31-09ec-451f-b6f7-c55f56de5804"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{resultFinal_anterior}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

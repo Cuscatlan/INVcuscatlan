@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportLotesConsolidadoRubroTotal" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7746f0c-0397-4527-9e67-ee98f28d9277">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SElect SUM( rubro211) as rubro211,SUM(rubro212) as rubro212,SUM(rubro213) as rubro213,SUM(rubro214) as rubro214,SUM(rubro221) as rubro221,SUM(rubro222) as rubro222,SUM(rubro223) as rubro223,SUM(rubro231) as rubro231,SUM(rubro241) as rubro241,SUM(total) as total
+from (
+select rubro211,rubro212,rubro213,rubro214,rubro221,rubro222,rubro223,rubro231,rubro241,(NVL(rubro211,0) + NVL(rubro212,0) + NVL(rubro213,0) + NVL(rubro214,0) + NVL(rubro221,0) + NVL(rubro222,0) + NVL(rubro223,0) + NVL(rubro231,0) + NVL(rubro241,0)) as total
+                    from
+                    (
+                      select  t1.num_lote,t1.nombre_estado,t1.SK_INSTITUCION,t1.EJERCICIO,t1.sfuente,t1.rubro,SUM(t1.abonado ) as abonado
+                      from (
+                         select  tco.SK_INSTITUCION,tco.EJERCICIO,VTT.IDFUENTEFINAN as idfuente,VFF.DESCRIPCION AS sfuente,cel.NOMBRE_ESTADO,TTL.NUM_LOTE,pkg_utils_obligacion.OBTENER_RUBRO(tco.ID_DOC_COMPROMISO) as rubro,SUM(ttl.monto) as abonado
+                         from TC_OBLIGACION tco,TC_DOCUMENTO_RESPALDO_ENC tdr ,TC_RETENCION tcr,TT_SOLICITUD_PAGO_RET trr,TT_LOTE TTL ,VTB_TRX_SALDOSCOMPRO VTT,  VTB_CI_FUENTE_FINANC VFF,CT_ESTADO_LOTE cel
+                          where  tco.EJERCICIO=$P{ejercicio}
+		and ($P{institucion} is null or $P{institucion}= tco.sk_institucion)  and tco.sk_obligacion=tdr.SK_OBLIGACION
+                          and tdr.sk_documento_respaldo_enc=tcr.sk_documento_respaldo_enc and tcr.sk_retencion = trr.sk_retencion and trr.sk_lote=ttl.sk_lote
+                          and tco.ID_DOC_COMPROMISO =VTT.DOCID and   VTT.IDFUENTEFINAN=VFF.SK_FUENTE_FINANC and ttl.sk_estado=cel.SK_ESTADO_LOTE
+                         GROUP BY TTL.num_lote,tco.SK_INSTITUCION,tco.EJERCICIO,VTT.IDFUENTEFINAN,VFF.DESCRIPCION,cel.NOMBRE_ESTADO,TTL.NUM_LOTE, pkg_utils_obligacion.OBTENER_RUBRO(tco.ID_DOC_COMPROMISO)
+                         UNION
+                         select tco.SK_INSTITUCION,tco.EJERCICIO,VTT.IDFUENTEFINAN as idfuente,VFF.DESCRIPCION AS sfuente,cel.NOMBRE_ESTADO,TTL.num_lote,pkg_utils_obligacion.OBTENER_RUBRO(tco.ID_DOC_COMPROMISO) as rubro,SUM(ttl.monto) as abonado
+                         from TC_OBLIGACION tco,TC_DOCUMENTO_RESPALDO_ENC tdr  ,tt_solicitud_pago_doc tsp,TT_LOTE TTL ,VTB_TRX_SALDOSCOMPRO VTT,  VTB_CI_FUENTE_FINANC VFF,CT_ESTADO_LOTE cel
+                          where  tco.EJERCICIO=$P{ejercicio}
+		and ($P{institucion} is null or $P{institucion}= tco.sk_institucion) and tco.sk_obligacion=tdr.SK_OBLIGACION
+                          and tdr.sk_documento_respaldo_enc=tsp.sk_documento_respaldo_enc and tsp.sk_lote=ttl.sk_lote
+                          and tco.ID_DOC_COMPROMISO =VTT.DOCID and   VTT.IDFUENTEFINAN=VFF.SK_FUENTE_FINANC and ttl.sk_estado=cel.SK_ESTADO_LOTE
+                         GROUP BY TTL.num_lote,tco.SK_INSTITUCION,tco.EJERCICIO,VTT.IDFUENTEFINAN,VFF.DESCRIPCION,cel.NOMBRE_ESTADO,TTL.NUM_LOTE,pkg_utils_obligacion.OBTENER_RUBRO(tco.ID_DOC_COMPROMISO)
+                         ) t1
+                         group by t1.num_lote,t1.nombre_estado,t1.SK_INSTITUCION,t1.EJERCICIO,t1.sfuente,t1.rubro
+
+                )
+                 pivot
+                 (
+                 SUM(abonado)
+                   FOR rubro IN (211 AS rubro211,212 as rubro212,213 as rubro213,214 as rubro214,221 as rubro221, 222 as rubro222,223 as rubro223,213 as rubro231, 241 as rubro241 )
+                  )
+                  ) t1]]>
+	</queryString>
+	<field name="RUBRO211" class="java.math.BigDecimal"/>
+	<field name="RUBRO212" class="java.math.BigDecimal"/>
+	<field name="RUBRO213" class="java.math.BigDecimal"/>
+	<field name="RUBRO214" class="java.math.BigDecimal"/>
+	<field name="RUBRO221" class="java.math.BigDecimal"/>
+	<field name="RUBRO222" class="java.math.BigDecimal"/>
+	<field name="RUBRO223" class="java.math.BigDecimal"/>
+	<field name="RUBRO231" class="java.math.BigDecimal"/>
+	<field name="RUBRO241" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="20">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="688" y="0" width="65" height="20" uuid="525298b7-ecf4-48af-9ef4-d016557befa2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO241}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="331" y="0" width="50" height="20" uuid="7bc6b511-635b-4ca1-859c-b970945ab8f5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO213}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="632" y="0" width="56" height="20" uuid="dde04db4-880a-475d-a508-fbadb4465fb7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO231}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="573" y="0" width="59" height="20" uuid="0d75015e-9d5c-4cbe-aec6-393eef96482f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO222}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="511" y="0" width="62" height="20" uuid="a3373211-1036-47d3-b8c8-8520fd11b804"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO221}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="447" y="0" width="64" height="20" uuid="924d28b4-ef76-4762-a18c-a9fc6598f560"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO214}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="753" y="0" width="39" height="20" uuid="dbd9868c-17f1-468c-b7a0-e179417c57d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="197" y="0" width="68" height="20" uuid="5f7faa20-cd2d-412c-8982-fc580867f0ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO211}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="381" y="0" width="66" height="20" uuid="ed9f41ff-ce44-4827-8d18-41dc6d8664fb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO214}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="265" y="0" width="66" height="20" uuid="2fe26aa0-72f7-4954-a24c-d7c93e5faeb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RUBRO212}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="100" y="0" width="97" height="20" backcolor="#CCCCCC" uuid="dc2c6faf-42e4-4ba4-950f-e62cb1f6531d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL GENERAL:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_tt_transferencia_bancaria" pageWidth="800" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f72adb-ae64-4bc5-a9ec-3b201dbfcff9">
+	<property name="ireport.zoom" value="2.5937424601000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="322"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="stylecontent" mode="Opaque" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<style name="styleborder" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<subDataset name="detalle" uuid="dfa66e75-8332-4acd-8382-cb2b91bdd49c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+		<queryString>
+			<![CDATA[select
+cuenta.DESCRIPCION ,
+ectadet.NO_TRANSACCION ,
+TRUNC(ectadet.FECHA_TRANSACCION) FECHA_TRANSACCION,
+ectadet.NO_DOCUMENTO ,
+ectadet.CONCEPTO ,
+ectadet.SALDO_INICIAL ,
+ectadet.DEBITO ,
+ectadet.CREDITO ,
+SALDO_FINAL from tt_estado_cuenta_det ectadet
+left join ct_cuentas_operativas cuenta on ectadet.SK_CUENTA_OPERATIVA_ORIGEN = cuenta.sk_cuentas_operativas
+where sk_estado_cuenta = 1]]>
+		</queryString>
+		<field name="DESCRIPCION" class="java.lang.String"/>
+		<field name="NO_TRANSACCION" class="java.math.BigDecimal"/>
+		<field name="FECHA_TRANSACCION" class="java.sql.Timestamp"/>
+		<field name="NO_DOCUMENTO" class="java.lang.String"/>
+		<field name="CONCEPTO" class="java.lang.String"/>
+		<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+		<field name="DEBITO" class="java.math.BigDecimal"/>
+		<field name="CREDITO" class="java.math.BigDecimal"/>
+		<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="p_transferencia_bancaria" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMG_SV" class="java.awt.Image" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select SK_TRANSFERENCIA_BANCARIA ,
+cuentaOrigen.numero_cuenta || ' ' || cuentaOrigen.descripcion  CUENTA_ORIGEN ,
+cuentaDestino.numero_cuenta || ' ' || cuentaDestino.descripcion  CUENTA_DESTINO ,
+transferencia.NO_TRANSACCION ,
+transferencia.EJERCICIO ,
+transferencia.MONTO ,
+transferencia.CONCEPTO ,
+transferencia.FECHA_REGISTRO ,
+transferencia.FECHA_AUTORIZACION ,
+case transferencia.ESTADO
+when 0 then '00 - Anulada'
+when 1 then '01 - Ingresada'
+when 2 then '02 - Autorizada'
+END ESTADO,
+transferencia.S_CREA_USUARIO ,
+transferencia.F_CREA_FECHA ,
+transferencia.S_MOD_USUARIO ,
+transferencia.F_MOD_FECHA
+from tt_transferencia_bancaria transferencia
+join ct_cuentas_operativas cuentaOrigen on cuentaOrigen.sk_cuentas_operativas = transferencia.SK_CUENTA_ORIGEN
+join ct_cuentas_operativas cuentaDestino on cuentaDestino.sk_cuentas_operativas = transferencia.SK_CUENTA_DESTINO
+where
+SK_TRANSFERENCIA_BANCARIA = $P{p_transferencia_bancaria}]]>
+	</queryString>
+	<field name="SK_TRANSFERENCIA_BANCARIA" class="java.math.BigDecimal"/>
+	<field name="CUENTA_ORIGEN" class="java.lang.String"/>
+	<field name="CUENTA_DESTINO" class="java.lang.String"/>
+	<field name="NO_TRANSACCION" class="java.lang.String"/>
+	<field name="EJERCICIO" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="FECHA_REGISTRO" class="java.sql.Timestamp"/>
+	<field name="FECHA_AUTORIZACION" class="java.sql.Timestamp"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="S_CREA_USUARIO" class="java.lang.String"/>
+	<field name="F_CREA_FECHA" class="java.sql.Timestamp"/>
+	<field name="S_MOD_USUARIO" class="java.lang.String"/>
+	<field name="F_MOD_FECHA" class="java.sql.Timestamp"/>
+	<pageHeader>
+		<band height="116" splitType="Stretch">
+			<staticText>
+				<reportElement style="stylecontent" mode="Transparent" x="226" y="55" width="251" height="16" uuid="9feb78b9-abf5-4d44-a7b8-7dab44b47f74"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION FINANCIERA INTEGRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="13" width="251" height="21" uuid="82a7ab66-98eb-4693-8a69-0390997bdcb8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="34" width="251" height="21" uuid="1eff37e9-5a61-47c9-8504-176c69a77a6b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección General Tesorería]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="2" width="84" height="69" uuid="61aaca9b-93c6-48f6-84c0-1af551b402ca"/>
+				<imageExpression><![CDATA[$P{P_IMG_SV}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="stylecontent" mode="Transparent" x="173" y="71" width="382" height="16" uuid="7eeb504d-ec74-4df0-a3ce-29c921d11eef"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMPROBANTE DE AUTORIZACION DE TRANSFERENCIA DE FONDOS ENTRE CUENTAS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="420" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="36" width="80" height="14" uuid="2a440f43-4979-4832-9e8c-e9166b0d1692">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha Autorizacion:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="36" width="258" height="14" uuid="3a8745d6-2bb9-4d51-a5ae-0bbffe6d875b">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_AUTORIZACION})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="36" width="80" height="14" uuid="7fc49b61-f424-4783-9036-d6e237cf8ddc">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Usuario Autorizo:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="440" y="36" width="239" height="14" uuid="c95b0a79-cd3d-4234-a24f-cb3c403582f4">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{S_MOD_USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="8" width="80" height="14" uuid="1aa16cb9-61b8-402e-9cc1-3b45ba38502d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha Elaboracion:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="8" width="258" height="14" uuid="12d80d99-78a3-4877-87da-4d74354c2b01">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_REGISTRO})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="8" width="80" height="14" uuid="caee1be4-8108-4a84-a121-1026644eab21">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Usuario Elaboro:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="440" y="8" width="239" height="14" uuid="f70ea25b-9c04-4652-9063-7f6d434dbc71">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{S_CREA_USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="64" width="80" height="14" uuid="3c04500c-c7c7-4bbf-a8d8-1b2b8c3b8c9c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="64" width="258" height="14" uuid="13c0e75c-5264-4e0a-8a8d-acadb78d8f22">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="stylecontent" mode="Transparent" x="0" y="92" width="679" height="26" uuid="4f8f3a12-fff8-47bc-8996-b0416f98bd9a"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[La Dirección General de Tesorería, de conformidad al artículo 80 de la ley orgánica de administración financiera del Estado ( LEY AFI ) y el articulo 109 del reglamento de la misma ley.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="118" width="679" height="32" uuid="852ad2fc-a4d7-4d01-846c-40d1b580eb9a"/>
+				<textFieldExpression><![CDATA["AUTORIZA AL BANCO CENTRA DE RESERVA DE EL SALVADOR PARA QUE REALICE LA SIGUIENTE TRANSFERENCIA DE FONDO \n NO. " + $F{NO_TRANSACCION} + "/" + $F{EJERCICIO}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement mode="Transparent" x="0" y="150" width="679" height="121" forecolor="#000000" backcolor="#BECFF1" uuid="1dc41317-b276-4d40-b9ad-a92893d90bf8"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#0099CC"/>
+					<topPen lineWidth="1.0" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.0" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.0" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.0" lineColor="#0099CC"/>
+				</box>
+				<textField>
+					<reportElement x="173" y="31" width="267" height="20" uuid="dd33506d-7c0c-4be4-b895-c1d436542b9a"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{CUENTA_ORIGEN}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="173" y="51" width="267" height="20" uuid="b77fd5a0-217f-4029-95f1-6baa19670f91"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{CUENTA_DESTINO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="173" y="71" width="267" height="20" uuid="36362190-a2f2-4296-b278-7c7f78eac415"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($F{MONTO} == null)? "$ 0" : "$ " +$F{MONTO}.toString()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="173" y="91" width="267" height="20" uuid="8c0841e2-bea4-4e6e-ab2a-53a0bfb2a90c"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="4" y="161" width="169" height="20" uuid="46f90f29-3e64-4883-8928-c995e52e7a80">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[PARA EFECTUAR:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="161" width="267" height="20" uuid="11aecf2b-a24e-4216-bda1-c98f192e44d9">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[TRANSFERENCIA POR DISTRUBUCION DE FONDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="181" width="169" height="20" uuid="f7a12efc-08d0-4990-aef5-7a3950c112d6">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CON DEBITO A LA CUENTA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="201" width="169" height="20" uuid="2dc9a5b1-2bfc-49d1-a335-551b43c1ec0c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CON CREDITO A LA CUENTA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="221" width="169" height="20" uuid="5f889d0f-4aab-4aee-9130-d6a07f8d7608">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[POR VALOR DE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="241" width="169" height="20" uuid="9210d498-0d50-46b4-bf6e-a87129bb66af">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="300" width="100" height="20" uuid="6b8e5793-14c2-48b1-ba44-eef2cd42501d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Firmas Autorizadas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="73" y="400" width="100" height="20" uuid="ff4dff82-ccb1-4c0e-8dd3-c1696ee5b8ab"/>
+				<text><![CDATA[PAGADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="400" width="100" height="20" uuid="27eca116-0a01-4051-ab6e-c4ac298d315f"/>
+				<text><![CDATA[REFRENDARIO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="43" y="400" width="150" height="1" uuid="f6f2d0f5-ba94-4990-bfd1-d7646e660846"/>
+			</line>
+			<line>
+				<reportElement x="342" y="400" width="150" height="1" uuid="9caa45bf-000b-4788-9e10-8dbb34abca8f"/>
+			</line>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

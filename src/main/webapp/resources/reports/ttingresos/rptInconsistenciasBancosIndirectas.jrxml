@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptInconsistenciasBancosIndirectas" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="37564fd7-58f4-4322-95ec-13c397de2add">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_USER" class="java.lang.String"/>
+	<parameter name="P_F_INI" class="java.lang.String"/>
+	<parameter name="P_F_FIN" class="java.lang.String"/>
+	<parameter name="cadena" class="java.lang.String"/>
+	<parameter name="P_BANCO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from
+(
+select * from (
+select
+reg.colecturia as cod,
+(select descripcion from DBASITEP.colecturia@SAFI2SITEP where colecturia= reg.colecturia) as colecturia,
+reg.inconsistencia,
+count(c.descripcion) cant
+from(
+select
+dp.colecturia
+,(select descripcion from DBASITEP.TIPO_INCO_BANCO@SAFI2SITEP where tipo=dp.tipo_inco_banco) as inconsistencia
+from
+DBASITEP.DOCUME_PAGO@SAFI2SITEP dp
+where
+dp.tipo_inco_banco is not null
+and to_date(dp.fecha_registro) >=to_date($P{P_F_INI}, 'DD/MM/YYYY')
+and to_date(dp.fecha_registro)<=to_date($P{P_F_FIN},'DD/MM/YYYY')
+)reg,DBASITEP.colecturia@SAFI2SITEP c
+where
+reg.colecturia=c.colecturia
+and (select SUBSTR(reg.colecturia,1,1)from dual)='0'
+$P!{cadena}
+group by
+reg.colecturia,
+reg.inconsistencia
+)a
+RIGHT OUTER JOIN
+(
+select descripcion from DBASITEP.TIPO_INCO_BANCO@SAFI2SITEP
+)b
+on a.inconsistencia=b.descripcion
+)
+pivot( count(cant) for descripcion in('NIT NO REGISTRADO','NIT MAL REGISTRADO','CRUCE DE IMPUESTOS','PAGOS NO REGISTRADOS','NUMERO DE DOCUMENTOS MAL REGISTRADOS',
+'NO SEPARAN MULTAS E INTERESES','PERIODO MAL REGISTRADO','NO REGISTRAN PERIODOS','VALORES MAL REGISTRADOS','NO REGISTRAN NUMERO DE DOCUMENTO',
+'NO REGISTRAN NUMERO DE RESOLUCION','NUMERO DE RESOLUCION MAL REGISTRADA','ERRORES DE CONTRIBUYENTE','NO APLICA','ERROR O NO REGISTRADO CODIGO DE ADUANA'))]]>
+	</queryString>
+	<field name="COD" class="java.lang.String"/>
+	<field name="COLECTURIA" class="java.lang.String"/>
+	<field name="INCONSISTENCIA" class="java.lang.String"/>
+	<field name="&apos;NIT NO REGISTRADO&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;NIT MAL REGISTRADO&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;CRUCE DE IMPUESTOS&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;PAGOS NO REGISTRADOS&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;NUMERO DE DOCUMENTOS MAL REGI" class="java.math.BigDecimal"/>
+	<field name="&apos;NO SEPARAN MULTAS E INTERESES" class="java.math.BigDecimal"/>
+	<field name="&apos;PERIODO MAL REGISTRADO&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;NO REGISTRAN PERIODOS&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;VALORES MAL REGISTRADOS&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;NO REGISTRAN NUMERO DE DOCUME" class="java.math.BigDecimal"/>
+	<field name="&apos;NO REGISTRAN NUMERO DE RESOLU" class="java.math.BigDecimal"/>
+	<field name="&apos;NUMERO DE RESOLUCION MAL REGI" class="java.math.BigDecimal"/>
+	<field name="&apos;ERRORES DE CONTRIBUYENTE&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;NO APLICA&apos;" class="java.math.BigDecimal"/>
+	<field name="&apos;ERROR O NO REGISTRADO CODIGO " class="java.math.BigDecimal"/>
+	<variable name="t1" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NIT NO REGISTRADO'}]]></variableExpression>
+	</variable>
+	<variable name="t2" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NIT MAL REGISTRADO'}]]></variableExpression>
+	</variable>
+	<variable name="t3" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'CRUCE DE IMPUESTOS'}]]></variableExpression>
+	</variable>
+	<variable name="t4" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'PAGOS NO REGISTRADOS'}]]></variableExpression>
+	</variable>
+	<variable name="t5" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NUMERO DE DOCUMENTOS MAL REGI}]]></variableExpression>
+	</variable>
+	<variable name="t6" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NO SEPARAN MULTAS E INTERESES}]]></variableExpression>
+	</variable>
+	<variable name="t7" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'PERIODO MAL REGISTRADO'}]]></variableExpression>
+	</variable>
+	<variable name="t8" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NO REGISTRAN PERIODOS'}]]></variableExpression>
+	</variable>
+	<variable name="t9" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'VALORES MAL REGISTRADOS'}]]></variableExpression>
+	</variable>
+	<variable name="t10" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NO REGISTRAN NUMERO DE DOCUME}]]></variableExpression>
+	</variable>
+	<variable name="t11" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NO REGISTRAN NUMERO DE RESOLU}]]></variableExpression>
+	</variable>
+	<variable name="t12" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NUMERO DE RESOLUCION MAL REGI}]]></variableExpression>
+	</variable>
+	<variable name="t13" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'ERRORES DE CONTRIBUYENTE'}]]></variableExpression>
+	</variable>
+	<variable name="t14" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'NO APLICA'}]]></variableExpression>
+	</variable>
+	<variable name="t15" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{'ERROR O NO REGISTRADO CODIGO }]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="752" height="20" uuid="739e2cfd-5b17-4bb0-9a3a-7b8c6532bc1a"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="752" height="20" uuid="d9862bcc-78c8-48eb-837b-ca5e3698f493"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="752" height="20" uuid="d3edd74c-8f9b-40e2-bece-501663e6a662"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[INFORME DE INCONSISTENCIA POR BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="60" width="19" height="20" uuid="1e22f6b5-8875-4879-95ca-32161c017f61"/>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="60" width="25" height="20" uuid="ecb93b86-4735-43e5-a25c-4b57ebbc19a3"/>
+				<text><![CDATA[AL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="310" y="60" width="100" height="20" uuid="eb1598d8-5548-4896-bd58-3156ddd7d597"/>
+				<textFieldExpression><![CDATA[$P{P_F_INI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="437" y="60" width="100" height="20" uuid="0b6abad4-895f-4c99-bd19-3d52ae805344"/>
+				<textFieldExpression><![CDATA[$P{P_F_FIN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="26" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="135" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="56" height="135" uuid="01df32e5-8c1f-4aa4-b767-12a372f4d7be"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="0" width="309" height="135" uuid="f7acd16c-1228-4bb4-82dd-74f7f012068d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="0" width="27" height="135" uuid="2fc4a5dd-fe76-4f6e-adf7-cbde9c0b52ae"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT NO REGISTRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="0" width="26" height="135" uuid="22d55a66-26f8-41f2-b2dd-fffc81cc9cab"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT MAL REGISTRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="0" width="26" height="135" uuid="23b6c118-6157-4768-bd12-78c227fd8278"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CRUCE DE IMPUESTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="26" height="135" uuid="12e8aa3f-d21a-4ce3-94fa-bce4ccb9d59b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGOS NO REGISTRADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="0" width="22" height="135" uuid="5ad32e04-f0de-405a-9692-c61e97d6c8f1"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUMERO DE DOCUMENTOS MAL REGISTRADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="0" width="22" height="135" uuid="90040a74-7be9-41fb-9716-6e05fa92dcec"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO SEPARAN MULTAS  E INTERESES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="515" y="0" width="22" height="135" uuid="3eadee4c-8452-4126-8dd0-2b913a4d3d89"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERIODO MAL REGISTRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="537" y="0" width="22" height="135" uuid="7200476c-4c3d-49b0-81e5-ac9dc0e6ba1e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO REGISTRAN PERIODOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="559" y="0" width="22" height="135" uuid="de0671fd-8be3-4e85-b12e-2a5745fc8e68"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALORES MAL REGISTRADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="581" y="0" width="22" height="135" uuid="eddc6632-fa1a-4388-b144-8855a764d877"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO REGISTRAN NUMERO DE DOCUMENTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="603" y="0" width="22" height="135" uuid="777ebc85-70cc-4922-b372-94147fefded6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO REGISTRAN NUMERO DE RESOLUCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="625" y="0" width="22" height="135" uuid="e974d912-6cb1-45c7-8fe0-ce36aae726ae"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUMERO DE RESOLUCION MAL REGISTRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="0" width="22" height="135" uuid="a3635a5a-2a36-4012-bba9-326f8b708d1c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ERRORES DE CONTRIBUYENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="669" y="0" width="22" height="135" uuid="bdb61abf-53a3-4411-8db1-a8f3562ad84a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO APLICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="691" y="0" width="27" height="135" uuid="459a7e0a-c966-4fe9-9dcf-db2b61d86909"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ERROR O NO RESGISTRA CODIGO DE ADUANA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="56" height="22" uuid="fbc66713-4c4a-43a3-bd44-442cad71e3ab"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="0" width="309" height="22" uuid="7472f184-df1c-4235-a0bb-bd97c57457ec"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="366" y="0" width="27" height="22" uuid="7be80c40-8aaa-40ad-976b-188c660f7fe7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NIT NO REGISTRADO'}==0?'':$F{'NIT NO REGISTRADO'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="393" y="0" width="26" height="22" uuid="047d8342-fe71-4199-8acb-f510279741cb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NIT MAL REGISTRADO'}==0?'':$F{'NIT MAL REGISTRADO'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="420" y="0" width="25" height="22" uuid="199ac085-8488-4b83-9bba-09d837e7db11"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'CRUCE DE IMPUESTOS'}==0?'':$F{'CRUCE DE IMPUESTOS'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="445" y="0" width="26" height="22" uuid="4c6a2594-a879-4f3f-bd63-4f6dca86f873"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'PAGOS NO REGISTRADOS'}==0?'':$F{'PAGOS NO REGISTRADOS'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="22" height="22" uuid="79c6638f-4eb0-453e-aa70-b1a710f10a2b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NUMERO DE DOCUMENTOS MAL REGI}==0?'':$F{'NUMERO DE DOCUMENTOS MAL REGI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="493" y="0" width="22" height="22" uuid="52d1d0bf-ef64-440d-a6dd-c1bc9f40f264"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NO SEPARAN MULTAS E INTERESES}==0?'':$F{'NO SEPARAN MULTAS E INTERESES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="515" y="0" width="22" height="22" uuid="06013737-9aa1-4e03-bf3f-ccaff2282f26"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'PERIODO MAL REGISTRADO'}==0?'':$F{'PERIODO MAL REGISTRADO'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="537" y="0" width="22" height="22" uuid="e40a91b2-7c09-4944-a16f-a97a32fee4a9"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NO REGISTRAN PERIODOS'}==0?'':$F{'NO REGISTRAN PERIODOS'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="559" y="0" width="22" height="22" uuid="109543ca-daee-4b35-99b8-b389b756427c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'VALORES MAL REGISTRADOS'}==0?'':$F{'VALORES MAL REGISTRADOS'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="581" y="0" width="22" height="22" uuid="cee9640a-858d-4b4e-9536-76a2c16e690d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NO REGISTRAN NUMERO DE DOCUME}==0?'':$F{'NO REGISTRAN NUMERO DE DOCUME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="22" height="22" uuid="8d63ebd3-6124-40ee-b767-c5f069140e86"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NO REGISTRAN NUMERO DE RESOLU}==0?'':$F{'NO REGISTRAN NUMERO DE RESOLU}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="625" y="0" width="22" height="22" uuid="701aa040-b37c-4d7d-946a-83936e605897"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NUMERO DE RESOLUCION MAL REGI}==0?'':$F{'NUMERO DE RESOLUCION MAL REGI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="647" y="0" width="22" height="22" uuid="6c4a0b5d-d2b4-46f5-88bd-e0d0672171fd"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'ERRORES DE CONTRIBUYENTE'}==0?'':$F{'ERRORES DE CONTRIBUYENTE'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="669" y="0" width="22" height="22" uuid="e349625f-3425-4a32-92ea-e54805e88dce"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'NO APLICA'}==0?'':$F{'NO APLICA'}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="691" y="0" width="27" height="22" uuid="aee17bc1-de04-4d4e-b4fb-320a69d1ab0c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{'ERROR O NO REGISTRADO CODIGO }==0?'':$F{'ERROR O NO REGISTRADO CODIGO }]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement x="715" y="0" width="37" height="20" uuid="109e2bf0-5177-473c-992b-9af2d46fe9df"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="656" y="0" width="59" height="20" uuid="88ed0ebc-fb0f-4c7a-a784-3021b2f8c169"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="ff146d5f-bac8-49e8-b91b-c475c7ffacb9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENERADO POR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="853c44f0-408a-4e12-8645-cbdde914f4d3"/>
+				<textFieldExpression><![CDATA[$P{P_USER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="41" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="365" y="0" width="28" height="20" uuid="ce70c8cb-0ca6-4d06-93c1-7c73858fdfe7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="28" height="20" uuid="b56cecc6-6b85-480e-bb3c-f8a206514ee0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="0" width="100" height="20" uuid="b9f80e57-a7b2-460c-a1c9-cd8eb8f82978"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="0" width="26" height="20" uuid="75150f46-6e01-4be2-b1f2-149e49866d96"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t3}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="445" y="0" width="26" height="20" uuid="4d855472-8cf9-4d45-998f-b6cdba76a87c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="471" y="0" width="26" height="20" uuid="7e94308f-4cc6-4b19-b2c6-b906f9680f02"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t5}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="497" y="0" width="18" height="20" uuid="4cc9b904-1af3-449e-a781-f1cf8d8e1a73"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t6}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="515" y="0" width="18" height="20" uuid="f1137710-79d9-4a95-ade0-88e6ae356793"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t7}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="533" y="0" width="26" height="20" uuid="7dc7fcd2-75a1-49b7-af79-017e93ddd4c1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t8}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="559" y="0" width="22" height="20" uuid="d1a4616b-33da-4928-ac58-45e8ce7e7c61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t9}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="581" y="0" width="22" height="20" uuid="4f96900a-80c9-4257-b58d-f74959777d79"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t10}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="22" height="20" uuid="7f81fd29-9879-42db-ab5e-41898c780c6a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t11}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="625" y="0" width="22" height="20" uuid="b2f1b562-ea6e-4f5e-becd-a793b2fc6de5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t12}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="647" y="0" width="22" height="20" uuid="0fbe47e7-b18b-4cd0-a902-5f4c55462a4c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t13}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="669" y="0" width="22" height="20" uuid="f0e21b3a-75b0-4090-bbf0-7e5fe2de0e37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t14}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="691" y="0" width="27" height="20" uuid="d5db10a6-ae67-4185-9a63-fa9cf7f8d1ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{t15}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="repReciboUnico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cabaa7f7-f3c8-4912-91cd-3942bfbc33c0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_INGRESO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\keiic\\Documents\\NetBeansProjects\\safi\\src\\main\\webapp\\resources\\reports\\ttingresos\\recaudacionDirecta\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<parameter name="FIRMA_ELE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ing.sk_ingreso as SK_INGRESO, colec.DENOMINACION_COLECTURIA AS COLECTURIA, ban.DENOMINACION_BANCO AS BANCO, SUC.DENOMINACION_SUCURSAL AS SUCURSAL , ing.caja AS CAJA, ing.fecha_ingreso AS FECHA_INGRESO,
+         ING.SK_TRANSACCION_INGRESO AS TRANSACCION, ing.nit AS NIT , nvl(ing.NOMBRES,'')||' '||NVL(ing.APELLIDOS,'') AS NOMBRES, FUEN.DESCRIPCION AS FUENTE_FINANCIAMIENTO, PR_num_a_letras.dintex(ing.IMPORTE_PERCIBIDO) AS CANTIDAD
+   from tt_ingresos ing, CT_COLECTURIAS_FINALES colec, CT_BANCO ban, CT_SUCURSAL SUC, CI_FUENTE_FINANC FUEN
+    WHERE ing.SK_COLECTURIA_FINAL = colec.SK_COLECTURIAS_FINALES(+)
+      AND ING.SK_BANCO = ban.SK_BANCO(+)
+      AND ing.SK_SUCURSAL = SUC.SK_SUCURSAL(+)
+      AND ing.SK_FUENTE_FINANC = FUEN.SK_FUENTE_FINANC(+)
+      AND ing.SK_INGRESO = $P{P_INGRESO}]]>
+	</queryString>
+	<field name="SK_INGRESO" class="java.math.BigDecimal"/>
+	<field name="COLECTURIA" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="SUCURSAL" class="java.lang.String"/>
+	<field name="CAJA" class="java.math.BigDecimal"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="TRANSACCION" class="java.math.BigDecimal"/>
+	<field name="NIT" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="FUENTE_FINANCIAMIENTO" class="java.lang.String"/>
+	<field name="CANTIDAD" class="java.lang.String"/>
+	<group name="SK_INGRESO">
+		<groupExpression><![CDATA[$F{SK_INGRESO}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="196" y="0" width="163" height="20" uuid="52343da9-ee5c-474d-b1e0-b42a8aa777e7"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="20" width="223" height="20" uuid="76d9be5a-097f-43ac-9ede-a09369df0973"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="40" width="129" height="20" uuid="1461261f-96e4-415c-afee-17d99aa5a96b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="150" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="0" width="281" height="15" uuid="94fc971c-ce35-4337-9823-4527381dc93c"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="274" height="15" uuid="9fe5b2c9-001f-403c-9131-5a9f2dbdf055"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="274" height="15" uuid="4bdbd028-333e-4c11-8456-f6c64955e892"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="15" width="281" height="15" uuid="e37b1ef2-2055-44e4-b7fe-851696ab7a6a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="30" width="274" height="15" uuid="43562469-2f5d-4add-a706-49ecc64c65b9"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SUCURSAL]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="30" width="281" height="15" uuid="33526f8e-f377-4a87-beec-b14dfffd3455"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="45" width="274" height="15" uuid="706e4c12-a296-4677-9df7-22030b8ad0d1"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CAJA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="45" width="281" height="15" uuid="553abea8-4143-439f-a4fc-99bdb293b96d"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="274" height="15" uuid="1f736b14-9764-4bbb-bb45-a2587b223f72"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FECHA PAGO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="60" width="281" height="15" uuid="2923582e-ee6a-4e53-90ac-d86d7e7836a6"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="75" width="274" height="15" uuid="6fc9a7da-e4e1-4d6c-9ced-71a82b669365"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TRANSACCION]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="75" width="281" height="15" uuid="ea4db2a3-1efe-4660-b005-d7804f68194d"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="90" width="274" height="15" uuid="b463791f-1e41-4518-a20b-9b8128fa462a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="90" width="281" height="15" uuid="bac0cc66-0bfd-43fd-a4e2-04ddcac12f22"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="105" width="274" height="15" uuid="795fe1c5-6bfc-430c-8d1d-3478bcee9ebb"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="105" width="281" height="15" uuid="4981167f-77fc-428b-9847-77924bcf3482"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="274" height="15" uuid="2fdb9fe4-b8a2-4554-883f-7816a3351e98"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FONDO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="120" width="281" height="15" uuid="d039b4ab-7f28-4c29-a5d2-6a2c018d6859"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINANCIAMIENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="135" width="555" height="15" uuid="8d421a42-eafc-4573-a4e3-4448283808c1"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE DEL PAGO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="58" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="58" uuid="21c18727-6037-47ac-898c-5d1dbf54e20c"/>
+				<subreportParameter name="SK_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{P_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subRepDetalleRui.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="128" y="0" width="427" height="20" uuid="a9331290-bbf5-44d5-a833-5b56e11523fd"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="128" height="20" uuid="73aaba1c-0d28-4b4f-bdea-223ebe0e0ec0"/>
+				<text><![CDATA[CANTIDAD EN LETRAS:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="74" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="58" height="20" uuid="66ef324a-bd5b-4b2c-a9b8-a993e11ee19b"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="58" y="0" width="100" height="20" uuid="02da9805-19fc-4ee8-b92a-e9561dae60a1"/>
+				<textFieldExpression><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="0" width="100" height="20" uuid="931211c7-177c-4ed6-8633-97480a6e3b73"/>
+				<text><![CDATA[Firma Electronica: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="0" width="126" height="32" uuid="fdb8e281-8040-4b0a-b868-39e8ca72680b"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FIRMA_ELE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="32" width="422" height="20" uuid="68718335-dfcf-4e2c-bd6b-31188b51a16d"/>
+				<text><![CDATA[PUEDE CONSULTAR SUS PAGOS EN LINEA EN LA SIGUIENTE DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="52" width="193" height="20" forecolor="#3333FF" uuid="10d9fbc7-4622-45a6-a62d-5a64f98d5a6e"/>
+				<textElement verticalAlignment="Bottom">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[www.mh.gob.sv/consulta/pagos]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

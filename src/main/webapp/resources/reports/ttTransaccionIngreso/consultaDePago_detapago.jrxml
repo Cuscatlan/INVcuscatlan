@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consultaDePago_detapago" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="762a1f24-1fc7-4223-8a69-e2dd96040fd5">
+	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_SK_INGRESO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT CLA.CLAECO_ING_GAS, CUE.DESCRIPCION||' '||CLA.DESCRIPCION , DET.IMPORTE_PERCIBIDO
+  FROM TT_INGRESOS_DETALLE DET, VTB_CI_CLASIF_ING_GAS CLA, VTB_CI_CLASIF_ING_GAS CUE
+    WHERE DET.SK_CLAECO_ING_GAS = CLA.SK_CLAECO_ING_GAS
+    AND  SUBSTR(CLA.CLAECO_ING_GAS,0,4) = CUE.CLAECO_ING_GAS
+     AND   CLA.NIVEL = 'ESPECIFICO'
+     AND CUE.NIVEL = 'CUENTA'
+     AND SUBSTR(CLA.CLAECO_ING_GAS,1,1) = '1'
+    AND SK_INGRESO = $P{P_SK_INGRESO} ORDER BY 1]]>
+	</queryString>
+	<field name="CLAECO_ING_GAS" class="java.lang.String"/>
+	<field name="CUE.DESCRIPCION||&apos;&apos;||CLA.DESCRIPCION" class="java.lang.String"/>
+	<field name="IMPORTE_PERCIBIDO" class="java.math.BigDecimal"/>
+	<variable name="IMPORTE_PERCIBIDO_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE_PERCIBIDO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="31">
+			<staticText>
+				<reportElement x="0" y="11" width="555" height="20" uuid="2e934a62-0629-456f-b254-54ec06f4f58f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE PAGO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="10" backcolor="#CCCCCC" uuid="ce7709c6-0ee9-4afb-93e7-0a9bd3759d4a"/>
+			</rectangle>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4c2d8c77-c0f7-4aac-8a62-db502a866158"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<text><![CDATA[ESPECIFICO / AXT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="355" height="20" uuid="3fb68f6b-77a0-4f0b-9ec4-a5431e7e9450"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="20" uuid="3a402bc7-a92c-4e3b-840b-6ba62e19fc4f"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e71098aa-4d54-4bac-a1d2-c8e9570b0586"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{CLAECO_ING_GAS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="355" height="20" uuid="2788374a-867f-445c-bea6-df6ca03d42f1"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUE.DESCRIPCION||''||CLA.DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="455" y="0" width="100" height="20" uuid="645c560b-befe-4092-9289-6bba1597d608"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IMPORTE_PERCIBIDO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="355" height="20" uuid="39a5b164-9b3a-4326-86d4-17d358b439fa"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="455" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="20a929f9-de96-4a68-9706-92e184ac09e8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IMPORTE_PERCIBIDO_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

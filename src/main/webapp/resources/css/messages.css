@@ -1,0 +1,37 @@
+.messagesBox {
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    border: 1px solid;
+    font-family: Arial,Tahoma,Sans-serif;
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 5px 5px 5px 50px;
+    width: 600px;
+}
+.mbinfo {
+    background-color: #BDE5F8;
+    background-image: url("../../../../img/msg/info.png");
+    color: #00529B;
+}
+.mbsuccess {
+    background-color: #DFF2BF;
+    background-image: url("../../../../img/msg/success.png");
+    color: #4F8A10;
+}
+.mbsuccess a {
+    background-color: #DFF2BF;
+    color: #4F8A10;
+    font-size: 14px;
+    font-weight: bolder;
+    text-decoration: none;
+}
+.mbwarning {
+    background-color: #FEEFB3;
+    background-image: url("../../../../img/msg/warning.png");
+    color: #9F6000;
+}
+.mberror {
+    background-color: #FFBABA;
+    background-image: url("../../../../img/msg/error.png");
+    color: #D8000C;
+}

@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_saldos_disponibilidad_cuenta" pageWidth="800" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f72adb-ae64-4bc5-a9ec-3b201dbfcff9">
+	<property name="ireport.zoom" value="3.138428376721006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="432"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="stylecontent" mode="Opaque" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<style name="styleborder" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<subDataset name="detalle" uuid="dfa66e75-8332-4acd-8382-cb2b91bdd49c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+		<queryString>
+			<![CDATA[select
+cuenta.DESCRIPCION ,
+ectadet.NO_TRANSACCION ,
+TRUNC(ectadet.FECHA_TRANSACCION) FECHA_TRANSACCION,
+ectadet.NO_DOCUMENTO ,
+ectadet.CONCEPTO ,
+ectadet.SALDO_INICIAL ,
+ectadet.DEBITO ,
+ectadet.CREDITO ,
+SALDO_FINAL from tt_estado_cuenta_det ectadet
+left join ct_cuentas_operativas cuenta on ectadet.SK_CUENTA_OPERATIVA_ORIGEN = cuenta.sk_cuentas_operativas
+where sk_estado_cuenta = 1]]>
+		</queryString>
+		<field name="DESCRIPCION" class="java.lang.String"/>
+		<field name="NO_TRANSACCION" class="java.math.BigDecimal"/>
+		<field name="FECHA_TRANSACCION" class="java.sql.Timestamp"/>
+		<field name="NO_DOCUMENTO" class="java.lang.String"/>
+		<field name="CONCEPTO" class="java.lang.String"/>
+		<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+		<field name="DEBITO" class="java.math.BigDecimal"/>
+		<field name="CREDITO" class="java.math.BigDecimal"/>
+		<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="p_cuenta_operativa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMG_SV" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Online BackUp\\XCLab Cloud\\DAI WORK WORK\\SAFI\\reportes\\ttConciliacionBancaria\\Saldos\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grupo_cuenta" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+    institucion.descripcion institucion,
+    fuenteFinanc.descripcion fuente_financiamiento,
+    banco.denominacion_banco banco,
+    cuenta.numero_cuenta,
+    cuenta.descripcion nombre_cuenta,
+    tipoCuenta.descripcion tipo_cuenta,
+    estado.descripcion estado,
+    (select NVL(SUM(credito),0) - NVL(SUM(debito),0) from tt_libro_banco_det
+      join tt_conciliacion_bancaria_det on tt_libro_banco_det.SK_LIBRO_BANCO_DET = tt_conciliacion_bancaria_det.SK_LIBRO_BANCO_DET
+      where tt_conciliacion_bancaria_det.SK_CONCILIACION_ESTADO = 'CON' and tt_libro_banco_det.SK_LIBRO_BANCO = libroBanco.SK_LIBRO_BANCO) saldo_conciliado_libro_banco,
+    (select NVL(SUM(credito),0) from tt_libro_banco_det
+          where tt_libro_banco_det.SK_LIBRO_BANCO = libroBanco.SK_LIBRO_BANCO and SK_LIBRO_BANCO_DET NOT IN
+          (select SK_LIBRO_BANCO_DET from tt_conciliacion_bancaria_det where SK_CONCILIACION_ESTADO = 'CON')) credito_desc_libro_banco,
+    (select NVL(SUM(debito),0) from tt_libro_banco_det
+          where tt_libro_banco_det.SK_LIBRO_BANCO = libroBanco.SK_LIBRO_BANCO and SK_LIBRO_BANCO_DET NOT IN
+          (select SK_LIBRO_BANCO_DET from tt_conciliacion_bancaria_det where SK_CONCILIACION_ESTADO = 'CON'))  debito_desc_libro_banco,
+    (select NVL(SUM(credito),0) - NVL(SUM(debito),0) from tt_estado_cuenta_det
+      join tt_conciliacion_bancaria_det on tt_estado_cuenta_det.SK_ESTADO_CUENTA_DET = tt_conciliacion_bancaria_det.SK_ESTADO_CUENTA_DET
+      where tt_conciliacion_bancaria_det.SK_CONCILIACION_ESTADO = 'CON' and tt_estado_cuenta_det.SK_ESTADO_CUENTA = estadoCuenta.SK_ESTADO_CUENTA) saldo_conciliado_estado_cuenta,
+      (select NVL(SUM(credito),0) from tt_estado_cuenta_det
+          where tt_estado_cuenta_det.SK_ESTADO_CUENTA = estadoCuenta.SK_ESTADO_CUENTA and SK_ESTADO_CUENTA_DET NOT IN
+          (select SK_ESTADO_CUENTA_DET from tt_conciliacion_bancaria_det where SK_CONCILIACION_ESTADO = 'CON')) credito_desc_estado_cuenta,
+      (select NVL(SUM(debito),0) from tt_estado_cuenta_det
+          where tt_estado_cuenta_det.SK_ESTADO_CUENTA = estadoCuenta.SK_ESTADO_CUENTA and SK_ESTADO_CUENTA_DET NOT IN
+          (select SK_ESTADO_CUENTA_DET from tt_conciliacion_bancaria_det where SK_CONCILIACION_ESTADO = 'CON')) debito_desc_estado_cuenta
+from ct_cuentas_operativas cuenta
+join VTB_CI_INSTITUCION institucion on cuenta.sk_institucion = institucion.sk_institucion
+join VTB_CI_FUENTE_FINANC fuenteFinanc on cuenta.sk_fuente_financ = fuenteFinanc.sk_fuente_financ
+join ct_banco banco on cuenta.sk_banco = banco.sk_banco
+join ct_tipo_cuenta tipoCuenta on cuenta.sk_tipo_cuenta = tipoCuenta.sk_tipo_cuenta
+join ct_ingresos_estados estado on cuenta.sk_ingreso_estado = estado.sk_ingreso_estado
+join tt_libro_banco libroBanco on libroBanco.sk_cuentas_operativas = cuenta.sk_cuentas_operativas
+join tt_estado_cuenta estadoCuenta on estadoCuenta.sk_cuentas_operativas = cuenta.sk_cuentas_operativas
+where cuenta.sk_cuentas_operativas = $P{p_cuenta_operativa}]]>
+	</queryString>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="FUENTE_FINANCIAMIENTO" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="NOMBRE_CUENTA" class="java.lang.String"/>
+	<field name="TIPO_CUENTA" class="java.lang.String"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="SALDO_CONCILIADO_LIBRO_BANCO" class="java.math.BigDecimal"/>
+	<field name="CREDITO_DESC_LIBRO_BANCO" class="java.math.BigDecimal"/>
+	<field name="DEBITO_DESC_LIBRO_BANCO" class="java.math.BigDecimal"/>
+	<field name="SALDO_CONCILIADO_ESTADO_CUENTA" class="java.math.BigDecimal"/>
+	<field name="CREDITO_DESC_ESTADO_CUENTA" class="java.math.BigDecimal"/>
+	<field name="DEBITO_DESC_ESTADO_CUENTA" class="java.math.BigDecimal"/>
+	<pageHeader>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement style="stylecontent" mode="Transparent" x="140" y="55" width="477" height="16" uuid="9feb78b9-abf5-4d44-a7b8-7dab44b47f74"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDOS DE LIBRO BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="13" width="477" height="21" uuid="82a7ab66-98eb-4693-8a69-0390997bdcb8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="34" width="477" height="21" uuid="1eff37e9-5a61-47c9-8504-176c69a77a6b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION FINANCIERA INTEGRADO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="2" width="84" height="69" uuid="61aaca9b-93c6-48f6-84c0-1af551b402ca"/>
+				<imageExpression><![CDATA[$P{P_IMG_SV}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="617" y="2" width="48" height="12" uuid="52ee9c9c-8116-4955-85a8-b70e46cb16cb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha/Hora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="617" y="14" width="31" height="12" uuid="b4e64f36-e326-4862-b96b-68afa4bb5506"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="617" y="26" width="143" height="12" uuid="351f2a4e-ad8e-42b9-9ec7-03d828563b9f"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de" + " " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h:mm a">
+				<reportElement x="666" y="2" width="94" height="12" uuid="ac681342-7caa-43a2-848e-9b13c772b693"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="648" y="14" width="112" height="12" uuid="2fe507f5-722e-4ec8-800d-252a32e1c7d5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="173" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="50" width="140" height="14" uuid="2a440f43-4979-4832-9e8c-e9166b0d1692">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BANCO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="140" y="50" width="607" height="14" uuid="3a8745d6-2bb9-4d51-a5ae-0bbffe6d875b">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="64" width="140" height="14" uuid="8720612e-4e24-4dcf-8241-d3a6785818c6">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CUENTA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="140" y="64" width="607" height="14" uuid="eb15a23e-16ca-4fea-b470-f64e91a7d49f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_CUENTA} + " - " + $F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="8" width="140" height="14" uuid="1aa16cb9-61b8-402e-9cc1-3b45ba38502d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[INSTITUCION:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="140" y="8" width="607" height="14" uuid="12d80d99-78a3-4877-87da-4d74354c2b01">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="140" height="14" uuid="caee1be4-8108-4a84-a121-1026644eab21">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[FUENTE DE FINANCIAMIENTO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="140" y="22" width="607" height="14" uuid="f70ea25b-9c04-4652-9063-7f6d434dbc71">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINANCIAMIENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="36" width="140" height="14" uuid="9cec29c1-ceb2-4776-adf1-93d2ddabd22c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[GRUPO CUENTA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="140" y="36" width="607" height="14" uuid="b5f98820-aa9b-47ad-9d8d-de5ff045295d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{grupo_cuenta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="78" width="140" height="14" uuid="8106eb0a-1120-470f-9a67-18c751264ef0">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="140" y="78" width="607" height="14" uuid="4ec12135-0de5-45b7-84a6-094d04ea6160"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#0099CC"/>
+					<topPen lineWidth="1.0" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.0" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.0" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.0" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="107" width="160" height="14" uuid="b03ebfc8-a747-4b38-8642-7b5a1145c8cb">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[SALDO LIBRO BANCO                     $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="149" width="160" height="14" uuid="c2749552-5594-4fea-8137-765af4a04cbf">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[= Saldo Disponible Libro Banco      $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="135" width="160" height="14" uuid="c3e79e29-bfbf-4de5-9c1d-a9710702a8f9">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[(-) Debito pendiente Estado de Cuenta      $]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="160" y="107" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="cf4fcee7-125c-472c-9e0b-795511ad604c"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_CONCILIADO_LIBRO_BANCO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="160" y="121" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="1cb90e02-8d56-409f-97c0-b432d66ff650"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CREDITO_DESC_ESTADO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="160" y="135" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d81c38c4-9cc0-4781-acc0-03cf1629c16d"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEBITO_DESC_ESTADO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="160" y="149" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="64f6cc2b-8a8b-4ff0-b532-8957d5a1cf6f"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_CONCILIADO_LIBRO_BANCO}.add($F{CREDITO_DESC_ESTADO_CUENTA}).subtract($F{DEBITO_DESC_ESTADO_CUENTA})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="611" y="107" width="70" height="14" uuid="71803f4a-7d97-4b32-a08d-fe83924155ac"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{SALDO_CONCILIADO_ESTADO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="611" y="149" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="de33f820-2f25-47ae-b540-b29809f1d95e"/>
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_CONCILIADO_ESTADO_CUENTA}.add($F{CREDITO_DESC_LIBRO_BANCO}).subtract($F{DEBITO_DESC_LIBRO_BANCO})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="444" y="149" width="167" height="14" uuid="91b560ae-0410-435e-981c-ee122dad8ebb">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[= Saldo Disponible Estado de Cuenta $]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="611" y="135" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f57c8734-5595-460d-9c61-6333ed394890"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEBITO_DESC_LIBRO_BANCO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="611" y="121" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="4939de51-ec39-425c-9362-3c73b4b38e07"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CREDITO_DESC_LIBRO_BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="444" y="135" width="167" height="14" uuid="9eef8163-c544-46d5-9788-1b56dc23bb0e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[(-) Debito pendiente Libro Banco                     $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="107" width="167" height="14" uuid="ca9d3dfd-fb52-472d-9988-1d1358604c5d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[SALDO ESTADO DE CUENTA              $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="121" width="167" height="14" uuid="50fb1b6e-5595-40f5-b4ad-f30aaa193703">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[(+) Credito pendiente Libro Banco                   $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="121" width="160" height="14" uuid="284ceb5c-ce6f-4ff8-81f2-08aea313a397">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[(+) Credito pendiente Estado de Cuenta    $]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="122" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement x="0" y="0" width="747" height="122" uuid="f856ae7b-852c-4520-b389-88d352f910af"/>
+				<subreportParameter name="p_cuenta_operativa">
+					<subreportParameterExpression><![CDATA[$P{p_cuenta_operativa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rpt_saldos_disponibilidad_cuenta_libro_creditos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="62">
+			<subreport>
+				<reportElement x="0" y="0" width="747" height="62" uuid="42469617-728d-4da5-88c9-294233ca29ea"/>
+				<subreportParameter name="p_cuenta_operativa"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rpt_saldos_disponibilidad_cuenta_libro_debitos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="10"/>
+		<band height="122">
+			<subreport>
+				<reportElement x="0" y="0" width="747" height="122" uuid="3365a8f9-58c2-49b2-87ba-fa7778b2f02d"/>
+				<subreportParameter name="p_cuenta_operativa">
+					<subreportParameterExpression><![CDATA[$P{p_cuenta_operativa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rpt_saldos_disponibilidad_cuenta_extractos_creditos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="62">
+			<subreport>
+				<reportElement x="0" y="0" width="747" height="62" uuid="c26f56c9-e8ce-4225-93b6-9ba7d6440462"/>
+				<subreportParameter name="p_cuenta_operativa">
+					<subreportParameterExpression><![CDATA[$P{p_cuenta_operativa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rpt_saldos_disponibilidad_cuenta_extractos_debitos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="62"/>
+	</detail>
+</jasperReport>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEstadoSituacionFinanciera" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fac8473f-7a9b-4673-9061-8eaf9d21f531">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="skUfi" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skPrograma" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skPeriodo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["504"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skSubPrograma" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skProyecto" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skFuenteFinanc" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skClaEcoIngGas" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skTipoMov" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skTipoPresup" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skSubTipoPresup" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skObraTarea" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skConvenio" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skClasifOrgFinan" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mostrarEjercicioAnterior" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Si"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="expresadoEn" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["- EN DOLARES (USD) -"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skPeriodoAnt" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["133"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="skActividad" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select a.codigo, a.descripcion, sum(a.saldo) as saldo, sum(a.saldo_anterior) as saldo_anterior,
+       a.nivel, a.nombre_ufi, a.nombre_institucion,
+       to_char(max(a.fecha_fin),'dd') || ' de ' ||
+       trim(to_char(max(a.fecha_fin), 'Month', 'nls_date_language=Spanish')) || ' de ' ||
+       to_char(max(a.fecha_fin),'yyyy') as saldo_al,
+       GET_NOTA_EXPLICATIVA(1,$P!{skPeriodo},a.sk_cuenta_contable) AS nota_explicativa from(
+
+select d.codigo, d.descripcion,  d.sk_cuenta_contable,
+       sum(saldos) as saldo,
+       0 as saldo_anterior,
+       d.nivel, e.descripcion as nombre_ufi, f.descripcion as nombre_institucion,
+       a.fecha_fin_per_cont as fecha_fin
+from tc_periodo_contable a, tc_periodos_contables_saldos b, cc_catalogo_cuenta d, vtb_ci_unidad_financ e, vtb_ci_institucion f
+where a.sk_periodo_contable = b.sk_periodo
+and   b.sk_cuenta = d.sk_cuenta_contable
+and   b.sk_cod_ufi_usefi = e.sk_unidad_financ
+and   e.institucion_id = f.sk_institucion
+and   d.nivel in (1,2,3)
+and   d.sk_tipo_cuenta in (1,2,3)
+$P!{skUfi}
+and   a.sk_periodo_contable = $P!{skPeriodo}
+$P!{skPrograma}
+$P!{skSubPrograma}
+$P!{skClaEcoIngGas}
+$P!{skConvenio}
+$P!{skFuenteFinanc}
+$P!{skObraTarea}
+$P!{skProyecto}
+$P!{skSubTipoPresup}
+$P!{skTipoMov}
+$P!{skTipoPresup}
+$P!{skActividad}
+group by d.codigo, d.descripcion, d.nivel, e.descripcion, f.descripcion, a.fecha_fin_per_cont,  d.sk_cuenta_contable
+
+union all
+
+select d.codigo, d.descripcion, d.sk_cuenta_contable,
+       0 as saldo,
+       sum(saldos) as saldo_anterior,
+       d.nivel, e.descripcion as nombre_ufi, f.descripcion as nombre_institucion,
+       a.fecha_fin_per_cont
+from tc_periodo_contable a, tc_periodos_contables_saldos b, cc_catalogo_cuenta d, vtb_ci_unidad_financ e, vtb_ci_institucion f
+where a.sk_periodo_contable = b.sk_periodo
+and   b.sk_cuenta = d.sk_cuenta_contable
+and   b.sk_cod_ufi_usefi = e.sk_unidad_financ
+and   e.institucion_id = f.sk_institucion
+and   d.nivel in (1,2,3)
+and   d.sk_tipo_cuenta in (1,2,3)
+$P!{skUfi}
+and   a.sk_periodo_contable = PKG_CONTABILIDAD.FN_GET_SK_PERIODO_ANTERIOR($P!{skPeriodo},0)
+$P!{skPrograma}
+$P!{skSubPrograma}
+$P!{skClaEcoIngGas}
+$P!{skConvenio}
+$P!{skFuenteFinanc}
+$P!{skObraTarea}
+$P!{skProyecto}
+$P!{skSubTipoPresup}
+$P!{skTipoMov}
+$P!{skTipoPresup}
+$P!{skActividad}
+group by d.codigo, d.descripcion, d.nivel, e.descripcion, f.descripcion, a.fecha_fin_per_cont,  d.sk_cuenta_contable
+
+) a
+group by a.codigo, a.descripcion, a.nivel, a.nombre_institucion, a.nombre_ufi, a.sk_cuenta_contable
+order by a.codigo]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="SALDO" class="java.math.BigDecimal"/>
+	<field name="SALDO_ANTERIOR" class="java.math.BigDecimal"/>
+	<field name="NIVEL" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_UFI" class="java.lang.String"/>
+	<field name="NOMBRE_INSTITUCION" class="java.lang.String"/>
+	<field name="SALDO_AL" class="java.lang.String"/>
+	<field name="NOTA_EXPLICATIVA" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b028739e-c6cd-4a92-9f01-2963f6655a87" x="0" y="0" width="555" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3efbbff7-d239-43e4-b40f-5a23f3dceda0" x="0" y="15" width="555" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ESTADO DE SITUACION FINANCIERA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f8c5bd69-1308-44d4-8afb-639fdb3f197e" x="0" y="30" width="555" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_AL}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00b8fa22-d2c7-4769-b51a-768231f88f25" x="0" y="45" width="555" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{expresadoEn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="fa2d8b83-feb5-4147-8090-97e612e5a556" x="0" y="0" width="66" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69414083-42f7-4ccb-9e53-93cdc5f1ced8" x="66" y="0" width="278" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fe89a6bb-34e1-423b-904e-11a64b8b8db4" x="401" y="0" width="77" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e39273dc-770f-4fbf-853f-1d058cafdd65" x="478" y="0" width="77" height="15">
+					<printWhenExpression><![CDATA[$P{mostrarEjercicioAnterior}.equals("Si")]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ejercicio - 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69815720-1f34-4b44-97b0-559d6914f3a1" x="344" y="0" width="57" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.Nota]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement uuid="933c4631-c3b6-4c54-8939-7ac821108ef7" x="0" y="0" width="66" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ed56bfbc-be18-48c8-8f4c-03ef1b28eef8" x="66" y="0" width="278" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement uuid="30fef24e-44c2-4cb2-bc29-4c7678c129a7" x="401" y="0" width="77" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement uuid="6dabd62d-ea6d-4c72-98bf-bfad2bcee481" x="478" y="0" width="77" height="15">
+					<printWhenExpression><![CDATA[$P{mostrarEjercicioAnterior}.equals("Si")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_ANTERIOR}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ed56bfbc-be18-48c8-8f4c-03ef1b28eef8" x="344" y="0" width="57" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOTA_EXPLICATIVA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="34" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="15">
+			<textField>
+				<reportElement uuid="6a99f9bb-bef1-4e89-b308-da69876988fe" x="0" y="0" width="555" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["No se encontraron Registros"]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

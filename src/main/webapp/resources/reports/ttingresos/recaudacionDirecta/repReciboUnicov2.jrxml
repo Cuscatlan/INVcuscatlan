@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="repReciboUnico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cabaa7f7-f3c8-4912-91cd-3942bfbc33c0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="738"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\keiic\\Documents\\NetBeansProjects\\safi\\src\\main\\webapp\\resources\\reports\\ttingresos\\recaudacionDirecta\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_INGRESO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ing.sk_ingreso as SK_INGRESO, colec.DENOMINACION_COLECTURIA AS COLECTURIA, ban.DENOMINACION_BANCO AS BANCO, SUC.DENOMINACION_SUCURSAL AS SUCURSAL , ing.caja AS CAJA, ing.fecha_ingreso AS FECHA_INGRESO,
+         ING.SK_TRANSACCION_INGRESO AS TRANSACCION, ing.nit AS NIT , nvl(ing.NOMBRES,'')||' '||NVL(ing.APELLIDOS,'') AS NOMBRES, FUEN.DESCRIPCION AS FUENTE_FINANCIAMIENTO, PR_num_a_letras.dintex(ing.IMPORTE_PERCIBIDO) AS CANTIDAD, ing.s_firma as firma, ing.s_crea_usuario as usuario
+   from tt_ingresos ing, CT_COLECTURIAS_FINALES colec, CT_BANCO ban, CT_SUCURSAL SUC, CI_FUENTE_FINANC FUEN
+    WHERE ing.SK_COLECTURIA_FINAL = colec.SK_COLECTURIAS_FINALES(+)
+      AND ING.SK_BANCO = ban.SK_BANCO(+)
+      AND ing.SK_SUCURSAL = SUC.SK_SUCURSAL(+)
+      AND ing.SK_FUENTE_FINANC = FUEN.SK_FUENTE_FINANC(+)
+      AND ing.SK_INGRESO = $P{P_INGRESO}]]>
+	</queryString>
+	<field name="SK_INGRESO" class="java.math.BigDecimal"/>
+	<field name="COLECTURIA" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="SUCURSAL" class="java.lang.String"/>
+	<field name="CAJA" class="java.math.BigDecimal"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="TRANSACCION" class="java.math.BigDecimal"/>
+	<field name="NIT" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="FUENTE_FINANCIAMIENTO" class="java.lang.String"/>
+	<field name="CANTIDAD" class="java.lang.String"/>
+	<field name="FIRMA" class="java.lang.String"/>
+	<field name="USUARIO" class="java.lang.String"/>
+	<group name="SK_INGRESO">
+		<groupExpression><![CDATA[$F{SK_INGRESO}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="394" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="211" width="555" height="70" uuid="21c18727-6037-47ac-898c-5d1dbf54e20c"/>
+				<subreportParameter name="SK_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{P_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subRepDetalleRui.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="213" y="40" width="129" height="20" uuid="1461261f-96e4-415c-afee-17d99aa5a96b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="61" width="281" height="15" uuid="94fc971c-ce35-4337-9823-4527381dc93c"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="61" width="274" height="15" uuid="9fe5b2c9-001f-403c-9131-5a9f2dbdf055"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="76" width="274" height="15" uuid="4bdbd028-333e-4c11-8456-f6c64955e892"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="76" width="281" height="15" uuid="e37b1ef2-2055-44e4-b7fe-851696ab7a6a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="91" width="274" height="15" uuid="43562469-2f5d-4add-a706-49ecc64c65b9"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SUCURSAL]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="91" width="281" height="15" uuid="33526f8e-f377-4a87-beec-b14dfffd3455"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="106" width="274" height="15" uuid="706e4c12-a296-4677-9df7-22030b8ad0d1"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CAJA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="106" width="281" height="15" uuid="553abea8-4143-439f-a4fc-99bdb293b96d"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="121" width="274" height="15" uuid="1f736b14-9764-4bbb-bb45-a2587b223f72"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FECHA PAGO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="121" width="281" height="15" uuid="2923582e-ee6a-4e53-90ac-d86d7e7836a6"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="136" width="274" height="15" uuid="6fc9a7da-e4e1-4d6c-9ced-71a82b669365"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TRANSACCION]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="136" width="281" height="15" uuid="ea4db2a3-1efe-4660-b005-d7804f68194d"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="151" width="274" height="15" uuid="b463791f-1e41-4518-a20b-9b8128fa462a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="151" width="281" height="15" uuid="bac0cc66-0bfd-43fd-a4e2-04ddcac12f22"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="166" width="274" height="15" uuid="795fe1c5-6bfc-430c-8d1d-3478bcee9ebb"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="166" width="281" height="15" uuid="4981167f-77fc-428b-9847-77924bcf3482"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="181" width="274" height="15" uuid="2fdb9fe4-b8a2-4554-883f-7816a3351e98"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FONDO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="181" width="281" height="15" uuid="d039b4ab-7f28-4c29-a5d2-6a2c018d6859"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINANCIAMIENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="196" width="555" height="15" uuid="8d421a42-eafc-4573-a4e3-4448283808c1"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE DEL PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="20" width="223" height="20" uuid="76d9be5a-097f-43ac-9ede-a09369df0973"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="0" width="163" height="20" uuid="52343da9-ee5c-474d-b1e0-b42a8aa777e7"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="128" y="296" width="427" height="20" uuid="a9331290-bbf5-44d5-a833-5b56e11523fd"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="296" width="128" height="20" uuid="73aaba1c-0d28-4b4f-bdea-223ebe0e0ec0"/>
+				<text><![CDATA[CANTIDAD EN LETRAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="316" width="58" height="20" uuid="66ef324a-bd5b-4b2c-a9b8-a993e11ee19b"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="316" width="100" height="20" uuid="931211c7-177c-4ed6-8633-97480a6e3b73"/>
+				<text><![CDATA[Firma Electronica: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="348" width="422" height="20" uuid="68718335-dfcf-4e2c-bd6b-31188b51a16d"/>
+				<text><![CDATA[PUEDE CONSULTAR SUS PAGOS EN LINEA EN LA SIGUIENTE DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="368" width="193" height="15" forecolor="#3333FF" uuid="10d9fbc7-4622-45a6-a62d-5a64f98d5a6e"/>
+				<textElement verticalAlignment="Bottom">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[www.mh.gob.sv/consulta/pagos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="368" width="100" height="20" uuid="9f20a2e9-f563-4d0a-95ba-8ebfc17b266a"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ORIGINAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="316" width="100" height="20" uuid="8427b742-6273-42f4-ab7b-24944b8db93a"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FIRMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="316" width="100" height="20" uuid="ecb88a8a-d7fe-4dfa-8ccf-af58e63a36ce"/>
+				<textFieldExpression><![CDATA[$F{USUARIO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="387">
+			<staticText>
+				<reportElement x="0" y="162" width="274" height="15" uuid="c3942e10-9618-476f-941e-638df3491240"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="147" width="274" height="15" uuid="c210be9b-d13e-4723-80ad-f576ee9ef372"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TRANSACCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="207" width="555" height="15" uuid="9e6cdcb6-ce6b-49c0-bf17-fa7cc761401f"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE DEL PAGO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="87" width="281" height="15" uuid="f823b357-3dea-4fe4-acad-72094ae753fa"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="177" width="281" height="15" uuid="7456d7ee-6dd8-48ac-9044-dfe06a7cb967"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="192" width="281" height="15" uuid="f085e2cb-2fa2-4ca5-a8c0-32fe3a727f59"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINANCIAMIENTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="147" width="281" height="15" uuid="41517cd6-50c5-4659-aca4-e924e3df86f2"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="102" width="274" height="15" uuid="2a4ae748-3259-46ac-8c46-46310e4cff07"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SUCURSAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="117" width="274" height="15" uuid="39a14321-5d93-4701-b98c-a8ec2784ec21"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CAJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="371" width="193" height="15" forecolor="#3333FF" uuid="08947ace-3880-4a6e-84be-7f2eca328c29"/>
+				<textElement verticalAlignment="Bottom">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[www.mh.gob.sv/consulta/pagos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="192" width="274" height="15" uuid="43b7259d-efdd-4b87-84f4-c301ccfb3e58"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FONDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="319" width="100" height="20" uuid="b847712b-28bc-41ba-b054-d496fdfcb09c"/>
+				<text><![CDATA[Firma Electronica: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="132" width="281" height="15" uuid="081a4212-f7a8-42f7-adb7-ff622f6a4b8d"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="196" y="10" width="163" height="20" uuid="f9675d74-d475-4878-855a-b1d5b7f91bb4"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="128" y="299" width="427" height="20" uuid="735b7c38-a949-42b2-8209-5ff0b7feac91"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="72" width="281" height="15" uuid="ba8b2de6-fea6-49dd-ac88-918218af7290"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="72" width="274" height="15" uuid="c110ab7d-8fd1-41b4-925f-4f8eb5ffc67e"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="87" width="274" height="15" uuid="71fe9b8b-639d-4597-a79f-e54ebe410afb"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="319" width="58" height="20" uuid="0897dea9-c451-44d5-849f-12856449f297"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="51" width="129" height="20" uuid="4e2b6ea7-8a8e-42f0-9d65-98af2d3d0967"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="299" width="128" height="20" uuid="ca0d8170-a0a7-4b3c-8b06-c08cf44116d7"/>
+				<text><![CDATA[CANTIDAD EN LETRAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="31" width="223" height="20" uuid="e444342a-b8bc-4c0f-8f62-b539a7885cdb"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="102" width="281" height="15" uuid="7ab165fe-e39c-41b0-adb7-fbd5718d7c9a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="351" width="422" height="20" uuid="646e9625-8892-4683-8f3b-829caac06dc7"/>
+				<text><![CDATA[PUEDE CONSULTAR SUS PAGOS EN LINEA EN LA SIGUIENTE DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="132" width="274" height="15" uuid="bebe748e-098c-41fd-a004-25dc78a23423"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FECHA PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="177" width="274" height="15" uuid="58a75fe6-47ac-4514-beca-4039a4ec490f"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="162" width="281" height="15" uuid="1fa88bd1-0b6e-412f-b1e0-3a58849f7ed5"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NIT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="117" width="281" height="15" uuid="5a52a30d-c808-4355-970f-5e06427c56cc"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="222" width="555" height="67" uuid="c5060094-c984-4a8c-b8b1-08e2148bfea8"/>
+				<subreportParameter name="SK_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{P_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subRepDetalleRui.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="422" y="366" width="100" height="20" uuid="b09ede50-82b7-47b2-939a-0e940f0ee923"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DUPLICADO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="5" width="555" height="1" uuid="e3b419d0-9cc8-437f-b589-593f6bf50935"/>
+			</line>
+			<textField>
+				<reportElement x="374" y="319" width="100" height="20" uuid="eaf1fb9e-bc4e-4f1e-96db-3f12958b7d72"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FIRMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="319" width="100" height="20" uuid="833a3504-e903-4ae9-ad7f-fb951336ac44"/>
+				<textFieldExpression><![CDATA[$F{USUARIO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="395">
+			<staticText>
+				<reportElement x="0" y="157" width="274" height="15" uuid="4d267989-34fb-4173-8f72-59d59281a08e"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="142" width="274" height="15" uuid="a4ca3cb3-5e2a-49f9-94d2-f446dda349a8"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TRANSACCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="202" width="555" height="15" uuid="c28fa294-2b1a-4226-a11c-ad5ab824c2e6"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[DETALLE DEL PAGO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="82" width="281" height="15" uuid="dbd72065-a0d9-48de-9d85-518c9b7c485a"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="172" width="281" height="15" uuid="5137b88c-6014-4440-a2ed-2c2384805380"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="187" width="281" height="15" uuid="936aa1d8-e7fc-4453-bdc6-b4c30be77808"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINANCIAMIENTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="142" width="281" height="15" uuid="1d55b7e0-3bd1-4857-a892-e94894d07be6"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="97" width="274" height="15" uuid="ff6d5dd5-2d1d-4ed0-b1aa-b9226c6618a4"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SUCURSAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="112" width="274" height="15" uuid="668c65be-c6f9-4ce9-bebc-1791312b3199"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CAJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="374" width="193" height="15" forecolor="#3333FF" uuid="8b952a50-2626-4271-b397-21d9c16c02f3"/>
+				<textElement verticalAlignment="Bottom">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[www.mh.gob.sv/consulta/pagos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="187" width="274" height="15" uuid="19bca77c-f7c4-47b9-bebd-08dd74d2b5a7"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FONDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="322" width="100" height="20" uuid="5dfdfc39-dcd8-4279-af2f-178671f40302"/>
+				<text><![CDATA[Firma Electronica: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="127" width="281" height="15" uuid="97e86524-be59-4b32-aeff-60b13ffcd0a4"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="196" y="6" width="163" height="20" uuid="69faee49-df68-4734-a206-ae714cec6a94"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="128" y="302" width="427" height="20" uuid="cd71f257-c89b-4b33-ad40-7040d27ef5a4"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="67" width="281" height="15" uuid="14d21ad4-617b-454f-ac99-c56621cff5e7"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="67" width="274" height="15" uuid="1c72dc5e-f0bc-47d7-bbc8-9dbaf87526d0"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="82" width="274" height="15" uuid="738c7b89-1058-4074-8f51-9bf7ed058b3b"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="322" width="58" height="20" uuid="790b1638-c13a-434e-8f6f-373808420d8f"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="46" width="129" height="20" uuid="25055cdf-c67b-4731-9ac3-2876b397a001"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="302" width="128" height="20" uuid="16b474bf-51bb-4d33-9d25-51068689ce33"/>
+				<text><![CDATA[CANTIDAD EN LETRAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="26" width="223" height="20" uuid="1adf9a7c-7664-4519-8c21-a2a299446713"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="97" width="281" height="15" uuid="d88295be-1552-4f92-9417-dc18205353a6"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="354" width="422" height="20" uuid="16074c72-8b3d-4eb4-881a-a6f0b6e389ca"/>
+				<text><![CDATA[PUEDE CONSULTAR SUS PAGOS EN LINEA EN LA SIGUIENTE DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="127" width="274" height="15" uuid="e56c8d0b-6739-4710-8194-c7838bd8e06b"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FECHA PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="172" width="274" height="15" uuid="44f44eda-572f-4ee7-be12-3378f4a81b53"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="157" width="281" height="15" uuid="a1c6a187-40e1-4c32-9314-60930d6425af"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NIT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="274" y="112" width="281" height="15" uuid="33ad4a81-070d-499e-94d5-9885e1b7629e"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="217" width="555" height="69" uuid="7915d552-cd0a-40f4-acb6-abb1ece2c9ad"/>
+				<subreportParameter name="SK_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{P_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subRepDetalleRui.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="410" y="374" width="100" height="20" uuid="1a3d58ba-f9e6-4bf5-be4c-7b55db3a233c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[TRIPLICADO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="5" width="555" height="1" uuid="dbac8aeb-dce6-487b-a907-547d3f57bc68"/>
+			</line>
+			<textField>
+				<reportElement x="374" y="322" width="100" height="20" uuid="5db145d6-02b3-4d69-ab22-0788e298d4d7"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FIRMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="322" width="100" height="20" uuid="ba1e5bb7-623d-4356-9931-157f6a3c0ed8"/>
+				<textFieldExpression><![CDATA[$F{USUARIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

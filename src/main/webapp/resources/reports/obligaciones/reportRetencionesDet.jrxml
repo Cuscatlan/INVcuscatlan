@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportRetencionesDet" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a03a49d5-8192-4a92-b1c0-b4802b5648e7">
+	<property name="ireport.zoom" value="1.2745232708414267"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="unidadejecutora" class="java.lang.String"/>
+	<parameter name="sunidadejecutora" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT VTT.IDFUENTEFINAN AS idfuente,
+tco.sk_unidad_ejecutor as unidadejecutora,
+vue.descripcion as sunidadejecutora,
+tco.SK_INSTITUCION as institucion,
+  VFF.DESCRIPCION                 AS sfuente,
+  tco.SK_OBLIGACION               AS akobligacion,
+  tdr.sk_documento_respaldo_enc   AS iddoc,
+  tsr.SK_SOLICITUD_PAGO_RET       AS sksolicitud,
+  tsr.n_resolucion                AS nresolucion,
+  trc.ESTADO                      AS estado,
+  ces.descripcion sestado,
+  tlo.num_lote             AS numlote,
+  ''                       AS periodo,
+  ''                       AS cuentaorigen,
+  ''                       AS cuentadestino,
+  tlo.fecha_autorizado     AS fechaautorizado,
+  tsr.n_resolucion         AS numeromandamiento,
+  trc.SK_DETALLE_RETENCION AS ctiporetencion,
+  cdr.NOMBRE               AS tiporetencion,
+  trc.MONTO,
+  tco.ejercicio AS ejercicio
+FROM TC_OBLIGACION tco,
+  TC_DOCUMENTO_RESPALDO_ENC tdr,
+  VTB_TRX_SALDOSCOMPRO VTT,
+  CC_TIPO_DOCUMENTO CTD,
+  VTB_CI_FUENTE_FINANC VFF,
+  tc_retencion trc,
+  tt_solicitud_pago_ret tsr,
+  cc_detalle_retencion cdr,
+  TT_LOTE tlo,
+  CT_ESTADO_SOLIC_PAGO ces,
+  VTB_CI_UNIDAD_EJECUTORA vue
+WHERE
+ tco.sk_obligacion                                               =tdr.SK_OBLIGACION
+AND tco.ID_DOC_COMPROMISO                                           =VTT.DOCID
+AND tdr.SK_TIPO_DOCUMENTO                                           =CTD.SK_TIPO_DOCUMENTO
+AND VTT.IDFUENTEFINAN                                               =VFF.SK_FUENTE_FINANC
+AND tdr.sk_documento_respaldo_enc                                   =trc.sk_documento_respaldo_enc
+AND trc.sk_retencion                                                =tsr.sk_retencion
+AND trc.SK_DETALLE_RETENCION                                        = cdr.SK_DETALLE_RETENCION
+AND tlo.sk_lote (+)                                                 = tsr.sk_lote
+AND tsr.sk_estado                                                   = ces.sk_estado
+AND tco.sk_unidad_ejecutor= vue.sk_unidad_ejecutor
+AND tco.sk_unidad_ejecutor =$P{unidadejecutora}
+AND ($P{institucion}                                                  IS NULL OR tco.SK_INSTITUCION =$P{institucion})
+AND ($P{ejercicio}                                                 IS NULL OR tco.EJERCICIO =$P{ejercicio})]]>
+	</queryString>
+	<field name="IDFUENTE" class="java.math.BigDecimal"/>
+	<field name="UNIDADEJECUTORA" class="java.math.BigDecimal"/>
+	<field name="SUNIDADEJECUTORA" class="java.lang.String"/>
+	<field name="INSTITUCION" class="java.math.BigDecimal"/>
+	<field name="SFUENTE" class="java.lang.String"/>
+	<field name="AKOBLIGACION" class="java.math.BigDecimal"/>
+	<field name="IDDOC" class="java.math.BigDecimal"/>
+	<field name="SKSOLICITUD" class="java.math.BigDecimal"/>
+	<field name="NRESOLUCION" class="java.lang.String"/>
+	<field name="ESTADO" class="java.math.BigDecimal"/>
+	<field name="SESTADO" class="java.lang.String"/>
+	<field name="NUMLOTE" class="java.math.BigDecimal"/>
+	<field name="PERIODO" class="java.lang.String"/>
+	<field name="CUENTAORIGEN" class="java.lang.String"/>
+	<field name="CUENTADESTINO" class="java.lang.String"/>
+	<field name="FECHAAUTORIZADO" class="java.sql.Timestamp"/>
+	<field name="NUMEROMANDAMIENTO" class="java.lang.String"/>
+	<field name="CTIPORETENCION" class="java.math.BigDecimal"/>
+	<field name="TIPORETENCION" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<variable name="MONTO_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="61">
+			<staticText>
+				<reportElement x="614" y="40" width="133" height="20" uuid="5f35b3b8-22be-4c03-92aa-2493b7ecfa3f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Retención:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="747" y="40" width="55" height="20" uuid="8a852957-c6e8-41ce-8b62-69d6c3e67d03"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{MONTO_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="20" width="100" height="20" uuid="1303401f-9157-4b39-834b-9f68729aee0c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFUENTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="20" width="56" height="20" uuid="a9250091-ce19-43ba-aeb0-9393380f1a6a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AKOBLIGACION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="156" y="20" width="58" height="20" uuid="a15c3e33-8fa6-4e98-8033-497bbc221693"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IDDOC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="214" y="20" width="63" height="20" uuid="70a9b810-da48-4be4-8474-4625c05491df"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SKSOLICITUD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="277" y="20" width="56" height="20" uuid="85897ede-8939-469e-80dc-5fb59d146f00"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SESTADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="333" y="20" width="36" height="20" uuid="431bfefe-bb07-4f62-a7c0-9baba78c30f3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMLOTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="369" y="20" width="47" height="20" uuid="6981447f-d801-4529-ab12-045d43471ce4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUENTAORIGEN}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="416" y="20" width="45" height="20" uuid="67efb23c-e6d9-4a66-a616-6d6a47626de2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUENTADESTINO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="461" y="20" width="53" height="20" uuid="20c59dbe-0fbf-4a70-b9b1-4b7d175e3803"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHAAUTORIZADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="514" y="20" width="55" height="20" uuid="3ea48578-be38-4606-a2f0-8ac9d9c7dca3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMEROMANDAMIENTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="569" y="20" width="45" height="20" uuid="52aa13a9-6c45-4fea-b18c-cee835f98cdb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PERIODO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="614" y="20" width="133" height="20" uuid="e5f45d5c-6551-446e-8a6c-b324e3fc799b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPORETENCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="747" y="20" width="55" height="20" uuid="145e136c-1fa8-41dc-9495-5a8f080fc4aa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="802" height="20" uuid="a6192b08-62a1-4872-8d5f-142fd3d80cdc"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{unidadejecutora} + " " + $P{sunidadejecutora}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

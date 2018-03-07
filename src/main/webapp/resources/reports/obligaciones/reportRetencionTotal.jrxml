@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportRetencionTotal" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b11b7411-dddc-4251-b164-2b4ce70ae94e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  SUM(trc.MONTO) AS MONTO
+FROM    TC_OBLIGACION tco, VTB_CI_INSTITUCION vci,
+  TC_DOCUMENTO_RESPALDO_ENC tdr,
+  VTB_TRX_SALDOSCOMPRO VTT,
+  CC_TIPO_DOCUMENTO CTD,
+  VTB_CI_FUENTE_FINANC VFF,
+  tc_retencion trc,
+  tt_solicitud_pago_ret tsr,
+  cc_detalle_retencion cdr,
+  TT_LOTE tlo,
+  CT_ESTADO_SOLIC_PAGO ces,
+  VTB_CI_UNIDAD_EJECUTORA vue
+where tco.sk_institucion=vci.SK_INSTITUCION and
+( $P{institucion} is null or $P{institucion}= tco.sk_institucion)
+and ($P{ejercicio} is null or tco.EJERCICIO= $P{ejercicio})
+AND tco.sk_unidad_ejecutor= vue.sk_unidad_ejecutor
+and tco.sk_obligacion                                               =tdr.SK_OBLIGACION
+AND tco.ID_DOC_COMPROMISO                                           =VTT.DOCID
+AND tdr.SK_TIPO_DOCUMENTO                                           =CTD.SK_TIPO_DOCUMENTO
+AND VTT.IDFUENTEFINAN                                               =VFF.SK_FUENTE_FINANC
+AND tdr.sk_documento_respaldo_enc                                   =trc.sk_documento_respaldo_enc
+AND trc.sk_retencion                                                =tsr.sk_retencion
+AND trc.SK_DETALLE_RETENCION                                        = cdr.SK_DETALLE_RETENCION
+AND tlo.sk_lote (+)                                                 = tsr.sk_lote
+AND tsr.sk_estado                                                   = ces.sk_estado
+AND tco.sk_unidad_ejecutor= vue.sk_unidad_ejecutor]]>
+	</queryString>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<variable name="MONTO_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="614" y="1" width="133" height="20" uuid="23d9c216-2dfd-46a1-a421-d86e53a39dcc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL GENERAL:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="747" y="1" width="55" height="20" uuid="42c5e852-8652-4aec-a626-9ca9a19b93f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

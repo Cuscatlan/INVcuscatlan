@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recaudacionZonaGeo" language="groovy" pageWidth="450" pageHeight="595" orientation="Landscape" columnWidth="410" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e69f0af7-5ae1-49ac-8c49-00a7e6f7c046">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FECHA_INICIO" class="java.lang.String"/>
+	<parameter name="FECHA_FIN" class="java.lang.String"/>
+	<parameter name="P_FECHA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select a.descripcion as zona,
+sum(b.num_doc) as num_doc,
+sum(b.monto) as monto
+from vtb_ci_clasif_geografico a,
+--Directas por zona geografica
+((select substr(vtb_ci_clasif_geografico.clasif_geografico, 1, 2) as nivel,
+count(tt_ingresos.num_documento) as num_doc,
+sum(tt_ingresos_detalle.importe_percibido) as monto
+from tt_ingresos, tt_ingresos_detalle, ct_colecturias_finales, vtb_ci_clasif_geografico
+where tt_ingresos.sk_ingreso = tt_ingresos_detalle.sk_ingreso
+and tt_ingresos.sk_colecturia_final = ct_colecturias_finales.sk_colecturias_finales
+and ct_colecturias_finales.departamento = vtb_ci_clasif_geografico.sk_clasif_geografico
+and tt_ingresos.sk_colecturia_final is not null
+$P!{P_FECHA}
+group by substr(vtb_ci_clasif_geografico.clasif_geografico, 1, 2))
+union
+--Indirectas por zona geografica
+(select substr(vtb_ci_clasif_geografico.clasif_geografico, 1, 2) as nivel,
+count(tt_ingresos.num_documento) as num_doc,
+sum(tt_ingresos_detalle.importe_percibido) as monto
+from tt_ingresos, tt_ingresos_detalle, ct_banco, ct_sucursal, vtb_ci_clasif_geografico
+where tt_ingresos.sk_ingreso = tt_ingresos_detalle.sk_ingreso
+and tt_ingresos.sk_banco = ct_banco.sk_banco
+and ct_banco.sk_banco = ct_sucursal.sk_banco
+and ct_sucursal.departamento = vtb_ci_clasif_geografico.sk_clasif_geografico
+and tt_ingresos.sk_banco is not null
+$P!{P_FECHA}
+group by substr(vtb_ci_clasif_geografico.clasif_geografico, 1, 2))
+order by nivel) b
+where a.clasif_geografico = b.nivel
+group by a.descripcion]]>
+	</queryString>
+	<field name="ZONA" class="java.lang.String"/>
+	<field name="NUM_DOC" class="java.math.BigDecimal"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_DOC" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NUM_DOC}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_MONTO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="93" splitType="Stretch">
+			<staticText>
+				<reportElement x="70" y="24" width="277" height="20" uuid="1c32294d-8eaa-4d41-a6f5-77659f039ac9"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="64" width="31" height="20" uuid="51286e37-5039-431e-81f2-3eeee01e198a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="222" y="64" width="75" height="20" uuid="45988981-7d7f-42d3-8ac4-4608224c0ce9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="64" width="75" height="20" uuid="238f3fed-d03d-4d77-b518-2528e63535ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="70" y="4" width="277" height="20" uuid="94bffe4d-1be9-4466-9f3b-8f09116b5954"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="44" width="365" height="20" uuid="ba696fe8-f5a4-4e64-b8a0-1b8e39474552"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[INGRESOS POR ZONA GEOGRAFICA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="5" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="154" height="20" backcolor="#FFFFFF" uuid="8e5e9603-6af2-4790-9517-52a54c447830"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ZONA GEOGRAFICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="154" y="0" width="128" height="20" backcolor="#FFFFFF" uuid="7be63402-14ae-4caa-be69-6787ba67e5b7"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="282" y="0" width="128" height="20" backcolor="#FFFFFF" uuid="d73ad437-5e22-4a73-ac00-cc06fe819d68"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="154" height="20" uuid="e3a1a1cd-4a86-45b9-b9bb-19a1e11cade8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ZONA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="0" width="128" height="20" uuid="21381b4c-b675-48a4-8b75-17ffe736066d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_DOC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="282" y="0" width="128" height="20" uuid="2efad5d9-b51a-4bd8-9e00-8dfac9f4f42f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="154" height="20" uuid="9e7a6a95-4656-41c7-96e7-18b10949a792"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="154" y="0" width="128" height="20" uuid="d97fb31e-4f56-4dce-b917-11f26f1a600b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DOC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="282" y="0" width="128" height="20" uuid="73100cde-245a-404e-9747-7c7a125a7a16"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

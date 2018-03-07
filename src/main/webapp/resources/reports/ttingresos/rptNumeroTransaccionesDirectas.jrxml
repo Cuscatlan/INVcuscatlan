@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptNumeroTransaccionesDirectas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a58942d6-6f7f-46f7-a483-35520cbc9856">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_F_INI" class="java.lang.String"/>
+	<parameter name="P_F_FIN" class="java.lang.String"/>
+	<parameter name="P_USER" class="java.lang.String"/>
+	<parameter name="P_COLECTURIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cadena" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+regs.sk_colecturias_finales
+,regs.denominacion_colecturia
+,regs.manuales
+,regs.npe
+,sum(nvl(regs.manuales,0)+nvl(regs.npe,0)) as total
+from(
+select * from (
+select
+cf.sk_colecturias_finales
+,cf.denominacion_colecturia
+,ing.sk_ing_tipo_carga
+,count(ing.sk_ingreso) as total
+from
+ct_colecturias_finales cf
+,tt_ingresos ing
+where
+cf.sk_colecturias_finales=ing.sk_colecturia_final
+and ing.sk_ing_tipo_carga in (4,1)
+and estado=1
+$P!{cadena}
+$P!{P_COLECTURIA}
+group by
+cf.sk_colecturias_finales
+,cf.denominacion_colecturia
+,ing.sk_ing_tipo_carga)
+pivot (sum(total)for sk_ing_tipo_carga in(1 as manuales,4 as npe)))regs
+group by
+regs.sk_colecturias_finales
+,regs.denominacion_colecturia
+,regs.manuales
+,regs.npe]]>
+	</queryString>
+	<field name="SK_COLECTURIAS_FINALES" class="java.math.BigDecimal"/>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="MANUALES" class="java.math.BigDecimal"/>
+	<field name="NPE" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="totalManuales" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{MANUALES}]]></variableExpression>
+	</variable>
+	<variable name="totalNPE" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NPE}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="816aac9e-b95b-4012-b444-ecd78d3df5d8"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20" uuid="94849036-3a89-4d86-88bf-dd0e2b4f2d65"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONESHHHH']]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="555" height="20" uuid="6f2a0fb1-836a-454a-8348-34984ae33584"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUMERO DE TRANSACCIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="60" width="22" height="20" uuid="b52959ca-aab8-47fd-a0c9-dcdf74ec9ab0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="174" y="60" width="21" height="20" uuid="52d1d7ef-7c97-4b61-b658-d25198989a96"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DE:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="195" y="60" width="100" height="20" uuid="cdd9a5bf-3c17-4134-81e9-d4f10ca3d688"/>
+				<textFieldExpression><![CDATA[$P{P_F_INI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="334" y="60" width="100" height="20" uuid="3d1eea0f-e414-4bc9-97d6-82e7a70a060d"/>
+				<textFieldExpression><![CDATA[$P{P_F_FIN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="45" height="23" uuid="599e75ba-193e-4f19-9c94-16f200b6b805"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="0" width="203" height="23" uuid="bdbd4a52-705c-4f31-80bf-01a11c1ecb94"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="0" width="100" height="23" uuid="68b38d28-450c-44f1-b21e-28704b9a1b4f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MANUALES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="0" width="100" height="23" uuid="b2cc6af8-e5a5-4a1e-a981-51d91fcb61ae"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="0" width="100" height="23" uuid="47104ca8-ea13-4229-8fa7-792f4ff842c8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="45" height="24" uuid="b63dc07e-29b4-4776-a9bf-84f49358208c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SK_COLECTURIAS_FINALES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="45" y="0" width="203" height="24" uuid="a7d92af9-1dcb-48e1-b081-b801c2e13944"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="248" y="0" width="100" height="24" uuid="17b2a64b-9197-476c-ab18-2f08f15aec54"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MANUALES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="0" width="100" height="24" uuid="3dc2b125-fe6b-4a08-a7a1-4dd6f0b72dd5"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NPE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="448" y="0" width="100" height="24" uuid="9420243e-2af3-43d2-819e-b8e7e25c602a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="9" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="7" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="23" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="248" y="0" width="100" height="20" uuid="b8bbb6c8-3d27-46b8-bebe-e8915eec1687"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalManuales}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="148" y="0" width="100" height="20" uuid="f690db35-396e-442d-9534-f87611044169"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL DIRECTA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="0" width="100" height="20" uuid="878013d8-3c8f-4dbe-a7fd-66434e30a325"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalNPE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="448" y="0" width="100" height="20" uuid="92a489df-88d5-47c2-b9f1-d951163ead4c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

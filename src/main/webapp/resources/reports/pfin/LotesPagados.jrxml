@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Lotespagados" language="groovy" pageWidth="2100" pageHeight="842" columnWidth="2060" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aca1bdab-b69f-4831-a5c8-91b6a276bbfd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_SK_EJERCICIO" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_NUMEROLOTE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MONTOLOTE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT  T.* ,  B.SK_BENEFICIARIO, B.NIT_BENEFI, B.NOMBRE_BENEFI, B.CLAS_PRESUPUESTARIA,
+B.ESTRUCTURA_PRESUPUESTARIA,B.SK_OBLIGACION  ,B.sk_institucion ,B.INSTITUCION, B.NOMBRE_UNIDAD_EJECUTORA,
+B.UNIDAD_EJECUTORA , B.fuente_finan, B.NOMBRE_FUENTE_FINAC, B.ACT_ESPECIAL, B.MONTO_OBLIGACION FROM
+(
+select L.SK_LOTE SK_LOTE, D.SK_LOTE_DET,  L.EJERCICIO EJERCICIO, ( SELECT DESCRIPCION FROM VTB_CI_TIPO_PRESUP WHERE ID = L.SK_TIPO_PRESUPUESTO)  TIPOPRESUPUESTO , L.NUM_LOTE , D.CICLO CICLO_LOTE ,
+D.TIPO_OPERACION TIPO_OPERACION , 'PENDIENTE' TIPO_PROPUESTA ,
+L.FECHA_AUTORIZADO FECHA_AUTORIZACION, D.TIPO_MOVIMIENTO TIPO_MOVIMIENTO, D.INSTRUCCION_PAGO_BCR INSTRUCCION_BCR,
+D.FECHA_INST_PAGO_BCR FECHA_PROCESO_BCR,  L.MONTO   MONTO_LOTE , D.MONTO_TOTAL_LOTE MONTO_DET,
+UPPER((select NOMBRE_ESTADO from ct_estado_lote where sk_estado_lote = l.sk_estado) ) ESTADO_LOTE
+from TT_LOTE L, TT_LOTE_DET D where L.SK_LOTE = D.SK_LOTE  $P!{P_SK_EJERCICIO}
+) T
+INNER JOIN
+(
+SELECT DISTINCT BE.SK_OBLIGACION SK_OBLIGACION , BE.SK_BENEFICIARIO SK_BENEFICIARIO,
+( SELECT DISTINCT NIT_CIE FROM tt_beneficiario WHERE SK_BENEFICIARIO = BE.SK_BENEFICIARIO) NIT_BENEFI,
+( SELECT DISTINCT  NOMBRES || ' ' || PRIMER_APELLIDO || ' ' || SEGUNDO_APELLIDO FROM
+tt_beneficiario WHERE SK_BENEFICIARIO = BE.SK_BENEFICIARIO) NOMBRE_BENEFI,
+ ( SELECT DISTINCT SK_CLASIFICACION FROM TT_BENEFICIARIO WHERE SK_BENEFICIARIO = BE.SK_BENEFICIARIO) CLAS_PRESUPUESTARIA,
+ 'PENDIENTE' ESTRUCTURA_PRESUPUESTARIA,
+(select SK_COD_INS from Vtb_ci_institucion where sk_institucion = o.sk_institucion  ) sk_institucion,
+
+
+(select descripcion from Vtb_ci_institucion where sk_institucion = o.sk_institucion) INSTITUCION,
+( select descripcion from vtb_ci_unidad_ejecutora where sk_unidad_ejecutor = o.sk_unidad_ejecutor) NOMBRE_UNIDAD_EJECUTORA,
+( select UNIDAD_EJECUTORA from vtb_ci_unidad_ejecutora where sk_unidad_ejecutor = o.sk_unidad_ejecutor) UNIDAD_EJECUTORA,
+
+( SELECT DISTINCT V.FUENTEFINAN   FROM  VTB_TRX_SALDOSCOMPRO V
+ WHERE O.SK_OBLIGACION = SOL.SK_OBLIGACION AND O.ID_DOC_COMPROMISO  = V.DOCID   ) FUENTE_FINAN,
+
+  ( SELECT DISTINCT UPPER((SELECT DESCRIPCION FROM VTB_CI_FUENTE_FINANC WHERE SK_FUENTE_FINANC = V.IDFUENTEFINAN ))  FROM  VTB_TRX_SALDOSCOMPRO V
+ WHERE O.SK_OBLIGACION = SOL.SK_OBLIGACION AND O.ID_DOC_COMPROMISO  = V.DOCID  ) NOMBRE_FUENTE_FINAC,
+
+'PENDIENTE' ACT_ESPECIAL, O.MONTO MONTO_OBLIGACION, SOL.SK_LOTE SK_LOTE
+FROM TC_OBLIGACION o,  TT_SOLICITUD_PAGO_DOC sol , tc_obl_benef BE
+WHERE o.sk_obligacion = sol.sk_obligacion
+ AND O.SK_OBLIGACION = BE.SK_OBLIGACION AND BE.SK_OBLIGACION = sol.sk_obligacion
+ AND SOL.SK_LOTE IS NOT NULL
+ ) B ON (T.SK_LOTE = B.SK_LOTE  $P!{P_NUMEROLOTE}  $P!{P_MONTOLOTE}  )]]>
+	</queryString>
+	<field name="SK_LOTE" class="java.math.BigDecimal"/>
+	<field name="SK_LOTE_DET" class="java.math.BigDecimal"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<field name="TIPOPRESUPUESTO" class="java.lang.String"/>
+	<field name="NUM_LOTE" class="java.math.BigDecimal"/>
+	<field name="CICLO_LOTE" class="java.lang.String"/>
+	<field name="TIPO_OPERACION" class="java.math.BigDecimal"/>
+	<field name="TIPO_PROPUESTA" class="java.lang.String"/>
+	<field name="FECHA_AUTORIZACION" class="java.sql.Timestamp"/>
+	<field name="TIPO_MOVIMIENTO" class="java.lang.String"/>
+	<field name="INSTRUCCION_BCR" class="java.lang.String"/>
+	<field name="FECHA_PROCESO_BCR" class="oracle.sql.TIMESTAMP"/>
+	<field name="MONTO_LOTE" class="java.math.BigDecimal"/>
+	<field name="MONTO_DET" class="java.math.BigDecimal"/>
+	<field name="ESTADO_LOTE" class="java.lang.String"/>
+	<field name="SK_BENEFICIARIO" class="java.math.BigDecimal"/>
+	<field name="NIT_BENEFI" class="java.lang.String"/>
+	<field name="NOMBRE_BENEFI" class="java.lang.String"/>
+	<field name="CLAS_PRESUPUESTARIA" class="java.math.BigDecimal"/>
+	<field name="ESTRUCTURA_PRESUPUESTARIA" class="java.lang.String"/>
+	<field name="SK_OBLIGACION" class="java.math.BigDecimal"/>
+	<field name="SK_INSTITUCION" class="java.lang.String"/>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="NOMBRE_UNIDAD_EJECUTORA" class="java.lang.String"/>
+	<field name="UNIDAD_EJECUTORA" class="java.lang.String"/>
+	<field name="FUENTE_FINAN" class="java.lang.String"/>
+	<field name="NOMBRE_FUENTE_FINAC" class="java.lang.String"/>
+	<field name="ACT_ESPECIAL" class="java.lang.String"/>
+	<field name="MONTO_OBLIGACION" class="java.math.BigDecimal"/>
+	<group name="SKEJERCICIO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{SK_LOTE}]]></groupExpression>
+		<groupHeader>
+			<band height="100">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="281" y="25" width="110" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="520cfef2-981d-4e3e-b243-5e123a7dc329"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{NUM_LOTE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="0" y="25" width="63" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="2473b81d-e3b1-4385-92b0-3198bc6fede9"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{EJERCICIO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="63" y="25" width="218" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="cafdda81-29a2-442a-bef6-5b24055dfd2f"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{TIPOPRESUPUESTO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="1106" y="25" width="228" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="fea12829-b3a7-4586-915e-ee1a7245b85c"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{FECHA_AUTORIZACION}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="1799" y="25" width="222" height="25" forecolor="#000000" backcolor="#FFFF66" uuid="4d92fa76-efe8-41bc-9fbb-0d4529a2deb7"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{MONTO_LOTE}==null? new BigDecimal(0) : $F{MONTO_LOTE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="75" width="63" height="25" backcolor="#CCCCCC" uuid="aa4bb9a1-5000-428f-a88d-67044bc71536"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ITEM]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="63" y="75" width="123" height="25" backcolor="#CCCCCC" uuid="b8f86583-994e-4d18-89e9-029a03f4b758"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[INSTRUCCION BCR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1184" y="75" width="150" height="25" backcolor="#CCCCCC" uuid="ed4f6f13-bda5-423b-877c-f89fb6bf68ec"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[CLASIF. PRESUPUESTARIA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="914" y="75" width="270" height="25" backcolor="#CCCCCC" uuid="53e185a3-6363-453c-a472-fd77488c8420"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NOMBRE BENEFICIARIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="736" y="75" width="178" height="25" backcolor="#CCCCCC" uuid="dfc14105-e57d-4acb-a87b-4be7a2d31b0e"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NIT BENEFICIARIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="619" y="75" width="117" height="25" backcolor="#CCCCCC" uuid="6ea37de6-fefa-46c1-a42f-657539dddb8f"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ESTADO LOTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="391" y="75" width="228" height="25" backcolor="#CCCCCC" uuid="19e1d2d0-921e-4b40-bc30-b5ca058703d6"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ACTIVIDAD ESPECIAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="281" y="75" width="110" height="25" backcolor="#CCCCCC" uuid="7ef9e89c-b653-40be-ab2a-2ffd96b57ce9"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FF]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="186" y="75" width="95" height="25" backcolor="#CCCCCC" uuid="30192aec-2413-4de1-9fd1-e1ed5b80d14f"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[UNIDAD EJEC.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="502" y="0" width="372" height="25" backcolor="#CCCCCC" uuid="baff4759-7a67-4b83-8404-a4c3ed328f0a"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TIPO OPERACION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1760" y="75" width="261" height="25" backcolor="#CCCCCC" uuid="8fefbee1-6793-4a05-81a2-49d25040c772"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TIPO PROPUESTA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1686" y="0" width="113" height="25" backcolor="#CCCCCC" uuid="8b738d9e-ceba-4dd2-bb08-99dc613cad1b"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA PROCESO BCR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1635" y="75" width="125" height="25" backcolor="#CCCCCC" uuid="d7147ce1-a485-489b-a4c9-d9341673cd36"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[MONTO ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1522" y="75" width="113" height="25" backcolor="#CCCCCC" uuid="bca8061b-a52c-47f6-9e54-b25ad94a984e"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[DOC. OBLIGACION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1334" y="75" width="188" height="25" backcolor="#CCCCCC" uuid="fadb12c8-3e2b-4a18-b94c-9562c0230c9a"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ESTRUC. PRESUPUES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1472" y="0" width="214" height="25" backcolor="#CCCCCC" uuid="023d6042-e25e-4b19-9070-22a9bebac07e"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[INSTRUCCION BCR]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="391" y="0" width="111" height="25" backcolor="#CCCCCC" uuid="f8e5b2db-bde0-461f-86ff-560eed374037"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[CICLO LOTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1334" y="0" width="138" height="25" backcolor="#CCCCCC" uuid="81da7da8-5d56-4db6-b381-03f093ed0729"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TIPO MOV.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="63" y="0" width="218" height="25" backcolor="#CCCCCC" uuid="bdb09348-eaee-4f98-94c1-1affa4275c78"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TP/STP]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="281" y="0" width="110" height="25" backcolor="#CCCCCC" uuid="1ca23aca-9e5a-431f-b73b-04e8ad485cb6"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[No LOTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="63" height="25" backcolor="#CCCCCC" uuid="cb578b31-f9c0-4ff7-9062-fb31341ad45a"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[EJERCICIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1106" y="0" width="228" height="25" backcolor="#CCCCCC" uuid="0a686b4d-b175-45ce-89dc-6aa2edc97228"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA AUTORIZACION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1799" y="0" width="222" height="25" backcolor="#CCCCCC" uuid="31e71b23-a2b5-4d60-b7ff-276040507035"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[MONTO LOTE]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="50" width="2021" height="25" uuid="56f8205e-a898-4d99-9066-bcd26bf57d56"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["MOVIMIENTOS"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="391" y="25" width="111" height="25" uuid="d5a8c0fd-be4f-4346-8793-583ee026b7a9"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CICLO_LOTE}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="502" y="25" width="372" height="25" uuid="a0cfa437-aa2f-4e1b-93a9-fce8ef6626c9"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO_OPERACION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="874" y="0" width="232" height="25" backcolor="#CCCCCC" uuid="8205c646-0a81-452a-b858-6c7ffc62baf4"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TIPO DE SOLICITUD]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="874" y="25" width="232" height="25" uuid="47c51130-dd79-4773-b6d8-4808ebe87ccb"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="1334" y="25" width="138" height="25" uuid="420b41ff-98e0-403b-8708-a840c80540e7"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO_MOVIMIENTO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="1472" y="25" width="214" height="25" uuid="af607efe-cd41-4716-858c-5baf65278fdd"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{INSTRUCCION_BCR}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="1686" y="25" width="113" height="25" uuid="c1ee6780-280e-42a0-bed3-f7efced4c9f7"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECHA_PROCESO_BCR}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="2021" height="65" uuid="5832f24a-a4cf-459b-b5b5-3295de08a013"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERIO DE HACIENDA" + "\n" +
+"DIRECCION GENERAL DE TESORERIA" + "\n" +
+"DIVISION DE PROGRAMACION FINANCIERA"	+ "\n" +
+"INFORME DE LOTES PAGADOS " + "\n" +
+"FECHA DE GENERACIÓN: " + new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="63" height="20" uuid="5d896a5a-23a6-46cd-9341-98baab890a40"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SK_LOTE_DET}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="63" y="0" width="123" height="20" uuid="442c16c5-46cc-47aa-90eb-f9db3c35cba9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{INSTRUCCION_BCR}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="186" y="0" width="95" height="20" uuid="8f194783-f934-4e60-90dd-35ba0548732b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{UNIDAD_EJECUTORA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="281" y="0" width="110" height="20" uuid="f71ba406-0929-4620-9377-a3925e0a5cb4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE_FINAN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="228" height="20" uuid="de243627-6496-49b4-8999-a6fb1fa19fb3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ACT_ESPECIAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="619" y="0" width="117" height="20" uuid="fdac6620-6631-4e65-917b-24b057dabdc7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ESTADO_LOTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="736" y="0" width="178" height="20" uuid="793d83ef-4f38-4532-8b54-80ab0dff3ba9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NIT_BENEFI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="914" y="0" width="270" height="20" uuid="d4e9b3be-7358-4b07-8279-ceaf6e0fcbc3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOMBRE_BENEFI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="1184" y="0" width="150" height="20" uuid="511b2fc8-71be-4670-bc98-1bb0c1f02699"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CLAS_PRESUPUESTARIA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="1334" y="0" width="188" height="20" uuid="f4dc4905-a4da-4a4c-bbdf-679ecb8ae3c4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ESTRUCTURA_PRESUPUESTARIA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="1522" y="0" width="113" height="20" uuid="12e54e94-1e42-4de2-a94c-78b40e65a86b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SK_OBLIGACION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="1635" y="0" width="125" height="20" uuid="69897ad2-411d-4e98-b453-7a0bde04af90"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MONTO_DET}==null ? new BigDecimal(0) : $F{MONTO_DET}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1760" y="0" width="261" height="20" uuid="4efa7765-bc6c-4dca-8c88-ea1c98fed315"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_PROPUESTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

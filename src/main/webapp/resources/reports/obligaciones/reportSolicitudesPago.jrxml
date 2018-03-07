@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportSolicitudesPago" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7c4b4da3-64f2-4107-ab21-7067b6b409e4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMAGE_PATH" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct sk_institucion, ejercicio from TC_OBLIGACION where $P{ejercicio}= ejercicio
+and ($P{institucion} is null or $P{institucion}= sk_institucion)]]>
+	</queryString>
+	<field name="SK_INSTITUCION" class="java.math.BigDecimal"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="69" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement key="image-1" x="16" y="12" width="74" height="50" uuid="15f0de16-0d8e-4773-9b2f-bae0b1dffabc"/>
+				<imageExpression><![CDATA[$P{IMAGE_PATH}.concat("/logoMh.png")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="176" y="42" width="277" height="15" forecolor="#0033FF" uuid="7459791e-ae14-439b-93d1-8b9930e9a009"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBLIGACIONES CONSOLIDADAS POR MES -REPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="209" y="27" width="197" height="15" forecolor="#0033FF" uuid="cf0c8b81-fe24-416f-a551-b808d597153e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN GENERAL DE TESORERÍA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="12" width="142" height="15" forecolor="#0033FF" uuid="e6fda6bf-b8af-45bf-aac4-81b2195200fe"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="63" height="20" uuid="a39b9658-c9ba-4529-a5da-3d424b364e2e"/>
+				<text><![CDATA[EJERCICIO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="63" y="0" width="184" height="20" uuid="413cdb0f-a83c-408c-a414-e8abb151dfb7"/>
+				<textFieldExpression><![CDATA[$P{ejercicio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="32" uuid="2cca8479-b738-459e-9cdf-9e524f662872"/>
+				<subreportParameter name="ejercicio">
+					<subreportParameterExpression><![CDATA[$P{ejercicio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="institucion">
+					<subreportParameterExpression><![CDATA[$F{SK_INSTITUCION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reportSolicitudesPagoDet.jasper"
+
+]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

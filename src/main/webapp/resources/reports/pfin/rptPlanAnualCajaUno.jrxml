@@ -1,0 +1,1591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPlanAnualCaja" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c61379b7-1c34-46c4-8386-741b997387e6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_FECHA" class="java.lang.String"/>
+	<parameter name="P_CIFRAS" class="java.lang.String"/>
+	<parameter name="P_CIFRAS_CADENA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[" Dolares "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_PLAN" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_VERSION" class="java.lang.String"/>
+	<parameter name="P_YEAR" class="java.lang.String"/>
+	<parameter name="P_FORMATO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.sk_plan, a.sk_cuenta_operativa, det.sk_plan_det, det.sk_clasif,det.concepto,
+(select tipo  from pfin_clasif_plan where sk_clasif = det.sk_clasif) tipo,
+(select descripcion  from pfin_clasif_plan where sk_clasif = det.sk_clasif) clasificacion,
+(det.ene)/$P{P_CIFRAS} ENE,(det.feb)/$P{P_CIFRAS}  FEB ,(det.mar)/$P{P_CIFRAS}   MAR,
+(det.abr)/$P{P_CIFRAS}  ABR,(det.may)/$P{P_CIFRAS}  MAY   ,(det.jun)/$P{P_CIFRAS}   JUN,(det.jul)/$P{P_CIFRAS}  JUL,(det.ago)/$P{P_CIFRAS}   AGO ,
+(det.sep)/$P{P_CIFRAS}   SEP,(det.ago)/$P{P_CIFRAS}  AGO,(det.sep)/$P{P_CIFRAS}  SEP,(det.oct)/$P{P_CIFRAS}   OCT ,
+(det.nov)/$P{P_CIFRAS}    NOV,(det.dic)/$P{P_CIFRAS}   DIC,a.estado, a.version , a.ejercicio  from pfin_plan_anual a,
+pfin_plan_anual_det det
+where det.sk_plan = a.sk_plan
+and a.sk_plan = $P{P_PLAN}
+order by det.sk_clasif]]>
+	</queryString>
+	<field name="SK_PLAN" class="java.math.BigDecimal"/>
+	<field name="SK_CUENTA_OPERATIVA" class="java.math.BigDecimal"/>
+	<field name="SK_PLAN_DET" class="java.math.BigDecimal"/>
+	<field name="SK_CLASIF" class="java.math.BigDecimal"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="CLASIFICACION" class="java.lang.String"/>
+	<field name="ENE" class="java.math.BigDecimal"/>
+	<field name="FEB" class="java.math.BigDecimal"/>
+	<field name="MAR" class="java.math.BigDecimal"/>
+	<field name="ABR" class="java.math.BigDecimal"/>
+	<field name="MAY" class="java.math.BigDecimal"/>
+	<field name="JUN" class="java.math.BigDecimal"/>
+	<field name="JUL" class="java.math.BigDecimal"/>
+	<field name="AGO" class="java.math.BigDecimal"/>
+	<field name="SEP" class="java.math.BigDecimal"/>
+	<field name="OCT" class="java.math.BigDecimal"/>
+	<field name="NOV" class="java.math.BigDecimal"/>
+	<field name="DIC" class="java.math.BigDecimal"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="VERSION" class="java.lang.String"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<variable name="sumEne" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENE}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="sumFeb" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{FEB}]]></variableExpression>
+	</variable>
+	<variable name="sumMarzo" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{MAR}]]></variableExpression>
+	</variable>
+	<variable name="sumAbr" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABR}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="sumMAY" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{MAY}]]></variableExpression>
+	</variable>
+	<variable name="sumJUN" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUN}]]></variableExpression>
+	</variable>
+	<variable name="sumJUL" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUL}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="sumAGO" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{AGO}]]></variableExpression>
+	</variable>
+	<variable name="sumSEP" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{SEP}]]></variableExpression>
+	</variable>
+	<variable name="sumOCT" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{OCT}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="sumNOV" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOV}]]></variableExpression>
+	</variable>
+	<variable name="sumDIC" class="java.math.BigDecimal" resetType="Group" resetGroup="CLASIFICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{DIC}]]></variableExpression>
+	</variable>
+	<variable name="tene" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENE}]]></variableExpression>
+	</variable>
+	<variable name="tfeb" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{FEB}]]></variableExpression>
+	</variable>
+	<variable name="tmar" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{MAR}]]></variableExpression>
+	</variable>
+	<variable name="tabr" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABR}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="tmay" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{MAY}]]></variableExpression>
+	</variable>
+	<variable name="tjun" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUN}]]></variableExpression>
+	</variable>
+	<variable name="tjul" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{JUL}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="tago" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{AGO}]]></variableExpression>
+	</variable>
+	<variable name="tsep" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{SEP}]]></variableExpression>
+	</variable>
+	<variable name="toct" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{OCT}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="tnov" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOV}]]></variableExpression>
+	</variable>
+	<variable name="tdic" class="java.math.BigDecimal" resetType="Group" resetGroup="TIPO" calculation="Sum">
+		<variableExpression><![CDATA[$F{DIC}]]></variableExpression>
+	</variable>
+	<variable name="Ing_Ene" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{ENE}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Feb" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{FEB}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Mar" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{MAR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Abr" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{ABR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_May" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{MAY}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Jun" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{JUN}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Jul" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{JUL}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Ago" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{AGO}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_sep" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{SEP}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Oct" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{OCT}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Nov" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{NOV}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Ing_Dic" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="INGRESO"?$F{DIC}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_Ene" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{ENE}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_Feb" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{FEB}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_mar" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{MAR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_abr" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{ABR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_may" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{MAY}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_jun" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{JUN}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_jul" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{JUL}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_ago" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{AGO}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_sept" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{SEP}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_oct" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{OCT}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_nov" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{NOV}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="Egr_dic" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="EGRESO"?$F{DIC}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_ene" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{ENE}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_feb" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{FEB}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_mar" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{MAR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_abr" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{ABR}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_may" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{MAY}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_jun" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{JUN}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_jul" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{JUL}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_ago" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{AGO}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_sep" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{SEP}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_oct" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{OCT}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_nov" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{NOV}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="saldo_dic" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TIPO}=="SALDO"?$F{DIC}: new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="vsEne" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$V{Ing_Ene}]]></variableExpression>
+	</variable>
+	<group name="TIPO">
+		<groupExpression><![CDATA[$F{TIPO}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="1260" height="20" backcolor="#FFFFFF" uuid="44f023c6-da76-45d5-bddb-dcd0b4cddd19"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO}=="SALDO"?"SALDO INICIAL" :
+(
+($F{TIPO}=="INGRESO"?"INGRESOS TOTALES" :
+ ($F{TIPO}=="EGRESO"?"EROGACIONES" :
+     "FINANCIAMIENTO"
+   )
+)
+)]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="224" y="0" width="79" height="20" uuid="69763f93-6933-4c44-976e-6f0e17cc2c32"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tene}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="224" height="20" uuid="4657b3da-4f5e-44af-85a4-249301c1f03e"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["SUBTOTAL: " + ($F{TIPO}=="SALDO"?"SALDO INICIAL" :
+(
+($F{TIPO}=="INGRESO"?"INGRESOS TOTALES" :
+ ($F{TIPO}=="EGRESO"?"EROGACIONES" :
+     "FINANCIAMIENTO"
+   )
+)
+))]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="303" y="0" width="79" height="20" uuid="41e2d3f7-a5a0-4314-ac84-9e931a03427c"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tfeb}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="540" y="0" width="79" height="20" uuid="e1511ffd-3ac2-4d5b-984c-4da3a3119646"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tmay}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="777" y="0" width="79" height="20" uuid="2381ae45-331e-428a-9203-f02dd44e268e"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tago}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="619" y="0" width="79" height="20" uuid="524f2727-ff97-40ce-a385-a74e94b9bd42"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tjun}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="698" y="0" width="79" height="20" uuid="3d1addc8-5691-4859-bfc0-06704cee9fc3"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tjul}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="461" y="0" width="79" height="20" uuid="96871090-c0b7-41e1-96b2-999783fa13e5"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tabr}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="382" y="0" width="79" height="20" uuid="fd5eca3a-6b97-48f2-a65b-201284b47566"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tmar}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="857" y="0" width="78" height="20" uuid="0737ba6d-e7ab-4a9c-b1a4-df208ed5e820"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tsep}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="935" y="0" width="79" height="20" uuid="e7f8d4a4-ae01-4dd9-9a48-31547f86d2bb"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{toct}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="1094" y="0" width="79" height="20" uuid="8f38d18b-282c-4549-9329-8813566ccc66"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tdic}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="1015" y="0" width="79" height="20" uuid="3c86cc08-9ae8-42e2-821c-dab7dd949888"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{tnov}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement x="1173" y="0" width="87" height="20" uuid="739ba77d-8e47-4aaf-9162-8e6486c3e882"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[($V{tene}).add
+($V{tfeb}).add
+($V{tmar}).add
+($V{tabr}).add
+($V{tmay}).add
+($V{tjun}).add
+($V{tjul}).add
+($V{tago}).add
+($V{tsep}).add
+($V{toct}).add
+($V{tnov}).add
+($V{tdic})]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="CLASIFICACION">
+		<groupExpression><![CDATA[$F{CLASIFICACION}]]></groupExpression>
+		<groupHeader>
+			<band>
+				<textField isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="303" height="0" backcolor="#FFFFFF" uuid="3b60dbb8-8861-4cac-9dcb-b071ae12dda1"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Left">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLASIFICACION}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{TIPO}=="EGRESO"]]></printWhenExpression>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="224" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="823eb845-29c8-4304-b28b-30ac304f0c92"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumEne}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="303" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="ed48d355-3aa2-478c-8548-5a16f2c68fbb"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumFeb}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="382" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="40aca769-771b-45a2-ad68-c270cc10f289"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumMarzo}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="461" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="9bd8c844-bfa1-4e8f-83d8-004d7937ae88"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumAbr}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="540" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="32600c05-a269-4f1f-aeaa-be39290ea90b"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumMAY}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Transparent" x="0" y="0" width="224" height="20" backcolor="#CCCCCC" uuid="5dfd74d5-f8f8-4148-828a-a39eb8ecde32"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLASIFICACION}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="619" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="68c10f69-a51e-49ba-9bba-ff80b4d2a357"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumJUN}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="698" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="fd6bddee-5ec8-4fb3-86b1-1d22062ca0b2"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumJUL}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="777" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="f47688d8-8410-449e-970f-d6543be4071f"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumAGO}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="857" y="0" width="78" height="20" backcolor="#CCCCCC" uuid="663af1ec-783a-4625-bf94-92fc6645780f"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumSEP}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="935" y="0" width="80" height="20" backcolor="#CCCCCC" uuid="78431544-5202-418c-8a63-391691339707"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumOCT}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1015" y="0" width="78" height="20" backcolor="#CCCCCC" uuid="2b94349d-7e2b-4fd2-97a2-119843ef2023"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumNOV}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1093" y="0" width="80" height="20" backcolor="#CCCCCC" uuid="da7151df-e527-432b-baf6-499cdf7209ea"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumDIC}]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1173" y="0" width="87" height="20" backcolor="#FFFFFF" uuid="4d30e0f8-1326-4a63-86b6-a579b5681fbf"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[($V{sumEne}).add($V{sumFeb}).add($V{sumMarzo}).add($V{sumAbr}).add
+($V{sumMAY}).add($V{sumJUN}).add($V{sumJUL}).add($V{sumAGO}).add
+($V{sumSEP}).add($V{sumOCT}).add($V{sumNOV}).add($V{sumDIC})]]></textFieldExpression>
+					<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="1260" height="65" uuid="7428dbf8-dfdc-45f9-8a66-ba0550f09933"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERIO DE HACIENDA" + "\n" +
+"DIRECCION GENERAL DE TESORERIA" + "\n" +
+"DIVISION DE PROGRAMACION FINANCIERA"	+ "\n" +
+"INFORME PLAN ANUAL DE CAJA " + "\n" +
+"DE AÑO: " + $P{P_YEAR} + "  ,VERSION: " + $P{P_VERSION}  + "  ,FECHA: " +  $P{P_FECHA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1173" y="0" width="87" height="25" backcolor="#CCCCCC" uuid="1f002bf4-ebb3-4601-8bea-2afd01500152"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="224" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="5f64984b-92fa-4744-b3fb-d19f2a379ef5"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="303" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="17653686-7c71-4374-8bd6-8f49b7e19ba9"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FEBRERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="382" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="2aabc6bb-799f-4e06-8705-aaede55edd00"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MARZO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="461" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="58726220-70c6-4c86-9b75-09d9a666d4d6"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ABRIL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="540" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="d7df98e7-35f9-4234-b1aa-14079243b121"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAYO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="619" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="196b4e7b-f202-4d46-9537-17679923ffbd"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JUNIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="698" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="76ff519e-7c88-44d6-a455-73f935f50b2b"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JULIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="777" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="a4c6a4dc-602f-4917-95aa-f16d47aab43a"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AGOSTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="856" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="9a71ed54-286e-4bca-9d2c-52b51e25a960"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEPTIEMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="935" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="ce371f26-181a-4358-804f-36032e58e519"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OCTUBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1014" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="e93e5324-3de7-4092-bc97-bb7a1b379c0c"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOVIEMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="1094" y="0" width="79" height="25" backcolor="#CCCCCC" uuid="1a26cea7-014d-4731-b849-ab066747e114"/>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DICIEMBRE]]></text>
+			</staticText>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="224" height="25" backcolor="#CCCCCC" uuid="d0406b61-7597-4015-ba26-56577a89998d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Flujo de efectivos en " + $P{P_CIFRAS_CADENA} + " de US"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[($F{TIPO}=="INGRESO" || $F{TIPO}=="SALDO" ) || ($F{TIPO}=="EGRESO" && $F{CLASIFICACION}=="OTRO")]]></printWhenExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="224" height="20" uuid="0b02c887-6cc7-4cf3-897f-aa6a8de933d1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1173" y="0" width="87" height="20" uuid="55b08ab6-1c45-4022-9581-87d54dd793e4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{ENE}==null? new BigDecimal(0): $F{ENE}).add
+($F{FEB}==null? new BigDecimal(0): $F{FEB}).add
+($F{MAR}==null? new BigDecimal(0): $F{MAR}).add
+($F{ABR}==null? new BigDecimal(0): $F{ABR}).add
+($F{MAY}==null? new BigDecimal(0): $F{MAY}).add
+($F{JUN}==null? new BigDecimal(0): $F{JUN}).add
+($F{JUL}==null? new BigDecimal(0): $F{JUL}).add
+($F{AGO}==null? new BigDecimal(0): $F{AGO}).add
+($F{SEP}==null? new BigDecimal(0): $F{SEP}).add
+($F{OCT}==null? new BigDecimal(0): $F{OCT}).add
+($F{NOV}==null? new BigDecimal(0): $F{NOV}).add
+($F{DIC}==null? new BigDecimal(0): $F{DIC})]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="224" y="0" width="79" height="20" uuid="4599155a-e412-416f-9745-0c6b287f17c9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENE}==null? new BigDecimal(0): $F{ENE}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="303" y="0" width="79" height="20" uuid="dcac33d6-e942-4c3b-84b8-d706ada19ec2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FEB}==null? new BigDecimal(0): $F{FEB}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="382" y="0" width="79" height="20" uuid="395ba651-2d10-4a87-be61-eb73d7d002e3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAR}==null? new BigDecimal(0): $F{MAR}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="461" y="0" width="79" height="20" uuid="8a0d2476-c226-45cd-b406-f31cbfad984e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABR}==null? new BigDecimal(0): $F{ABR}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="540" y="0" width="79" height="20" uuid="cbe499db-b02c-43a6-8885-4198fe119be8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAY}==null? new BigDecimal(0): $F{MAY}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="619" y="0" width="79" height="20" uuid="eaf1b742-5af9-4b98-95b2-d23a31e6d13b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JUN}==null? new BigDecimal(0): $F{JUN}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="698" y="0" width="79" height="20" uuid="3e0e8a89-184a-4adb-b2cb-5529763d5912"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JUL}==null? new BigDecimal(0): $F{JUL}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="777" y="0" width="79" height="20" uuid="4b0564eb-3ed6-4c93-a191-5e4f5455fe27"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AGO}==null? new BigDecimal(0): $F{AGO}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="856" y="0" width="79" height="20" uuid="f898a9f3-b2dd-433c-9506-a467cdcb6ed6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEP}==null? new BigDecimal(0): $F{SEP}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="935" y="0" width="79" height="20" uuid="1660d8f3-aea6-403b-bdca-df3909132a19"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OCT}==null? new BigDecimal(0): $F{OCT}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1014" y="0" width="79" height="20" uuid="b1ecce23-9211-4ed2-8117-fd3b4104133f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOV}==null? new BigDecimal(0): $F{NOV}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1093" y="0" width="80" height="20" uuid="ba2c071e-1a12-4c2b-b5bd-6db67c5f6d5b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIC}==null? new BigDecimal(0): $F{DIC}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="40" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="303" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="bfa9d46e-26f5-4d26-ab73-64e8183f5f83"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Feb} - $V{Egr_Feb}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="461" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="083b780a-a312-4028-a7be-f4789ff59617"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Abr} - $V{Egr_abr}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="619" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="044a7605-4d7e-4e10-9031-6446d2b4f3ae"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Jun} - $V{Egr_jun}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="540" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="9e9bd203-d405-4afc-b3e8-e97f28d0daff"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_May} - $V{Egr_may}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="0" width="224" height="20" backcolor="#CCCCCC" uuid="bf9ee019-cc5a-4b74-b9ab-270b5c503ce4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VARIACION DE SALDOS"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="382" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="81910eb0-b0f1-4fc6-ad54-58f64eb74d27"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Mar} - $V{Egr_mar}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="224" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="288caa78-5dd5-4192-b80a-67070f3298a0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Ene} - $V{Egr_Ene}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="698" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="b812b903-b0e1-4af1-91c6-3f4c9f2caeec"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Jul} - $V{Egr_jul}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1015" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="88546c9b-9750-4c47-b4ad-8a835610adad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Nov} - $V{Egr_nov}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="778" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="01e6d7ed-fa14-452c-b8c3-818ccb7d54e3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Ago} - $V{Egr_ago}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="857" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="9bc87a69-f9ae-4280-9217-5726f823c4c5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_sep} - $V{Egr_sept}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="936" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="8a846d91-c15d-4536-993d-ab28c6ffa434"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Oct} - $V{Egr_oct}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1094" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="42b9120f-7b38-4447-865b-d4d33cdeed64"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ing_Dic} - $V{Egr_dic}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="619" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="f3b2d5a7-9c53-4a82-858e-eb723b3b0be3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Jun} - $V{Egr_jun}) + $V{saldo_jun}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="540" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="50f5b1df-28af-4882-b83c-c0be87dafd1c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_May} - $V{Egr_may}) + $V{saldo_may}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="382" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="bae8f9a7-bca3-4236-bfa5-5e26ffb569fa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Mar} - $V{Egr_mar}) + $V{saldo_mar}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="0" y="20" width="224" height="20" backcolor="#CCCCCC" uuid="7c76bf2f-b9f3-4e8f-9673-a858b0b9d6c6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SALDO FINAL CUT"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="303" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="daaedd22-c8d7-4e85-a9a7-02c5d4ade3ef"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Feb} - $V{Egr_Feb}) + $V{saldo_feb}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="461" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="76f55de2-e3bf-4637-82f5-c3cb8c745429"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Abr} - $V{Egr_abr}) + $V{saldo_abr}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="224" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="29bd048b-a1ac-4dcf-a3aa-ea4532f86b04"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Ene} - $V{Egr_Ene}) + $V{saldo_ene}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="857" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="da89d6e9-ab66-4a83-93e5-f1e38882f609"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_sep} - $V{Egr_sept}) + $V{saldo_sep}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1094" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="8add873e-4ee2-4502-b230-5ddbcef1eee2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Dic} - $V{Egr_dic}) + $V{saldo_dic}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="778" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="5a0153e0-d5db-4ae2-8037-75de04142784"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Ago} - $V{Egr_ago}) + $V{saldo_ago}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="699" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="5ddea9ad-5d38-4f06-aa5e-07fb698116bf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Jul} - $V{Egr_jul}) + $V{saldo_jul}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="1015" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="f25ea7b4-e15b-4979-afa3-ebb804d0f2ac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Nov} - $V{Egr_nov}) + $V{saldo_nov}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="936" y="20" width="79" height="20" backcolor="#CCCCCC" uuid="784d542c-3e11-4f81-9e3e-7beeb204ae6c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Ing_Oct} - $V{Egr_oct}) + $V{saldo_oct}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="1173" y="20" width="87" height="20" uuid="b4e902b3-e702-418a-8530-ce0a3f1b9623"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[(($V{Ing_Ene} - $V{Egr_Ene}) + $V{saldo_ene}).add
+(($V{Ing_Feb} - $V{Egr_Feb}) + $V{saldo_feb}).add
+(($V{Ing_Mar} - $V{Egr_mar}) + $V{saldo_mar}).add
+(($V{Ing_Abr} - $V{Egr_abr}) + $V{saldo_abr}).add
+(($V{Ing_May} - $V{Egr_may}) + $V{saldo_may}).add
+(($V{Ing_Jun} - $V{Egr_jun}) + $V{saldo_jun}).add
+(($V{Ing_Jul} - $V{Egr_jul}) + $V{saldo_jul}).add
+(($V{Ing_Ago} - $V{Egr_ago}) + $V{saldo_ago}).add
+(($V{Ing_sep} - $V{Egr_sept}) + $V{saldo_sep}).add
+(($V{Ing_Oct} - $V{Egr_oct}) + $V{saldo_oct}).add
+(($V{Ing_Nov} - $V{Egr_nov}) + $V{saldo_nov}).add
+(($V{Ing_Dic} - $V{Egr_dic}) + $V{saldo_dic})]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="1173" y="0" width="87" height="20" uuid="7f7220c1-35b3-4184-b561-ac6a55a578ce"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($V{Ing_Ene} - $V{Egr_Ene}).add
+($V{Ing_Feb} - $V{Egr_Feb}).add
+($V{Ing_Mar} - $V{Egr_mar}).add
+($V{Ing_Abr} - $V{Egr_abr}).add
+($V{Ing_May} - $V{Egr_may}).add
+($V{Ing_Jun} - $V{Egr_jun}).add
+($V{Ing_Jul} - $V{Egr_jul}).add
+($V{Ing_Ago} - $V{Egr_ago}).add
+($V{Ing_sep} - $V{Egr_sept}).add
+($V{Ing_Oct} - $V{Egr_oct}).add
+($V{Ing_Nov} - $V{Egr_nov}).add
+($V{Ing_Dic} - $V{Egr_dic})]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{P_FORMATO}]]></patternExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportEstadosSolicitudes" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1b84c7cd-6132-4ace-9fd7-885b5093e160">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="15"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMAGE_PATH" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="usuario" class="java.lang.String"/>
+	<parameter name="sinstitucion" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT tco.SK_OBLIGACION AS skobligacion,
+  tdr.SK_DOCUMENTO_RESPALDO_ENC   AS skdocumentorespaldoenc,
+  tsd.sk_solicitud_pago_doc       AS numerosolc,
+  tsd.monto_pagar as montosol,
+  ces.DESCRIPCION                                                  AS estadosolic,
+  ''                                                       AS tipo,
+  tdr.monto                                                        AS montodoc,
+  tdr.saldo                                                        AS saldodoc,
+  pkg_utils_obligacion.OBTENER_NIT_BENEF(tco.ID_DOC_COMPROMISO)    AS nitbenef,
+  pkg_utils_obligacion.OBTENER_NOMBRE_BENEF(tco.ID_DOC_COMPROMISO) AS nombrebenef,
+  VTT.fechacompro                                                  AS fechacompromiso,
+  tco.FECHA_DEVENGADO                                              AS fechadevengado,
+  tdr.FECHA_APROB_DEVENG                                           AS fechadevengadoaprob,
+  tsd.fecha_solicitud                                              AS fechasolicitud,
+  tsd.sk_lote                                                      AS lote,
+  tsd.FECHA_PAGO_BCR as fechapagobcr,
+  tsd.FECHA_PAGO_BCR - tdr.fecha_aprob_deveng  as dias
+FROM TC_OBLIGACION tco,
+  TC_DOCUMENTO_RESPALDO_ENC tdr,
+  VTB_TRX_SALDOSCOMPRO VTT,
+  CC_TIPO_DOCUMENTO CTD,
+  VTB_CI_FUENTE_FINANC VFF,
+  tt_solicitud_pago_doc tsd,
+  TT_LOTE tlo,
+  CT_ESTADO_SOLIC_PAGO ces ,
+  TC_OBL_BENEF tob,
+  TT_BENEFICIARIO ct,
+  VTB_CI_INSTITUCION vci,
+  VTB_CI_UNIDAD_EJECUTORA vcu
+WHERE TOB.SK_OBLIGACION          =tco.SK_OBLIGACION
+AND TOB.SK_OBLIGACION            = tco.SK_OBLIGACION
+AND tco.SK_UNIDAD_EJECUTOR=vcu.SK_UNIDAD_EJECUTOR
+AND tob.SK_BENEFICIARIO          =ct.SK_BENEFICIARIO
+AND tco.sk_obligacion            =tdr.SK_OBLIGACION
+AND tco.ID_DOC_COMPROMISO        =VTT.DOCID
+AND tdr.SK_TIPO_DOCUMENTO        =CTD.SK_TIPO_DOCUMENTO
+AND VTT.IDFUENTEFINAN            =VFF.SK_FUENTE_FINANC
+AND tdr.sk_documento_respaldo_enc=tsd.sk_documento_respaldo_enc
+AND tlo.sk_lote (+)              = tsd.sk_lote
+AND tsd.sk_estado                = ces.sk_estado
+AND vci.sk_institucion           = tco.sk_institucion
+AND vci.sk_institucion           =vcu.sk_institucion
+AND ($P{institucion} is null or $P{institucion} = tco.SK_INSTITUCION)
+AND ($P{ejercicio}is null or $P{ejercicio} = tco.EJERCICIO)
+AND ( $P{estado} is null or $P{estado} = tob.estado)
+UNION
+SELECT DISTINCT tco.SK_OBLIGACION AS skobligacion,
+  tdr.SK_DOCUMENTO_RESPALDO_ENC   AS skdocumentorespaldoenc,
+  tsr.sk_solicitud_pago_ret       AS numerosolc,
+  tsr.monto_pagar as montosol,
+  ces.DESCRIPCION                                                  AS estadosolic,
+  cdr.nombre                                                       AS tipo,
+  tdr.monto                                                        AS montodoc,
+  tdr.saldo                                                        AS saldodoc,
+  pkg_utils_obligacion.OBTENER_NIT_BENEF(tco.ID_DOC_COMPROMISO)    AS nitbenef,
+  pkg_utils_obligacion.OBTENER_NOMBRE_BENEF(tco.ID_DOC_COMPROMISO) AS nombrebenef,
+  VTT.fechacompro                                                  AS fechacompromiso,
+  tco.FECHA_DEVENGADO                                              AS fechadevengado,
+  tdr.FECHA_APROB_DEVENG                                           AS fechadevengadoaprob,
+  tsr.fecha_solicitud                                              AS fechasolicitud,
+  tsr.sk_lote                                                      AS lote,
+  tsr.FECHA_PAGO_BCR as fechapagobcr,
+  tsr.FECHA_PAGO_BCR - tdr.fecha_aprob_deveng  as dias
+FROM TC_OBLIGACION tco,
+  TC_DOCUMENTO_RESPALDO_ENC tdr,
+  VTB_TRX_SALDOSCOMPRO VTT,
+  CC_TIPO_DOCUMENTO CTD,
+  VTB_CI_FUENTE_FINANC VFF,
+  tc_retencion trc,
+  tt_solicitud_pago_ret tsr,
+  cc_detalle_retencion cdr,
+  TT_LOTE tlo,
+  CT_ESTADO_SOLIC_PAGO ces ,
+  TC_OBL_BENEF tob,
+  TT_BENEFICIARIO ct,
+  VTB_CI_INSTITUCION vci,
+  VTB_CI_UNIDAD_EJECUTORA vcu
+WHERE TOB.SK_OBLIGACION          =tco.SK_OBLIGACION
+AND TOB.SK_OBLIGACION            = tco.SK_OBLIGACION
+AND tco.SK_UNIDAD_EJECUTOR=vcu.SK_UNIDAD_EJECUTOR
+AND tob.SK_BENEFICIARIO          =ct.SK_BENEFICIARIO
+AND tco.sk_obligacion            =tdr.SK_OBLIGACION
+AND tco.ID_DOC_COMPROMISO        =VTT.DOCID
+AND tdr.SK_TIPO_DOCUMENTO        =CTD.SK_TIPO_DOCUMENTO
+AND VTT.IDFUENTEFINAN            =VFF.SK_FUENTE_FINANC
+AND tdr.sk_documento_respaldo_enc=trc.sk_documento_respaldo_enc
+AND trc.sk_retencion             =tsr.sk_retencion
+AND trc.SK_DETALLE_RETENCION     = cdr.SK_DETALLE_RETENCION
+AND tlo.sk_lote (+)              = tsr.sk_lote
+AND tsr.sk_estado                = ces.sk_estado
+AND vci.sk_institucion           = tco.sk_institucion
+AND vci.sk_institucion           =vcu.sk_institucion
+AND ($P{institucion} is null or $P{institucion} = tco.SK_INSTITUCION)
+AND ($P{ejercicio}is null or $P{ejercicio} = tco.EJERCICIO)
+AND ( $P{estado} is null or $P{estado} = tob.estado)]]>
+	</queryString>
+	<field name="SKOBLIGACION" class="java.math.BigDecimal"/>
+	<field name="SKDOCUMENTORESPALDOENC" class="java.math.BigDecimal"/>
+	<field name="NUMEROSOLC" class="java.math.BigDecimal"/>
+	<field name="MONTOSOL" class="java.math.BigDecimal"/>
+	<field name="ESTADOSOLIC" class="java.lang.String"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="MONTODOC" class="java.math.BigDecimal"/>
+	<field name="SALDODOC" class="java.math.BigDecimal"/>
+	<field name="NITBENEF" class="java.lang.String"/>
+	<field name="NOMBREBENEF" class="java.lang.String"/>
+	<field name="FECHACOMPROMISO" class="oracle.sql.TIMESTAMP"/>
+	<field name="FECHADEVENGADO" class="java.sql.Timestamp"/>
+	<field name="FECHADEVENGADOAPROB" class="java.sql.Timestamp"/>
+	<field name="FECHASOLICITUD" class="java.sql.Timestamp"/>
+	<field name="LOTE" class="java.math.BigDecimal"/>
+	<field name="FECHAPAGOBCR" class="java.sql.Timestamp"/>
+	<field name="DIAS" class="java.math.BigDecimal"/>
+	<variable name="MONTOSOLICITADO_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTOSOL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="258" y="15" width="197" height="15" forecolor="#0033FF" uuid="e1c748bc-c882-40bf-8c20-4a2fd2acc67e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN GENERAL DE TESORERÍA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="284" y="0" width="142" height="15" forecolor="#0033FF" uuid="1cd14155-6fe6-40fc-9116-aaa1ed877f51"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement key="image-1" x="19" y="0" width="74" height="50" uuid="3020c451-224e-4241-a3b1-d72cc24a46eb"/>
+				<imageExpression><![CDATA[$P{IMAGE_PATH}.concat("/escudosv.jpg")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="236" y="29" width="243" height="15" forecolor="#0033FF" uuid="de3fe17d-cd32-4c00-b210-40b05c262ae6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE SOLICITUDES DE PAGO -REPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="568" y="0" width="37" height="15" uuid="736676f0-7396-4b98-a309-5f037624a8a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="605" y="0" width="197" height="15" uuid="291e9428-7f8e-4b07-abb8-b7e2cf76cf8e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="568" y="13" width="37" height="15" uuid="e09cfe18-a656-4288-b89f-3e14eeed3218"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="605" y="14" width="197" height="15" uuid="601cadd0-edf7-4265-9be2-d0016b529efb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{usuario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="568" y="28" width="37" height="15" uuid="1d7965a6-253e-4f10-889a-ce54f1207133"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Institución:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="605" y="28" width="197" height="15" uuid="1cc5313d-3009-4b3a-8765-86f92fe053f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sinstitucion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="34" height="20" uuid="bac24485-2dfb-495c-abec-477d3dca0012"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Obligación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="0" width="35" height="20" uuid="cd00ccf6-dea6-4ba9-989e-6b0ee3c3c378"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="0" width="29" height="20" uuid="bfd48ab6-fe12-4304-aa33-f71fe81e9a1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Solicitud]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="0" width="31" height="20" uuid="a82de995-61b7-475c-9fba-db17aa751e71"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="0" width="44" height="20" uuid="7721c960-5fd6-4333-9ad1-b94c93b309ad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="33" height="20" uuid="642dfc9b-71df-4a67-8003-4a74a0f400ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto Solicitado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="0" width="60" height="20" uuid="aff22382-9282-41da-9d98-49bdf8d83e39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="0" width="118" height="20" uuid="1bb242d8-8be9-4ab2-8997-91650f1c6458"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="413" y="0" width="67" height="20" uuid="5e5078c8-77c2-42f0-83aa-a2c078c46ea2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Compromiso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="0" width="64" height="20" uuid="564df1d7-8feb-4622-b074-9d117539d058"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Devengado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="542" y="0" width="63" height="20" uuid="2289d463-962c-43ac-bd35-1a57368bd801"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Aprobado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="604" y="0" width="63" height="20" uuid="1bf29799-3a21-4530-a758-bef0efaf22a8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Solicitud]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="666" y="0" width="64" height="20" uuid="722cc32d-a63d-4fc1-93e3-59023c5bb7b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Pago Bcr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="729" y="0" width="37" height="20" uuid="330192bc-2af3-4896-b832-87b85ef7b1bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="765" y="0" width="37" height="20" uuid="70a95bd7-7276-4ab5-a249-7c1f738025ba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Días]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="34" height="20" uuid="7e4df6cb-7039-4417-8e0f-c03284d75fdf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="34" height="20" uuid="509e4a4b-64c8-4709-b1d4-7f2fe716987b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SKOBLIGACION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="33" y="0" width="36" height="20" uuid="24fbe7cb-88e2-4c92-b81b-6e4de64ad637"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SKDOCUMENTORESPALDOENC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="68" y="0" width="29" height="20" uuid="b6787c3d-a965-4c28-9d5f-a250e241ce27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMEROSOLC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="96" y="0" width="31" height="20" uuid="2cbd8b48-735a-4451-8ec8-f997b455989e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADOSOLIC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="126" y="0" width="44" height="20" uuid="5466e7d0-d701-4602-87f0-357bb878224a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTODOC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="170" y="0" width="33" height="20" uuid="55d828d9-2680-4f57-a79f-fb12e4eccce7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTOSOL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="296" y="0" width="118" height="20" uuid="a5346710-48b3-42d2-9245-3841d5e1551c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBREBENEF}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="0" width="67" height="20" uuid="b2679d0c-db3a-4108-a269-ae60759621a6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHACOMPROMISO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="479" y="0" width="64" height="20" uuid="8091356d-087e-47f1-b73c-fbd3eea617c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHADEVENGADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="542" y="0" width="63" height="20" uuid="c39ccd5d-75c8-446c-ad5e-b3402784e80a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHADEVENGADOAPROB}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="604" y="0" width="63" height="20" uuid="6b4e6e45-5119-4a6a-a675-a89e119ae51b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHASOLICITUD}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="666" y="0" width="64" height="20" uuid="906a0df5-a1b2-4eaf-90bf-47120f0815f9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHAPAGOBCR}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="729" y="0" width="37" height="20" uuid="2e9a6659-f596-4c6b-ba78-2c7f484b84dc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LOTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="765" y="0" width="36" height="20" uuid="dcea3e60-a646-4cbd-9b6c-26e83ca27bb8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="202" y="0" width="34" height="20" uuid="ecdbd3f8-9318-42ae-b1e3-8e9e79ec43ba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDODOC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="236" y="0" width="60" height="20" uuid="e8c1b090-0d41-45b1-bf21-4793b3764002"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NITBENEF}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="24">
+			<staticText>
+				<reportElement x="127" y="0" width="43" height="20" uuid="6c8b1c53-e150-48a8-be00-ead806bbac7f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="170" y="0" width="32" height="20" uuid="5d681de8-acc7-4696-b86e-bb91bbbf1587"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTOSOL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

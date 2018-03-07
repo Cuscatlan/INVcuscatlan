@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporton" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="539a4d51-d146-4050-8504-3c1701128d16">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="eerf" isBold="true" isItalic="true">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Gobierno Central" )]]></conditionExpression>
+			<style backcolor="#FFFFFF" markup="styled" fontSize="48" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Instituciones Descentralizadas no Empresariales" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Instituciones de Seguridad Social" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Gobierno Local" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Empresas Públicas no Financieras" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Resto del Sector Público" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Del sector privado" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Total" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Gobiernos extranjeros" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Organismos financieros internacionales" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Otras entidades del sector externo" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "Endeudamiento de tesorería" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "I. DEUDA PÚBLICA INTERNA" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{OBLIGACIONES}.equals( "II. DEUDA PÚBLICA EXTERNA" )]]></conditionExpression>
+			<style isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="P_PERIODO" class="java.lang.String"/>
+	<parameter name="P_INS" class="java.lang.String"/>
+	<parameter name="P_TIPO_PRESUP" class="java.lang.String"/>
+	<parameter name="P_PROG" class="java.lang.String"/>
+	<parameter name="P_SUBPROG" class="java.lang.String"/>
+	<parameter name="P_ACTIVIDAD" class="java.lang.String"/>
+	<parameter name="P_PROY" class="java.lang.String"/>
+	<parameter name="P_FUENTEFIN" class="java.lang.String"/>
+	<parameter name="P_UFI" class="java.lang.String"/>
+	<parameter name="F_SUBTIPO" class="java.lang.String"/>
+	<parameter name="P_OBRATAREA" class="java.lang.String"/>
+	<parameter name="P_CONVENIO" class="java.lang.String"/>
+	<parameter name="P_CLAORGFIN" class="java.lang.String"/>
+	<parameter name="mes" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="valorMonetario" class="java.lang.Integer"/>
+	<parameter name="dia" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM CC_TMP_EVOLUCION_DEUDA order by SK]]>
+	</queryString>
+	<field name="SK" class="java.math.BigDecimal"/>
+	<field name="OBLIGACIONES" class="java.lang.String"/>
+	<field name="NOTAS" class="java.math.BigDecimal"/>
+	<field name="S1" class="java.math.BigDecimal"/>
+	<field name="S2" class="java.math.BigDecimal"/>
+	<field name="S3" class="java.math.BigDecimal"/>
+	<field name="MI1" class="java.math.BigDecimal"/>
+	<field name="MI2" class="java.math.BigDecimal"/>
+	<field name="MIT3" class="java.math.BigDecimal"/>
+	<field name="MD1" class="java.math.BigDecimal"/>
+	<field name="MD2" class="java.math.BigDecimal"/>
+	<field name="MDT3" class="java.math.BigDecimal"/>
+	<field name="IP" class="java.math.BigDecimal"/>
+	<field name="II" class="java.math.BigDecimal"/>
+	<field name="GCE" class="java.math.BigDecimal"/>
+	<field name="SCD" class="java.math.BigDecimal"/>
+	<field name="SK_INSTITUCION" class="java.math.BigDecimal"/>
+	<variable name="MI1_1" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{MI1}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="318" y="0" width="183" height="20" uuid="d291ab06-aea8-4238-93f1-f963dab4f650"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DENOMINACION DE LA ENTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="20" width="183" height="20" uuid="d0ca9b04-f723-4948-909b-7183dde68ec9"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO DE LA DEUDA PUBLICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="40" width="15" height="20" uuid="e6ab5621-460e-4533-b35d-db3e71dfa32d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ al ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="40" width="115" height="20" uuid="5f7886d9-caf9-4cc5-a029-5826d0b67631"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del 1º de Enero del]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="438" y="40" width="58" height="20" uuid="b752f439-30f3-4264-8929-a74b1c08a3cc"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{mes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="499" y="40" width="14" height="20" uuid="777ee388-f383-42f4-bdcd-ad77c5ba5c4f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="513" y="40" width="25" height="20" uuid="e0941e95-40b2-4ea2-b8f1-e036e125029c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="424" y="40" width="14" height="20" uuid="854c3792-6592-4693-9b41-90d032bba6d3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="406" y="40" width="18" height="20" uuid="1b035d70-02ad-4616-8818-755a51ea90b6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="368" y="40" width="28" height="20" uuid="25ce727d-205a-44b8-8641-9a63fb877156"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement x="11" y="9" width="146" height="70" uuid="cbbd9088-b842-49cd-bc41-e0d14d670d79"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="39" y="39" width="86" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="3a3070d1-5a4b-44f8-a552-5754f00de1bb"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBLIGACIONES]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="156" y="9" width="132" height="40" uuid="a94d3c60-f483-44e7-ae2a-48eb96c61945"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="157" y="9" width="131" height="40" uuid="4e5bf9fe-2879-48bc-af06-b76ca550c0ca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO DEL CAPITAL AL INICIO DEL EJERCICIO INFORMADO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="156" y="49" width="53" height="30" uuid="f5fcd9e1-0642-44bb-b748-c1b507727ced"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="157" y="49" width="50" height="30" uuid="c93ccfe0-b671-4bec-8ead-d122affd8b6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(A) Saldo al Cierre 31/12/X-1]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="205" y="49" width="43" height="30" uuid="8e919964-1699-4656-ab28-84bda02129da"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="205" y="49" width="43" height="30" uuid="17ec9705-d835-41c7-a66d-4bfcb409ef07"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(B) Ajuste al Saldo inicial]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="248" y="49" width="40" height="30" uuid="93af7750-e42f-4140-81b0-2868d9859aeb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="248" y="49" width="40" height="30" uuid="d661ccb1-3e8e-4d6f-9cad-2231c7fd943a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(C) Saldo Ajustado al 1/01/X]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="288" y="9" width="262" height="30" uuid="04f4e562-1f2e-4551-a34d-9f09d8db3615"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="338" y="19" width="152" height="20" uuid="81fed3a8-aa5c-427c-9d8e-fca9fa965bae"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MOVIMIENTOS DEL EJERCICIO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="288" y="39" width="137" height="10" uuid="c58ca086-06ef-4da8-97c0-d0c6c667e0ea"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="320" y="39" width="56" height="10" uuid="56437079-3b3c-4d7e-8a57-9ea86afc4e7d"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Incrementos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="425" y="39" width="125" height="10" uuid="3acd07a2-f181-4bcb-bcf1-823ca0782f8a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="425" y="39" width="100" height="10" uuid="fb4caef7-6718-4aab-838e-789017f07e5c"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Disminuciones	]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="288" y="49" width="50" height="30" uuid="442ad7aa-c1a3-4b16-a21b-747789a41a6a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="382" y="49" width="43" height="30" uuid="81f54710-f38a-4174-9da5-dd69b6680339"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="338" y="49" width="44" height="30" uuid="7d833207-3dff-41b3-94e4-8817f624671e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="425" y="49" width="44" height="30" uuid="feadaef3-2485-4aac-8a43-a31e60e99efd"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="469" y="49" width="43" height="30" uuid="ef9a24e5-2980-4de5-abbc-0af7696f551e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="512" y="49" width="38" height="30" uuid="eb656a94-baa8-430a-bd7c-6fb53b50a944"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="9" width="103" height="30" uuid="c516b218-cb75-435b-92d0-ce3f7d11f312"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="565" y="19" width="76" height="20" uuid="8d98acef-d8de-4060-99c7-fc20ae4678c1"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INTERESES VENCIDOS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="550" y="39" width="52" height="40" uuid="26003766-9288-4a76-84d4-bf6c9ef0d87f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="602" y="39" width="51" height="40" uuid="4c8fcd1d-08f8-4122-915e-d09f75a89a34"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="288" y="59" width="50" height="20" uuid="20c97878-7bca-401f-a10f-b38237c1d20b"/>
+				<textElement textAlignment="Center">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(D)Mov.
+Presupuestarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="49" width="44" height="30" uuid="3ee691b2-ddb7-439a-97d4-cf5245c4b83b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(E) Mov. sin impacto
+Presupuestario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="49" width="44" height="30" uuid="29c64aa2-6896-4019-84d1-d6572512a470"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(F)Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="49" width="44" height="30" uuid="b2adce98-1ee3-41ee-8354-a051f28a92de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(G)Mov.
+Presupuestarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="469" y="49" width="44" height="30" uuid="6685b5f3-783d-4fb6-9e81-37c0f83b1c3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(H) Mov. sin impacto
+Presupuestario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="513" y="49" width="37" height="30" uuid="b94b4c68-f406-4b64-9737-0541dc913270"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(I)Total]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="653" y="9" width="52" height="70" uuid="f14fcb21-2e93-4b78-8743-ef1f0d048085"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="705" y="9" width="52" height="70" uuid="1c2aeb5d-5148-4d34-b4fd-cc83bc70cb6d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="550" y="39" width="52" height="40" uuid="4c8814f3-208d-4a96-a1e7-01559893384f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(J)Pagados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="39" width="52" height="40" uuid="e4044a14-c2be-498c-817b-d90225264a7d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(K) Impagos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="654" y="9" width="51" height="70" uuid="6cd2eb39-3af6-418d-85db-27d02806d3b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(L) GASTOS Y COMISIONES DEL EJERCICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="706" y="9" width="51" height="70" uuid="7fe36c7f-3cd6-49e5-9508-d8b4778ad300"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(M) SALDO DEL CAPITAL
+EN DOLARES AL CIERRE DEL PERIODO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13">
+			<textField isBlankWhenNull="true">
+				<reportElement x="156" y="0" width="49" height="13" uuid="257f4a6b-59f1-4c96-91b3-18f7536ddb2e"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{S1}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="0" width="43" height="13" uuid="a443b57c-ae66-4ab0-9046-a5a30a23f33d"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{S2}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="0" width="40" height="13" uuid="09358753-30e2-4e29-9ea3-d1f562f92963"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{S3}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="0" width="50" height="13" uuid="ce7400e7-bf68-4c34-a01e-a16d50f32b10"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MI1}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="338" y="0" width="44" height="13" uuid="739615a4-ca59-4c71-b364-7c3a59330e92"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MI2}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="0" width="43" height="13" uuid="cec04fe3-0ee2-4c07-a5c8-e933004971ed"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MIT3}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="425" y="0" width="44" height="13" uuid="763a3a29-3602-4a78-ba3a-2262ff08b1e6"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MD1}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="0" width="43" height="13" uuid="fec8343a-4cdf-4d85-8513-d2cd5a025ee7"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MD2}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="512" y="0" width="38" height="13" uuid="fa67b4e1-cc93-448e-9a74-05c1810333cb"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MDT3}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="0" width="52" height="13" uuid="5de3414f-db80-4518-939c-059e973157cd"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IP}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="602" y="0" width="51" height="13" uuid="cf7c8983-4367-43f9-ac27-49c570c390cb"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{II}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="653" y="0" width="52" height="13" uuid="a242a1ed-6256-42fc-a26e-6cb0354bb503"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GCE}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="705" y="0" width="52" height="13" uuid="2adc6868-0ad4-4998-b629-bd01166abf0b"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SCD}/$P{valorMonetario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="eerf" x="11" y="0" width="145" height="13" uuid="98ef62f9-5c42-43b3-a803-6ef6db781257"/>
+				<box>
+					<pen lineWidth="0.75" lineStyle="Solid"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font size="6" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBLIGACIONES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

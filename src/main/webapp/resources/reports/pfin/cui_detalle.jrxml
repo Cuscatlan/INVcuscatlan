@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cui_detalle" language="groovy" pageWidth="1000" pageHeight="842" columnWidth="1000" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a6e0019e-a78a-4c7e-b6c8-d548ebe77153">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_CUI" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[801]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ROWNUM ITEM,'AXT' TIPO, CUIDET.SK_AUXILIAR_TESORERIA CODIGO, AXT.DESCRIPCION DESCRIPCION ,CUIDET.IMPORTE_DEVENGADO, CUIDET.IMPORTE_PERCIBIDO FROM TT_CUI_DETALLE CUIDET
+inner join CT_AUXILIAR_TESORERIA AXT ON CUIDET.SK_AUXILIAR_TESORERIA = AXT.SK_AUXILIAR_TESORERIA
+where sk_cui = $P{P_CUI}
+UNION
+SELECT ROWNUM ITEM,'ESPECIFICO' TIPO, CUIDET.SK_CLAECO_ING_GAS CODIGO, INGGAS.DESCRIPCION  DESCRIPCION,CUIDET.IMPORTE_DEVENGADO, CUIDET.IMPORTE_PERCIBIDO FROM TT_CUI_DETALLE CUIDET
+inner join VTB_CI_CLASIF_ING_GAS INGGAS ON CUIDET.SK_CLAECO_ING_GAS = INGGAS.SK_CLAECO_ING_GAS
+where sk_cui = $P{P_CUI}]]>
+	</queryString>
+	<field name="ITEM" class="java.math.BigDecimal"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="CODIGO" class="java.math.BigDecimal"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="IMPORTE_DEVENGADO" class="java.math.BigDecimal"/>
+	<field name="IMPORTE_PERCIBIDO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20">
+			<textField>
+				<reportElement x="184" y="0" width="471" height="20" uuid="f99bcbe3-3fa2-4214-9899-35f628863829"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Descripcion"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="797" y="0" width="163" height="20" uuid="cf44873a-1b3a-4110-91d3-a58bd0770df0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Importe percibido"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="0" width="133" height="20" uuid="4af2b938-7fb1-48cd-b3eb-b49d9f16d399"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Especifico/AXT"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="51" height="20" uuid="e516f7b6-f9fa-496c-b98c-b20d9d041dae"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Item"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="655" y="0" width="142" height="20" uuid="762921b5-2ef9-428f-8185-1ebf722e35ac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Importe devengado"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="655" y="0" width="142" height="20" uuid="3b60aff4-af9f-478c-8e2f-fbc6b08d29fb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE_DEVENGADO}==null? new BigDecimal(0) : $F{IMPORTE_DEVENGADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="184" y="0" width="471" height="20" uuid="df94ba9a-68ad-406c-adf9-ccf61fadf057"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="51" y="0" width="133" height="20" uuid="0e91dc9c-8d4d-4a7c-ad0e-dd261a80c389"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="797" y="0" width="163" height="20" uuid="f18db929-b9eb-4169-9d43-0de198dd9798"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE_PERCIBIDO}==null ? new BigDecimal(0) : $F{IMPORTE_PERCIBIDO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="51" height="20" uuid="5a437e54-2d16-4ac8-9ef9-147e19aa6b94"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ITEM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

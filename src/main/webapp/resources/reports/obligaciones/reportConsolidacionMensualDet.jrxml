@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportConsolidacionMensual" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c4762225-223c-423d-b408-29ded7a8e4ea">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="institucion" class="java.lang.String"/>
+	<parameter name="ejercicio" class="java.lang.String"/>
+	<parameter name="sinstitucion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT SK_INSTITUCION,descripcion as institucion,ejercicio,NVL(enero,0.00) as enero,NVL(febrero,0.00) as febrero,NVL(marzo,0.00) as marzo,NVL(abril,0.00) as abril,NVL(mayo,0.00) as mayo,NVL(junio,0.00) as junio,NVL(julio,0.00) as julio,NVL(agosto,0.00) as agosto,NVL(septiembre,0.00) as septiembre,NVL(octubre,0.00) as octubre,NVL(noviembre,0.00) as noviembre,NVL(diciembre,0.00) as diciembre,
+(NVL(to_number(enero),0) + NVL(to_number(febrero),0) + NVL(to_number(marzo),0)  + NVL(to_number(abril),0)  + NVL(to_number(mayo),0)  + NVL(to_number(junio),0)  + NVL(to_number(julio),0) + NVL(to_number(agosto),0)  + NVL(to_number(septiembre),0)  + NVL(to_number(octubre),0)  + NVL(to_number(noviembre),0)  + NVL(to_number(diciembre),0) ) as total
+FROM
+(
+select
+tco.SK_INSTITUCION,
+TO_CHAR(tsd.FECHA_SOLICITUD,'MM') AS mes,
+TO_CHAR(tsd.FECHA_SOLICITUD,'yyyy') AS ejercicio,
+vci.descripcion,
+tsd.MONTO_PAGAR
+from
+TC_OBLIGACION tco,
+TC_DOCUMENTO_RESPALDO_ENC tdr,
+TT_SOLICITUD_PAGO_DOC tsd,
+vtb_ci_institucion vci
+where tco.SK_OBLIGACION=tdr.SK_OBLIGACION and tdr.SK_DOCUMENTO_RESPALDO_ENC=tsd.SK_DOCUMENTO_RESPALDO_ENC AND
+ (  $P{institucion}             IS NULL
+OR $P{institucion}                = tco.sk_institucion)
+  and ($P{ejercicio} is null or tco.ejercicio=  $P{ejercicio})
+AND vci.sk_institucion=tco.sk_institucion
+UNION
+select
+tco.SK_INSTITUCION,
+TO_CHAR(tsr.FECHA_SOLICITUD,'MM') AS mes,
+TO_CHAR(tsr.FECHA_SOLICITUD,'yyyy') AS ejercicio,
+vci.descripcion,
+tsr.MONTO_PAGAR
+from
+TC_OBLIGACION tco,
+TC_DOCUMENTO_RESPALDO_ENC tdr,
+TC_RETENCION tcr,
+TT_SOLICITUD_PAGO_RET TSR,
+vtb_ci_institucion vci
+where tco.SK_OBLIGACION=tdr.SK_OBLIGACION and tdr.SK_DOCUMENTO_RESPALDO_ENC=tcr.SK_DOCUMENTO_RESPALDO_ENC AND
+  TCR.SK_RETENCION=TSR.SK_RETENCION
+and ( $P{institucion}             IS NULL OR       $P{institucion}          = tco.sk_institucion)
+  and ( $P{ejercicio} is null or tco.ejercicio= $P{ejercicio})
+AND vci.sk_institucion=tco.sk_institucion
+)
+PIVOT
+(
+  SUM(MONTO_PAGAR)
+  FOR mes IN ('01' as enero,'02' as febrero,'03' as marzo,'04' as abril,'05' as mayo,'06' as junio,'07' as julio,'08' as agosto,'09' as septiembre,'10' as octubre,'11' as noviembre,'12' as diciembre)
+)
+WHERE
+ (  $P{institucion}           IS NULL
+OR $P{institucion}              = sk_institucion)
+  and ($P{ejercicio} is null or ejercicio=  $P{ejercicio})
+
+ORDER BY descripcion,EJERCICIO]]>
+	</queryString>
+	<field name="SK_INSTITUCION" class="java.math.BigDecimal"/>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="EJERCICIO" class="java.lang.String"/>
+	<field name="ENERO" class="java.math.BigDecimal"/>
+	<field name="FEBRERO" class="java.math.BigDecimal"/>
+	<field name="MARZO" class="java.math.BigDecimal"/>
+	<field name="ABRIL" class="java.math.BigDecimal"/>
+	<field name="MAYO" class="java.math.BigDecimal"/>
+	<field name="JUNIO" class="java.math.BigDecimal"/>
+	<field name="JULIO" class="java.math.BigDecimal"/>
+	<field name="AGOSTO" class="java.math.BigDecimal"/>
+	<field name="SEPTIEMBRE" class="java.math.BigDecimal"/>
+	<field name="OCTUBRE" class="java.math.BigDecimal"/>
+	<field name="NOVIEMBRE" class="java.math.BigDecimal"/>
+	<field name="DICIEMBRE" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="68" height="20" uuid="e533236d-3bb6-468d-b098-ed09594ec631"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sinstitucion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="0" width="35" height="20" uuid="fdeb20b4-e933-4311-b2de-be3825573061"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EJERCICIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="103" y="0" width="35" height="20" uuid="5372f773-72b5-49d2-8e67-4b61f9427298"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENERO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="138" y="0" width="35" height="20" uuid="8aea408d-d67b-42b8-9ae8-ee61c8689997"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FEBRERO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="173" y="0" width="35" height="20" uuid="25746d0e-0ec2-4f1a-be13-f6cc79561b63"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MARZO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="208" y="0" width="35" height="20" uuid="3911f8e1-3aa9-4943-9492-ba08165434ce"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABRIL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="243" y="0" width="35" height="20" uuid="cb9b1980-4ea6-4862-9172-0e71947534ce"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAYO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="278" y="0" width="35" height="20" uuid="f803d5f3-0786-4979-b69f-087e806364f2"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JUNIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="313" y="0" width="35" height="20" uuid="cbeccfdf-ce5c-4fbc-a58e-b7df3f45eb99"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JULIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="348" y="0" width="35" height="20" uuid="ed0e3dbe-80a4-4e3e-8cc3-70ca011b5a86"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AGOSTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="383" y="0" width="35" height="20" uuid="88ef684d-d090-4a71-b3c0-b20e2008e7d8"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEPTIEMBRE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="418" y="0" width="35" height="20" uuid="66090d0e-85b2-4ab2-85f8-ee239312c541"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OCTUBRE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="453" y="0" width="35" height="20" uuid="2ca6728e-6816-4175-953b-3552cabcf45c"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOVIEMBRE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="488" y="0" width="35" height="20" uuid="cc7dfacb-173f-4216-9bbb-7e5e3e71ddc2"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DICIEMBRE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="523" y="0" width="32" height="20" uuid="20f8a5d8-3705-4835-a9dc-b3e8fe07e00f"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="21" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement x="523" y="1" width="32" height="17" uuid="0e2f4892-9573-4d01-88a1-6dbe4e9ac62d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="488" y="1" width="35" height="17" uuid="3540ca73-2d65-4ae8-8fe3-fdb6371066a0"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

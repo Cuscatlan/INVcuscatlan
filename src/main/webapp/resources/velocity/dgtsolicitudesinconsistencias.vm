@@ -1,0 +1,30 @@
+<html>
+		<head></head>
+		<body>
+                    <p><h3>La(s) siguiente(s) solicitud(es) de pago han sido rechazadas por banco comercial.</h3></p>
+                    <p><h3>Por favor, solicitar pago nuevamente:</h3></p>
+                    <br><br>
+			<table>
+				<thead>
+                                    <tr>
+                                        <th>NIT</th>
+                                        <th>No. Documento</th>
+                                        <th>No. Solicitud Pago</th>
+                                        <th>No. Cta Beneficiario</th>
+                                        <th>Fecha Rechazo Banco</th>
+                                        <th>Codigo y Descripcion Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    #foreach($doc in $model.detalle)
+                                        <tr>$doc.Nit</tr>
+                                        <tr>$doc.Documento</tr>
+                                        <tr>$doc.Solicitud</tr>
+                                        <tr>$doc.Cuenta</tr>
+                                        <tr>$doc.Fecha</tr>
+                                        <tr>$doc.Error</tr>
+                                    #end
+                                </tbody>
+			</table>
+		</body>
+</html>	

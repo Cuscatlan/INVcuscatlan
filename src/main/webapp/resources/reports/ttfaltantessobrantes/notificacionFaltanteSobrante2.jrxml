@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notificacionFaltanteSobrante2" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0563697c-6a61-489a-ae82-33628fea40a3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="skfaltantesobrante" class="java.lang.Integer"/>
+	<parameter name="para" class="java.lang.String"/>
+	<parameter name="de" class="java.lang.String"/>
+	<parameter name="cc" class="java.lang.String"/>
+	<parameter name="P_IMG_SV" class="java.awt.Image"/>
+	<queryString>
+		<![CDATA[SELECT FS.*, TC.DESCRIPCION TIPO_FONDO, SC.DESCRIPCION CONCEPTO
+FROM (TT_FALTANTES_SOBRANTES FS JOIN CT_TIPO_FONDO TC ON TC.SK_TIPO_FONDO = FS.SK_TIPO_FONDO)
+JOIN CT_FAL_SOB_CONCEPTOS SC ON FS.SK_FAL_SOB_CONCEPTO=SC.SK_FAL_SOB_CONCEPTO
+WHERE SK_FALTANTES_SOBRANTES=$P{skfaltantesobrante}]]>
+	</queryString>
+	<field name="SK_FALTANTES_SOBRANTES" class="java.math.BigDecimal"/>
+	<field name="SK_REMESA" class="java.math.BigDecimal"/>
+	<field name="SK_TIPO_FONDO" class="java.math.BigDecimal"/>
+	<field name="SK_COLECTURIA_FINALES" class="java.math.BigDecimal"/>
+	<field name="NO_CAJA" class="java.lang.String"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="SK_FAL_SOB_CONCEPTO" class="java.math.BigDecimal"/>
+	<field name="VALOR" class="java.math.BigDecimal"/>
+	<field name="NUMERO_NOTA" class="java.math.BigDecimal"/>
+	<field name="FECHA_NOTIFICACION" class="java.sql.Timestamp"/>
+	<field name="FECHA_SOLUCION" class="java.sql.Timestamp"/>
+	<field name="VALOR_SOLUCION" class="java.math.BigDecimal"/>
+	<field name="SK_INGRESO_ESTADO" class="java.lang.String"/>
+	<field name="S_CREA_USUARIO" class="java.lang.String"/>
+	<field name="F_CREA_FECHA" class="java.sql.Timestamp"/>
+	<field name="S_MOD_USUARIO" class="java.lang.String"/>
+	<field name="F_MOD_FECHA" class="java.sql.Timestamp"/>
+	<field name="OBSERVACIONES" class="java.lang.String"/>
+	<field name="FECHA_DEPOSITO_BANCO" class="java.sql.Timestamp"/>
+	<field name="TIPO_FONDO" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="118" splitType="Stretch">
+			<staticText>
+				<reportElement x="208" y="0" width="385" height="65" uuid="16a1b0e5-a2ac-4cba-a6e5-dc9c04752a43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="40"/>
+				</textElement>
+				<text><![CDATA[MEMORANDO]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="43" y="0" width="84" height="69" uuid="0d6ee11c-5588-4d62-9a13-f3f2b1b5aa89"/>
+				<imageExpression><![CDATA[$P{P_IMG_SV}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="27" y="75" width="127" height="20" uuid="af681436-35fb-4d14-9035-c26ec6ba9e40"/>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="95" width="160" height="20" uuid="5da3dc6c-d0c7-4d13-8b6a-be9d48cd6f4f"/>
+				<text><![CDATA[Direccion General de Tesoreria]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement x="169" y="0" width="100" height="20" uuid="a6f8b6d2-8db5-43ec-9a43-77b362223e3c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[PARA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="20" width="100" height="20" uuid="dafa0f51-dfc2-4315-9e47-8a2d51fe7347"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[DE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="40" width="100" height="20" uuid="e001fae2-11b3-44e6-818c-3ce14bf930b9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[CC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="60" width="100" height="20" uuid="4ad8f76e-b500-4a56-a76c-086c7d87d88a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ASUNTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="80" width="100" height="20" uuid="d9316787-1aea-4a30-bac6-6ffad431c6ed"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="60" width="123" height="20" uuid="835f77b4-766a-4788-a893-ec9e9ed92e88"/>
+				<text><![CDATA[Remesar o elaborar RUI]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="296" y="0" width="263" height="20" uuid="dfd9d6ca-3144-4586-8e1b-e98860a75d5d"/>
+				<textFieldExpression><![CDATA[$P{para}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="296" y="20" width="263" height="20" uuid="6c040c24-3f15-42aa-bd79-0708fa4456f2"/>
+				<textFieldExpression><![CDATA[$P{de}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="296" y="40" width="456" height="20" uuid="7cc91c7c-cfb5-4a47-aba2-af66c1492047"/>
+				<textFieldExpression><![CDATA[$P{cc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="296" y="80" width="263" height="20" uuid="9a1158a6-a4f4-4840-a1df-8b9b4a323942"/>
+				<textFieldExpression><![CDATA[$F{FECHA_NOTIFICACION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="151" splitType="Stretch">
+			<staticText>
+				<reportElement x="54" y="0" width="294" height="20" uuid="1ce1f974-280d-43d2-ace7-ce75061f65a4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Por medio de la presente se le pide Remesar, la cantidad de: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="398" y="0" width="83" height="20" uuid="e6210eb5-bc5c-4629-b6ce-f6c14659047c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[, a la cuenta del:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="20" width="100" height="20" uuid="a55abd9d-41b2-427f-ae16-4a57650676f9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[,en concepto de:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="20" width="52" height="20" uuid="1a4aa893-9231-4060-9e4e-a53485814b99"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[de fecha:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="54" y="59" width="100" height="20" uuid="f201eb3d-a516-46f2-9aa2-fc9907241db5"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="54" y="59" width="100" height="20" uuid="4ed3b70c-1be8-4445-9a26-336048f99837"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="154" y="59" width="265" height="20" uuid="9a94bd75-4640-4649-88c4-a261485a0274"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="154" y="79" width="265" height="20" uuid="dbf0c3d4-3aac-41dd-8e87-d278109a16bb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="54" y="79" width="100" height="20" uuid="8e4df1d7-94c9-4317-9b6f-053abc245313"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="419" y="59" width="100" height="20" uuid="8ded0e93-e829-4be1-b136-b45fc8b0cc20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="419" y="79" width="100" height="20" uuid="2a2693a6-70f5-448e-8de0-f6bdfc861706"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="248" y="59" width="100" height="20" uuid="d5d906fc-4e18-4cb7-8257-1b02272cf08a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Observacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="59" width="100" height="20" uuid="3ed2f5e7-361a-4c64-b1c0-058ca1f832fa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="154" y="79" width="100" height="20" uuid="5d64d365-1ff3-4ada-ba4d-1f6774cd5975"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Faltante de fecha:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="348" y="0" width="50" height="20" uuid="96eda5ca-8703-4846-8429-b76f6aed3c16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="481" y="0" width="271" height="20" uuid="052ac177-3ee4-4253-a9a7-8224d019b0e4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TIPO_FONDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="20" width="142" height="20" uuid="557252b9-c826-4226-b0a5-b7c0ee325497"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="54" y="79" width="100" height="20" uuid="63e195cd-e02c-413d-acf6-92756f149a8e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="79" width="100" height="20" uuid="4d02c130-f1b3-44cd-9271-fc9fcc085275"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="419" y="79" width="100" height="20" uuid="6641464c-22a7-4ed8-ab18-0994a24c1cc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="354" y="79" width="23" height="20" uuid="3aa27fb2-4eb4-4bca-9e9b-677a54e905b1"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[por:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="348" y="20" width="100" height="20" uuid="ee4a67e3-c31b-41e7-8339-70c88529021b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

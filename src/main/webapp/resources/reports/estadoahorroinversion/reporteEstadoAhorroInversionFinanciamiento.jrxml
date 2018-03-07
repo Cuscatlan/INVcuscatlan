@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEstadoAhorroInversionFinanciamiento" pageWidth="800" pageHeight="1100" whenNoDataType="AllSectionsNoDetail" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d27dcb41-a4c2-465b-aad6-ae0adff46f9a">
+	<property name="ireport.zoom" value="1.9487171000000039"/>
+	<property name="ireport.x" value="196"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_FECHA_DESDE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_FECHA_HASTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ENTIDAD" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_IMG_LEFT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_CENTER" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_IMG_MH_RIGHT" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="P_EJERCICIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_MES" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_INSTITUCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_SUB_TIPO_PRESUP" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_PROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_SUB_SPROGRAMA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_OBJE_ESPECIFICO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_SUBCUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_CUENTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_RUBRO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_NIVEL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TIPO_PRESUP_DESC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_ID_CONVENIO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_ORG_FIN" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_UFI" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_YEAR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_VALOR_MONETARIO" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select CODIGO AS NO,
+       DESCRIPCION AS CONCEPTO,
+DECODE($P{P_VALOR_MONETARIO},'ABS',SALDO/1,DECODE($P{P_VALOR_MONETARIO},'MILES',SALDO/1000,DECODE($P{P_VALOR_MONETARIO},'MILLON',SALDO/1000000,SALDO))) AS MONTO
+from SAFI_II_FINANC.TT_ESTADO_AH_INV]]>
+	</queryString>
+	<field name="NO" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="760" height="20" uuid="e2dc6e1a-202a-4723-8957-96117b3492e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO AHORRO - INVERSION - FINANCIAMIENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="182" height="20" uuid="7206949e-3c5b-4ba8-b6b4-5fed276c28d9"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="40" width="64" height="20" uuid="d01e78d1-6f03-493d-8de5-037bfdfcbd58"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="182" y="40" width="188" height="20" uuid="0e53228c-6e0d-4984-9d53-1824d02a82a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_DESDE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="434" y="40" width="139" height="20" uuid="a328bd8d-ddd4-4f7c-afed-c1d2e75aa066"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FECHA_HASTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="760" height="20" uuid="ba9b827b-b574-4e61-be4b-1bb68f3f6ba8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{P_ENTIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="760" height="20" uuid="a5497b7e-de44-4e20-8649-2bdfe401d209"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[En Miles de Dólares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="573" y="40" width="24" height="20" uuid="8f618e64-fe45-46fa-b712-ed34aefa8af9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="597" y="40" width="163" height="20" uuid="7c95febe-460b-4062-83c9-7e2cc22df9f5"/>
+				<textFieldExpression><![CDATA[$P{P_YEAR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="87" height="20" uuid="8a2074b1-76d7-48bd-9497-fbb4ca50d719"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="0" width="547" height="20" uuid="e4af87ac-6d24-414b-8d7a-51517fc8be55"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="634" y="0" width="126" height="20" uuid="c26729b8-a148-4562-875b-3f9650c1ce5b"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="87" height="20" uuid="1ed13988-e582-4cce-be47-3cd111b416b4"/>
+				<textFieldExpression><![CDATA[$F{NO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="87" y="0" width="547" height="20" uuid="6aa3dacc-d9e7-46c1-8c64-e17553aaa0be"/>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="634" y="0" width="126" height="20" uuid="f5e04f31-1e78-4a3d-a751-9dc8f78e9d27"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="48" splitType="Stretch">
+			<image hAlign="Left">
+				<reportElement x="0" y="0" width="126" height="48" uuid="ab63fdb4-1f94-4921-8510-de130c946000"/>
+				<imageExpression><![CDATA[$P{P_IMG_LEFT}]]></imageExpression>
+			</image>
+			<image hAlign="Center">
+				<reportElement x="126" y="0" width="508" height="48" uuid="5fe1a1f9-4bf8-4003-bebb-b878a57fb7f8"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_CENTER}]]></imageExpression>
+			</image>
+			<image hAlign="Right">
+				<reportElement x="634" y="0" width="126" height="48" uuid="ae7e041a-b104-4e16-a33f-85116c4177b3"/>
+				<imageExpression><![CDATA[$P{P_IMG_MH_RIGHT}]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>

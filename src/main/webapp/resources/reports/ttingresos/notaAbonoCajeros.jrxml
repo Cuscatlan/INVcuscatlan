@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaAbonoCajeros" language="groovy" pageWidth="857" pageHeight="595" orientation="Landscape" columnWidth="817" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5dea1ddd-b0f8-46cb-a21f-8be5eefc20e6">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FECHA_INICIO" class="java.lang.String"/>
+	<parameter name="FECHA_FIN" class="java.lang.String"/>
+	<parameter name="P_COLECTURIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_FECHA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TIPO_FONDO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select a.sk_colecturias_finales,
+rownum,
+a.nombre,
+a.denominacion_colecturia,
+b.*,
+(b.efectivo + b.cheques_propios + b.cheques_ajenos) as total_fila
+from
+(select ct_usuarios_colecturia.sk_colecturias_finales,
+ct_colecturias_finales.denominacion_colecturia,
+ct_usuarios_colecturia.no_caja,
+ad_usuario.s_nombres_usuario || ' ' || ad_usuario.s_apellidos_usuario as nombre
+from ct_colecturias_finales, ct_usuarios_colecturia, ad_usuario
+where ct_colecturias_finales.sk_colecturias_finales = ct_usuarios_colecturia.sk_colecturias_finales
+and ct_usuarios_colecturia.c_cod_usuario = ad_usuario.c_cod_usuario
+order by ct_usuarios_colecturia.sk_colecturias_finales) a,
+(select tt_remesas.sk_colecturia_final,
+tt_remesas.num_caja,
+ct_tipo_fondo.descripcion as tipo_fondo,
+tt_remesas.num_remesa || '-' || tt_remesas.ejercicio as num_remesas,
+sum(((billete_100*100) + (billete_50*50) + (billete_20*20) + (billete_10*10) + (billete_5*5) + (billete_1) + (monedas))) as efectivo,
+sum(importe_cheques_propios) as cheques_propios,
+sum(importe_cheques_ajenos) as cheques_ajenos
+from tt_remesas, ct_usuarios_colecturia, ct_tipo_fondo
+where tt_remesas.sk_colecturia_final = ct_usuarios_colecturia.sk_colecturias_finales
+and tt_remesas.sk_tipo_fondo = ct_tipo_fondo.sk_tipo_fondo
+$P!{P_TIPO_FONDO}
+and tt_remesas.num_caja = ct_usuarios_colecturia.no_caja
+$P!{P_FECHA}
+group by tt_remesas.sk_colecturia_final, tt_remesas.num_caja, ct_tipo_fondo.descripcion, tt_remesas.num_remesa || '-' || tt_remesas.ejercicio) b
+where a.sk_colecturias_finales = b.sk_colecturia_final
+and a.no_caja = b.num_caja
+$P!{P_COLECTURIA}
+order by a.sk_colecturias_finales]]>
+	</queryString>
+	<field name="SK_COLECTURIAS_FINALES" class="java.math.BigDecimal"/>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="SK_COLECTURIA_FINAL" class="java.math.BigDecimal"/>
+	<field name="NUM_CAJA" class="java.lang.String"/>
+	<field name="TIPO_FONDO" class="java.lang.String"/>
+	<field name="NUM_REMESAS" class="java.lang.String"/>
+	<field name="EFECTIVO" class="java.math.BigDecimal"/>
+	<field name="CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+	<field name="CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+	<field name="TOTAL_FILA" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_EFECTIVO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{EFECTIVO}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_PROPIO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHEQUES_PROPIOS}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_AJENO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHEQUES_AJENOS}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_TOT" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_FILA}]]></variableExpression>
+	</variable>
+	<group name="grp_colecturia" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{SK_COLECTURIA_FINAL}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="20" width="174" height="20" backcolor="#FFFFFF" uuid="499a356f-6b5c-4347-9d5a-6222bef055cc"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CAJERO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="174" y="20" width="143" height="20" backcolor="#FFFFFF" uuid="e635b5e0-1f6d-49c5-82f8-1557bc689f2f"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TIPO DE FONDO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="317" y="20" width="92" height="20" backcolor="#FFFFFF" uuid="3a40a07c-bdcd-446b-b36d-ee8215c3ee38"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[No. UNICO REMESA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="409" y="20" width="102" height="20" backcolor="#FFFFFF" uuid="03ebe6d3-f362-406f-846a-0924fde6be69"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[EFECTIVO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="511" y="20" width="102" height="20" backcolor="#FFFFFF" uuid="1317af51-07da-4702-abb9-a5f8ddccb9a8"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CHEQUE PROPIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="613" y="20" width="102" height="20" backcolor="#FFFFFF" uuid="aeac00a6-857d-4a5d-8ea9-e37be9d96fa9"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CHEQUE AJENO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="715" y="20" width="102" height="20" backcolor="#FFFFFF" uuid="26b886c1-2350-4c56-8a2a-2b5bb5288839"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="0" width="317" height="20" uuid="3a010124-2317-4d13-aa66-665dc162c66f"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="409" height="20" backcolor="#FFFFFF" uuid="48b8d5b5-d7e1-49d6-b037-649cc17d837a"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement x="409" y="0" width="102" height="20" uuid="c6e0bae9-f9dd-4bac-8025-c1fe29035bfb"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_EFECTIVO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="511" y="0" width="102" height="20" uuid="0c7bf619-4152-4065-b3ad-8271e869ecc8"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_PROPIO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="613" y="0" width="102" height="20" uuid="fc16854f-f094-46e4-be24-644231e45e9f"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_AJENO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="715" y="0" width="102" height="20" uuid="25fd24ff-2cda-4592-a2a0-ed055ef88a97"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_TOT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement x="250" y="0" width="277" height="20" uuid="c49d8212-a2cd-4ec8-b5c6-434bad50d506"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="20" width="277" height="20" uuid="f342903c-08b2-4b24-ae18-948306cbe053"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="60" width="31" height="20" uuid="a489d4d7-3e9d-4d49-a3fb-013f4337844e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[al]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="401" y="60" width="75" height="20" uuid="9c7891bb-ef96-4be0-8c42-09785df24105"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="60" width="75" height="20" uuid="9f3edd2e-3408-40b5-9de9-cff4f94d9a87"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="205" y="40" width="365" height="20" uuid="41edc2ac-f7b7-4d7b-991d-2d3136c0b22e"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE NOTA DE ABONO POR CAJEROS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="3" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="2" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="174" height="25" uuid="8ed0d93c-622f-4c6e-a94d-992b60829962"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="174" y="0" width="143" height="25" uuid="70889702-d73b-4ed4-8e05-9b5fd99abc10"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_FONDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="317" y="0" width="92" height="25" uuid="5f072f49-29eb-4c30-aac0-401dd4f93189"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUM_REMESAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="409" y="0" width="102" height="25" uuid="5d4833b9-1b41-44c9-8075-ce0283639c24"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EFECTIVO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="511" y="0" width="102" height="25" uuid="361fc95a-e2b1-4ee3-8069-0f3e857bcac2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CHEQUES_PROPIOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="613" y="0" width="102" height="25" uuid="f8be7500-08c5-4af4-b544-5ce6a29afe3b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CHEQUES_AJENOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="715" y="0" width="102" height="25" uuid="42a9e87a-c82b-4bc7-ad67-1d6fa98abf62"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_FILA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

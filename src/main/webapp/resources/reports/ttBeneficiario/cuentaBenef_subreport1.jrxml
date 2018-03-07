@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cuentaBenef_subreport1" language="groovy" pageWidth="572" pageHeight="752" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8be76dd7-eba8-4a9e-98d9-1c9260c15c82">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="480"/>
+	<parameter name="skBeneficiarioSubReport" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+SK_BENEFICIARIO CODIGO_BENEF,
+( SELECT CODIGO || '-' || DESCRIPCION FROM CT_CLASE_BENEFICIARIO WHERE SK_CLASE_BENEFICIARIO=BENEF.SK_CLASE_BENEFICIARIO ) CLASE,
+( SELECT AK_TIPO_SECTOR || '-' || DESCRIPCION FROM CT_BENEF_FIN_FUNCION WHERE SK_TIPO_SECTOR=BENEF.SK_TIPO_SECTOR ) TIPO_SECTOR,
+( SELECT AK_TIPO_SECTOR || '-' || DESCRIPCION FROM CT_BENEF_FIN_FUNCION WHERE SK_TIPO_SECTOR=BENEF.SK_TIPO_PERSONA ) TIPO_PERSONA,
+( SELECT AK_TIPO_SECTOR || '-' || DESCRIPCION FROM CT_BENEF_FIN_FUNCION WHERE SK_TIPO_SECTOR=BENEF.SK_CLASIFICACION ) CLASIFICACION,
+( SELECT SK_COD_INS || '-' || DESCRIPCION FROM VTB_CI_INSTITUCION WHERE SK_INSTITUCION=BENEF.SK_INSTITUCION ) INSTITUCION,
+NIT_CIE,
+NOMBRES,
+PRIMER_APELLIDO,
+SEGUNDO_APELLIDO,
+NOMBRE_COMERCIAL,
+SK_CLASIFICACION_MINEC,
+DUI,
+PASAPORTE,
+TELEFONO,
+EMAIL,
+DIRECCION,
+( SELECT CODIGO || '-' || DESCRIPCION FROM VTB_CI_PAIS WHERE ID=BENEF.SK_PAIS ) PAIS,
+( SELECT DESCRIPCION FROM VTB_CI_CLASIF_GEOGRAFICO WHERE SK_CLASIF_GEOGRAFICO=BENEF.SK_DEPARTAMENTO ) DEPARTAMENTO,
+( SELECT DESCRIPCION FROM VTB_CI_CLASIF_GEOGRAFICO WHERE SK_CLASIF_GEOGRAFICO=BENEF.SK_MUNICIPIO ) MUNICIPIO,
+(SELECT NIT FROM TT_APODERADO_BENEF WHERE SK_BENEFICIARIO=BENEF.SK_BENEFICIARIO ) NIT_APODERADO,
+(SELECT NOMBRE FROM TT_APODERADO_BENEF WHERE SK_BENEFICIARIO=BENEF.SK_BENEFICIARIO ) NOMBRE_APODERADO,
+(SELECT CORREO FROM TT_APODERADO_BENEF WHERE SK_BENEFICIARIO=BENEF.SK_BENEFICIARIO ) CORREO_APODERADO,
+(SELECT TELEFONO FROM TT_APODERADO_BENEF WHERE SK_BENEFICIARIO=BENEF.SK_BENEFICIARIO ) TELEFONO_APODERADO,
+(SELECT AK_ESTADO_BENEF || '-' || DESCRIPCION FROM CT_ESTADO_BENEF WHERE SK_ESTADO_BENEF=BENEF.SK_ESTADO_BENEF) ESTADO
+FROM TT_BENEFICIARIO BENEF
+WHERE SK_BENEFICIARIO=$P{skBeneficiarioSubReport}]]>
+	</queryString>
+	<field name="CODIGO_BENEF" class="java.math.BigDecimal"/>
+	<field name="CLASE" class="java.lang.String"/>
+	<field name="TIPO_SECTOR" class="java.lang.String"/>
+	<field name="TIPO_PERSONA" class="java.lang.String"/>
+	<field name="CLASIFICACION" class="java.lang.String"/>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="NIT_CIE" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="PRIMER_APELLIDO" class="java.lang.String"/>
+	<field name="SEGUNDO_APELLIDO" class="java.lang.String"/>
+	<field name="NOMBRE_COMERCIAL" class="java.lang.String"/>
+	<field name="SK_CLASIFICACION_MINEC" class="java.lang.String"/>
+	<field name="DUI" class="java.lang.String"/>
+	<field name="PASAPORTE" class="java.lang.String"/>
+	<field name="TELEFONO" class="java.lang.String"/>
+	<field name="EMAIL" class="java.lang.String"/>
+	<field name="DIRECCION" class="java.lang.String"/>
+	<field name="PAIS" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="MUNICIPIO" class="java.lang.String"/>
+	<field name="NIT_APODERADO" class="java.lang.String"/>
+	<field name="NOMBRE_APODERADO" class="java.lang.String"/>
+	<field name="CORREO_APODERADO" class="java.lang.String"/>
+	<field name="TELEFONO_APODERADO" class="java.lang.String"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="11" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="334" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="20" width="100" height="20" uuid="ed7c5da1-4eef-49fa-8908-53aac4151c15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_BENEF}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="100" height="20" uuid="f1ff1b7f-b4ab-469f-a751-517ec6d48c73"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo de Persona]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="100" width="173" height="20" uuid="e5b6a593-210d-493f-b58a-bb5bb4eae046"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLASIFICACION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="100" height="20" uuid="2aa26d3d-0f7a-4a52-a6c2-e64ae1f6e918"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clasificación]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="120" width="172" height="20" uuid="c3c9af1b-39ab-468d-9d66-acc404d47a47"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="100" height="20" uuid="ba9a7c2a-9ce0-4629-bcc7-321f70c55f80"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Institución Beneficiaria]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="141" width="100" height="20" uuid="32318606-18a6-4107-8655-8f9d1de3dc57"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIT_CIE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="141" width="100" height="20" uuid="4013ea27-cb18-445c-b508-be6bd76daee2"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[NIT o CIE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="160" width="174" height="20" uuid="e6701b87-6086-48d4-9520-eb8c28609552"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="161" width="100" height="20" uuid="c2c9556d-2f21-41c6-ab34-8b62c9dd33cd"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombres]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="102" y="181" width="171" height="20" uuid="63546728-891a-4065-b57e-f10588fdfd1d"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRIMER_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="181" width="100" height="20" uuid="8455e003-d035-4b60-a269-2a66ff763a9f"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Primer Apellido]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="201" width="172" height="20" uuid="c73788d2-3cfb-43ae-b142-edad8f77715b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEGUNDO_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="201" width="100" height="20" uuid="3a0e8df3-d7f4-44df-90a5-aec9a8555205"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Segundo Apellido]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="221" width="172" height="20" uuid="744d1ed4-5796-4ecd-9513-2915788b1636"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_COMERCIAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="221" width="100" height="20" uuid="3670b20a-fe4d-44e0-b242-1fae29aa77c9"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre Comercial]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="241" width="172" height="20" uuid="3ffaf470-1b14-4df1-910b-8d1351d01bb3"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SK_CLASIFICACION_MINEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="241" width="100" height="20" uuid="749be359-2d66-46ca-8928-ad3dc4177fd2"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clasificación MINEC]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="261" width="100" height="20" uuid="ec4eb7cd-e7f6-4330-98bd-4dace1c8a2b6"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DUI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="261" width="100" height="20" uuid="8f55552e-8a14-42e9-b4d8-212a7c627031"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[DUI]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="20" width="100" height="20" uuid="8a470a99-6ba8-48a6-9208-7dd44ecdc42e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PASAPORTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="20" width="100" height="20" uuid="f714500f-39b3-4b05-8418-7d081463f94c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[No. Pasaporte]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="40" width="100" height="20" uuid="d1610985-a7a4-488a-a0f9-9ad1c483bdb3"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="40" width="100" height="20" uuid="dc68acb5-4c47-4b01-a858-ca846fce9f36"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="60" width="100" height="20" uuid="6d197b54-6d22-477e-bcd3-2cd3144083fc"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EMAIL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="60" width="100" height="20" uuid="ff7388e3-5b5c-45c8-95d1-9f9ed5ad44fd"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="80" width="100" height="20" uuid="766b3e07-103a-460c-99d7-ec0d5767d8ad"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="80" width="100" height="20" uuid="48616c94-2de4-4620-9124-26eb3c622585"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="100" width="100" height="20" uuid="e6d844ea-ce02-42df-a643-51242918eaa8"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAIS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="101" width="100" height="20" uuid="6d462f2c-11e4-4791-b17e-ec9c5f6849f6"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[País]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="120" width="100" height="20" uuid="6ae5e126-3db6-4e06-9467-6238bc94cf5a"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="121" width="100" height="20" uuid="02286868-3f78-49e6-9b5d-bbe5a4754a53"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="140" width="100" height="20" uuid="0a0f59e7-e14c-478e-a45e-cc4632f14620"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MUNICIPIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="140" width="100" height="20" uuid="58f9e17a-e643-4c4a-8924-69bae5668f76"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Municipio]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="181" width="100" height="20" uuid="b55b1865-fc7f-4ea0-a315-8286081fcc2e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIT_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="181" width="100" height="20" uuid="d334ae88-1c47-49a5-84c0-7af08fed8589"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="201" width="147" height="20" uuid="f02cc3de-fe57-425e-ae9b-fac5d08a1504"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="201" width="100" height="20" uuid="8e435401-f1f6-4bf9-bc63-5c1bc1eb03a5"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="222" width="100" height="20" uuid="203034bc-180a-4562-bb80-e53fd6ec8a6a"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CORREO_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="221" width="100" height="20" uuid="d5235490-8b53-4cb1-a20b-44d7e7266d1c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Correo]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="241" width="100" height="20" uuid="8674dc72-1d2d-4f73-a463-bcb3c87bcfde"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="242" width="100" height="20" uuid="8e1df6bb-c57b-476c-ab94-91f039c757b5"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="261" width="100" height="20" uuid="8c51aea2-8849-4c17-a9bb-25d8fc9c4f60"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="261" width="100" height="20" uuid="85b9e7eb-bef3-493b-b814-6a80e34b77a4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="161" width="200" height="20" uuid="ff7271c2-80b0-4f3c-bc7c-9f1c73dbd307"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL REPRESENTANTE O APODERADO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="-1" y="0" width="493" height="20" uuid="012d0bb6-278c-43db-95b5-bb77ac679888"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="0" width="201" height="20" uuid="a940093d-c1e6-448a-a2ec-9bd0725747ad"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS GENERALES DEL BENEFICIARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="20" width="100" height="20" uuid="8d19db17-86f4-4823-9320-c96bf2d2b938"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Código Beneficiario]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="40" width="100" height="20" uuid="0dabe5a6-685c-4b26-b239-09cd673d23e7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="40" width="100" height="20" uuid="dc7c392a-a3ac-436b-a809-9f3602f61105"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clase]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="60" width="100" height="20" uuid="7321bccf-f79d-4c95-a472-0eace8e88375"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_SECTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="60" width="100" height="20" uuid="69cd307b-1c8a-4e3f-92f8-3ecc85c04495"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo Sector]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="80" width="100" height="20" uuid="b6bbeae4-c542-4d0c-bcf1-748a0819896c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_PERSONA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="341">
+			<staticText>
+				<reportElement x="12" y="171" width="100" height="20" uuid="90049d1f-2aeb-4293-9188-79337fd9cea4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombres]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="50" width="100" height="20" uuid="7dbd2ba5-9091-4d3d-80dd-3e5299665ff3"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLASE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="170" width="174" height="20" uuid="a3bd4ba7-71b4-451f-82a1-aa80500597d3"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="171" width="200" height="20" uuid="72e44bdd-8f53-40e6-a770-feb8fb459483"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL REPRESENTANTE O APODERADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="90" width="100" height="20" uuid="c849625a-ebee-4daa-98e0-02934f9ceefd"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="191" width="100" height="20" uuid="68fa8451-3660-41e1-a0c5-8d9113727229"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="70" width="100" height="20" uuid="fbcf710a-c91a-40c6-8aac-374d5f4c4b26"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="131" width="100" height="20" uuid="1d5544fe-1fdc-4eda-91c5-eff863d9eefe"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="191" width="100" height="20" uuid="5a8ca330-f246-415e-8bcb-1952f38861eb"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIT_APODERADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="211" width="147" height="20" uuid="dd25f2a2-169e-43e3-a49a-471f4e46176d"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_APODERADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="90" width="100" height="20" uuid="772aed96-0a03-498c-bae5-0dd14f3fd326"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="232" width="100" height="20" uuid="6e8ba4e6-b76c-4028-97a6-7083ba42a0c1"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CORREO_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="130" width="100" height="20" uuid="a0f2ed99-3a59-434c-ac47-f0affea2cbea"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Institución Beneficiaria]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="191" width="171" height="20" uuid="e5223b4f-0fbd-45bd-b203-7a23ba2a31b5"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRIMER_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="70" width="100" height="20" uuid="0a9dd998-3a75-4837-86f1-3e96f42d57a7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo Sector]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="30" width="100" height="20" uuid="2b6915aa-371f-4e05-9250-0a423533b627"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[No. Pasaporte]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="130" width="172" height="20" uuid="1a5d5798-5a9a-434e-a1b7-fa528f53a8f5"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="271" width="100" height="20" uuid="98fd38c2-6de7-4c6d-a264-236a0bca6364"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="110" width="173" height="20" uuid="d7914100-3051-45ae-bf2c-0717200e843a"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLASIFICACION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="110" width="100" height="20" uuid="59e3cfc3-c67b-4df1-aecc-a5ac5ea38054"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clasificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="211" width="100" height="20" uuid="74c164d0-d8b9-473f-978c-a1fb569a2d95"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Segundo Apellido]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="90" width="100" height="20" uuid="95220681-0c4c-4165-91f3-297e4293690b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_PERSONA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="231" width="172" height="20" uuid="9ecc4813-a9ef-49b5-a691-3e190bacb607"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_COMERCIAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="251" width="100" height="20" uuid="b3bc57f1-6f32-4426-828a-c8b9905b78e7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO_APODERADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="30" width="100" height="20" uuid="16e9714d-c63f-48b8-aa67-28c13eeb92cd"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Código Beneficiario]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="130" width="100" height="20" uuid="b2b1f8ed-69c4-43d3-9928-57b091b85a3b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="211" width="100" height="20" uuid="8090c8bf-8cb0-46bc-beed-f06cb3ccf9fb"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="70" width="100" height="20" uuid="111bccbb-ef9e-4399-adae-087862eeae9c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EMAIL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="111" width="100" height="20" uuid="ff1d7626-3198-43e5-b5bd-a26ce51134af"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[País]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="50" width="100" height="20" uuid="66d3eed6-7c25-4a6f-acba-3c89dced35eb"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clase]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="110" width="100" height="20" uuid="1c2a7b56-e218-4e93-92e4-ff6426390fe7"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAIS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="251" width="172" height="20" uuid="a536dbb2-18c2-4ce8-a18e-210e7c625e18"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SK_CLASIFICACION_MINEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="251" width="100" height="20" uuid="0a29d872-ed35-4984-a645-35bbaf0abf5f"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Clasificación MINEC]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="50" width="100" height="20" uuid="1e10ad45-3976-4cd3-a3be-d3ab1093dd8b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="30" width="100" height="20" uuid="7ecf4c80-a5a7-4bf2-9f73-dfb7997308ed"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_BENEF}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="150" width="100" height="20" uuid="935a9fc5-e767-41bb-877e-5b24aaa4673c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Municipio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="231" width="100" height="20" uuid="2bd77aea-efa0-4a49-8610-14bba35fc3db"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Correo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="90" width="100" height="20" uuid="c4439b69-b518-49dd-9360-d5a842dfa665"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tipo de Persona]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="271" width="100" height="20" uuid="605ea0d5-be0c-4432-930b-1b103c38dd8d"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DUI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="30" width="100" height="20" uuid="debc29e0-d1f7-4590-b210-20b2e0e197b8"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PASAPORTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="231" width="100" height="20" uuid="d52bb4ac-14d8-4eb5-b945-07631c9ef70f"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre Comercial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="252" width="100" height="20" uuid="2df0d1ea-7d17-45c9-9352-6b31ef2862fe"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="211" width="172" height="20" uuid="4047ccc5-dfc4-4176-9e4e-3cb78077885e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEGUNDO_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="70" width="100" height="20" uuid="152de512-0f74-49a2-a8ee-385edcd020a1"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_SECTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="191" width="100" height="20" uuid="a2b35768-8845-49e4-9b7f-f6596b935c3e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Primer Apellido]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="151" width="100" height="20" uuid="c531327b-5eee-420c-ba1a-a65157d6f23e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIT_CIE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="150" width="100" height="20" uuid="d5419b24-66cf-42c6-971b-5f2ffdd140ff"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MUNICIPIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="50" width="100" height="20" uuid="9a62fb50-790a-4dda-a107-7a5552556f5e"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="10" y="10" width="493" height="20" uuid="5e7e4659-6bce-42e9-a42d-0e78b3b81002"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="271" width="100" height="20" uuid="ea3a12f2-2d18-4486-a6db-e50db45dfc36"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="151" width="100" height="20" uuid="d9d47121-cf91-4613-afcb-f19574556af5"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[NIT o CIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="271" width="100" height="20" uuid="8790f417-d6c1-4d24-ada6-40139326b663"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[DUI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="10" width="201" height="20" uuid="092bce45-61eb-49c7-ab37-4670f3ba4621"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS GENERALES DEL BENEFICIARIO]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

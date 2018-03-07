@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptSaldosDiariosDirectos" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9c730f2b-6205-4419-97e7-3c1ccea2d2bb">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_F_INI" class="java.lang.String"/>
+	<parameter name="P_USER" class="java.lang.String"/>
+	<parameter name="cadena" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cuenta" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+SALDOS.*,
+SUM(ECD.CREDITO) AS ABONOS,
+SUM(ECD.DEBITO) AS CONCENTRACION
+FROM (
+SELECT
+CUENTAS.*,
+BANCO.DENOMINACION_BANCO,
+EC.SALDO_FINAL,
+EC.SK_ESTADO_CUENTA
+FROM
+(SELECT
+(CASE SK_TIPO_FONDO
+ WHEN 1 THEN 'FONDO GENERAL'
+ WHEN 2 THEN 'FONDOS AGENOS EN CUSTODIA'
+ WHEN 3 THEN 'FONDOS DE ACTIVIDADES ESPECIALES'
+ END) AS CUENTA_OFICIAL
+, SK_BANCO
+,NUMERO_CUENTA
+,DESCRIPCION
+,SK_CUENTAS_OPERATIVAS
+from  ct_cuentas_operativas
+where recaudadora =1
+and tipo_recaudacion='D'
+GROUP BY CUENTA_OFICIAL, SK_BANCO,NUMERO_CUENTA,DESCRIPCION,SK_CUENTAS_OPERATIVAS,SK_TIPO_FONDO) CUENTAS,
+CT_BANCO BANCO,
+TT_ESTADO_CUENTA EC
+WHERE
+CUENTAS.SK_BANCO=BANCO.SK_BANCO(+) AND
+CUENTAS.SK_CUENTAS_OPERATIVAS=EC.SK_CUENTAS_OPERATIVAS(+))SALDOS,
+TT_ESTADO_CUENTA_DET ECD
+WHERE
+SALDOS.SK_ESTADO_CUENTA=ECD.SK_ESTADO_CUENTA(+)
+$P!{cuenta}
+$P!{cadena}
+GROUP BY
+SALDOS.CUENTA_OFICIAL,
+SALDOS.SK_BANCO,
+SALDOS.NUMERO_CUENTA,
+SALDOS.DESCRIPCION,
+SK_CUENTAS_OPERATIVAS,
+SALDOS.DENOMINACION_BANCO,
+SALDOS.SALDO_FINAL,
+SALDOS.SK_ESTADO_CUENTA
+ORDER BY SALDOS.DESCRIPCION ASC]]>
+	</queryString>
+	<field name="CUENTA_OFICIAL" class="java.lang.String"/>
+	<field name="SK_BANCO" class="java.math.BigDecimal"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="SK_CUENTAS_OPERATIVAS" class="java.math.BigDecimal"/>
+	<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+	<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	<field name="SK_ESTADO_CUENTA" class="java.math.BigDecimal"/>
+	<field name="ABONOS" class="java.math.BigDecimal"/>
+	<field name="CONCENTRACION" class="java.math.BigDecimal"/>
+	<variable name="totalSaldoDiaAnterior" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_FINAL}-$F{ABONOS}]]></variableExpression>
+	</variable>
+	<variable name="totalAbonos" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ABONOS}]]></variableExpression>
+	</variable>
+	<variable name="totalSaldos" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_FINAL}+$F{ABONOS}]]></variableExpression>
+	</variable>
+	<variable name="variable1" class="java.lang.String"/>
+	<variable name="totaoConcent" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CONCENTRACION}]]></variableExpression>
+	</variable>
+	<variable name="totalNuevoSaldo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{SALDO_FINAL}+$F{ABONOS})-$F{CONCENTRACION}]]></variableExpression>
+	</variable>
+	<group name="RECAUDACION_DIRECTA">
+		<groupExpression><![CDATA[$F{CUENTA_OFICIAL}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="0" y="0" width="752" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="448e1fa2-4d30-4fb3-afee-fccf46aa78c0"/>
+					<box>
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CUENTA_OFICIAL}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="7"/>
+		</groupFooter>
+	</group>
+	<group name="BANCOS">
+		<groupExpression><![CDATA[$F{DENOMINACION_BANCO}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField>
+					<reportElement x="0" y="0" width="752" height="21" uuid="900a37e3-9634-4100-9367-5a823a93fcb5"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{DENOMINACION_BANCO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="11"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="752" height="20" uuid="12553b44-44b7-4e6c-8aa3-ee4d163a9cc7"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="752" height="20" uuid="24898a45-c185-44c5-ab97-f5953814c6a6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECAUDACION DIRECTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="752" height="20" uuid="55f629ca-ddd7-42fe-a2f5-bc89dfc2e1b5"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="752" height="20" uuid="3de64f55-4d71-40dd-b4f6-602bc0613841"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE SALDOS DIARIOS ]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="333" y="80" width="100" height="20" uuid="c7e27156-9130-453a-86f6-a6c0bdcecab9"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_F_INI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="52" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="21" width="60" height="31" backcolor="#FFFFFF" uuid="aa8e03a2-c11b-4d7b-a889-314c0b2800ce"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="21" width="140" height="31" backcolor="#FFFFFF" uuid="a9a6be94-1736-43c3-b8f4-d0c803343f43"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="200" y="21" width="115" height="31" backcolor="#FFFFFF" uuid="e755803e-b21d-4445-8199-bbacbcb7b70c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO DIA ANTERIOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="315" y="21" width="100" height="31" backcolor="#FFFFFF" uuid="a700ae92-6da9-472d-938d-3d1256c2266f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ABONOS DEL DIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="415" y="21" width="100" height="31" backcolor="#FFFFFF" uuid="cf90a813-69f0-458f-a0a9-ab62642039c4"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="515" y="21" width="100" height="31" backcolor="#FFFFFF" uuid="1a4f4fbe-8f6e-43d8-905a-dcd99294d936"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCENTRACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="615" y="21" width="137" height="31" backcolor="#FFFFFF" uuid="ef927105-2087-47b0-bfe2-0f10b3382ceb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUEVO SALDO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="60" y="0" width="140" height="22" uuid="2677e0f5-f567-4f70-8030-bb31e27bd91c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="200" y="0" width="115" height="22" uuid="80274daa-3f75-47d1-87a0-4031a7d3d6ae"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_FINAL}-$F{ABONOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="315" y="0" width="100" height="22" uuid="94b12098-632d-4d3a-a637-a86ac690c3d5"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ABONOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="415" y="0" width="100" height="22" uuid="8e025d7e-51f2-457a-8d47-0e0c089a256d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_FINAL}+$F{ABONOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="515" y="0" width="100" height="22" uuid="f6a24f27-9ab5-492d-b065-89f268b7999f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONCENTRACION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="615" y="0" width="137" height="22" uuid="83d452e8-52c1-4548-9f2b-f11c66114845"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{SALDO_FINAL}+$F{ABONOS})-$F{CONCENTRACION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="22" uuid="3996698d-4068-45d3-9b18-27929c73bf29"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="656" y="0" width="59" height="20" uuid="1f0b5168-ade5-4ece-a01b-b4b1c7ca26e5"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4a0260d2-e55b-45ba-a271-547174b5eebd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENERADO POR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="715" y="0" width="37" height="20" uuid="a3a8dbe7-7128-4cd3-9e6d-126ef64439b9"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="303" height="20" uuid="e7d38644-337c-4a22-b8f1-f4811916e8e1"/>
+				<textFieldExpression><![CDATA[$P{P_USER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="84" y="0" width="100" height="20" uuid="b5206c5b-2998-45cf-9869-37067fd66936"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="115" height="20" uuid="32d2a1b4-5a03-4de4-b54a-45e7312154b4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalSaldoDiaAnterior}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="315" y="0" width="100" height="20" uuid="f5e88251-8160-435c-bb91-ab5ba039c0e3"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalAbonos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="415" y="0" width="100" height="20" uuid="f9fd8d2a-249e-40e7-ac8b-1936868be84a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalSaldos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="515" y="0" width="100" height="20" uuid="a9139e17-a3d4-46f7-b79c-30b59799e698"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totaoConcent}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="615" y="0" width="137" height="20" uuid="31cf43ff-c7e0-499a-852f-2e05dec0e200"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalNuevoSaldo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ttcui" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="027632c6-6380-4bf3-8cda-8e0bfcac8c39">
+	<property name="ireport.zoom" value="3.4522712143931042"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="skcui" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Users Stuff\\Lokoloroko\\Documents\\NetBeansProjects\\safi\\src\\main\\webapp\\resources\\reports\\ttcui\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select CUI.SK_CUI,CUI.FECHA_INGRESO, INSTITUCION.DESCRIPCION INSTITUCION, CUI.FECHA_REGISTRO, CUI.EJERCICIO, CUI.SIGADE,
+TINGRESO.DESCRIPCION TIPO_INGRESO, CUENTA.DESCRIPCION CUENTA, COLECTURIAS.DENOMINACION_COLECTURIA, LIBRETA.DESCRIPCION LIBRETA,
+BANCO.DENOMINACION_BANCO BANCO, FUENTE.DESCRIPCION FUENTE, ESTADO.DESCRIPCION ESTADO
+from TT_CUI CUI
+left join VTB_CI_INSTITUCION INSTITUCION ON CUI.SK_INSTITUCION = INSTITUCION.SK_INSTITUCION
+left join CT_COLECTURIAS_FINALES COLECTURIAS ON CUI.SK_COLECUTURIA_FINAL = COLECTURIAS.SK_COLECTURIAS_FINALES
+left join CT_BANCO BANCO ON CUI.SK_BANCO = BANCO.SK_BANCO
+left join CT_SUCURSAL SUCURSAL ON CUI.SK_SUCURSAL = SUCURSAL.SK_SUCURSAL
+left join CT_TIPOS_INGRESO TINGRESO ON CUI.SK_TIPO_INGRESO = TINGRESO.SK_TIPO_INGRESO
+left join CT_CUENTAS_OPERATIVAS CUENTA ON CUI.SK_CUENTA_OPERATIVA = CUENTA.SK_CUENTAS_OPERATIVAS
+left join CT_CUENTAS_OPERATIVAS LIBRETA ON CUI.SK_CUENTA_OPERATIVA = LIBRETA.SK_CUENTAS_OPERATIVAS
+left join VTB_CI_FUENTE_FINANC FUENTE ON CUI.SK_FUENTE_FINANC = FUENTE.SK_FUENTE_FINANC
+left join CT_INGRESOS_ESTADOS ESTADO ON CUI.SK_INGRESO_ESTADO = ESTADO.SK_INGRESO_ESTADO
+WHERE CUI.SK_CUI = $P{skcui}]]>
+	</queryString>
+	<field name="SK_CUI" class="java.math.BigDecimal"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="FECHA_REGISTRO" class="java.sql.Timestamp"/>
+	<field name="EJERCICIO" class="java.math.BigDecimal"/>
+	<field name="SIGADE" class="java.lang.String"/>
+	<field name="TIPO_INGRESO" class="java.lang.String"/>
+	<field name="CUENTA" class="java.lang.String"/>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="LIBRETA" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="FUENTE" class="java.lang.String"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="180" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#79C7F3" uuid="184c5b94-cb0e-42c4-92bd-504023034923"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Comprobante Único de Ingresos]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="20" width="180" height="20" uuid="5b06a063-cc33-4ac0-bb93-ad7e7a8ad508"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SK_CUI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="80" height="20" uuid="f48ceb0c-d4f3-44ad-baaf-cec87c09c251"/>
+				<text><![CDATA[Número  CUI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="80" height="20" uuid="d487fd16-42dd-46c3-924e-69d3b77a45e9"/>
+				<text><![CDATA[Institución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="80" height="20" uuid="dfe1974d-3b9e-47fc-a2cd-c059e7e5c3b8"/>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="80" height="20" uuid="edc76335-254e-422e-b47b-54424c00802a"/>
+				<text><![CDATA[Tipo de Ingreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="80" height="20" uuid="738df14b-16e6-4cb4-ad9b-29e5a27be0d1"/>
+				<text><![CDATA[Colecturia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="120" width="80" height="20" uuid="d076413d-b6a5-4922-83de-4ca7871cdea0"/>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="20" width="120" height="20" uuid="daad0ea8-f6f3-4c32-996c-cb1f204e782f"/>
+				<text><![CDATA[Fecha de ingreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="40" width="120" height="20" uuid="d0e25bdd-cdc7-428a-aa0d-ccb58e64a0b1"/>
+				<text><![CDATA[Fecha de Registro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="60" width="120" height="20" uuid="cb661f77-5503-4188-a33f-8d8e6a5db944"/>
+				<text><![CDATA[SIGADE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="80" width="120" height="20" uuid="96aa145d-29e1-4754-bb06-f9146485d8af"/>
+				<text><![CDATA[Cuenta Recaudadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="100" width="120" height="20" uuid="427e6f5c-fb7b-4862-9c7c-80c27dee035d"/>
+				<text><![CDATA[Libreta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="120" width="120" height="20" uuid="5e7a7dfa-b9e4-44a3-8674-d2b37e250b90"/>
+				<text><![CDATA[Fuente de Financiamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="140" width="120" height="20" uuid="ea23b96d-7ed5-4a49-b7e3-c4f2d56e90e4"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="20" width="175" height="20" uuid="1a76dc3c-9880-4259-a619-2073ed058034"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_INGRESO})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="40" width="175" height="20" uuid="1d6c0c21-ee93-4fcf-a9c5-23a49ad60459"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_REGISTRO})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="60" width="180" height="20" uuid="8e905945-27e8-4202-aefb-2fbbd751b99b"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{EJERCICIO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="60" width="175" height="20" uuid="32127c69-b348-48d3-b0cd-5e8bc092607d"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SIGADE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="40" width="180" height="20" uuid="067c4994-be12-42ae-849f-7238ba74bbd7"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="80" width="180" height="20" uuid="38a0a9f1-8a4d-4884-aff2-eda61f50b034"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TIPO_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="80" width="175" height="20" uuid="be863c25-eabb-4037-b304-70d43aa5c70f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="100" width="175" height="20" uuid="4eb57db3-f470-4b8c-8d7c-b9fe6f770b9c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LIBRETA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="100" width="180" height="20" uuid="6df4f696-4c53-408c-9f4e-b475bcf3c90c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="120" width="180" height="20" uuid="167f749c-f415-4144-9596-8b401e5f5f26"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="120" width="175" height="20" uuid="4c7e2a7e-777a-4bb9-8bf4-efa8acfa1963"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FUENTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="140" width="175" height="20" uuid="b8f0d3da-b085-4ecd-8210-e4aec2402dff"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="100">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="100" uuid="c2a4bc05-96e0-488f-9ef9-84063f4a109e"/>
+				<subreportParameter name="skcui">
+					<subreportParameterExpression><![CDATA[$P{skcui}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ttcui_det.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

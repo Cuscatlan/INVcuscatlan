@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2017-05-17T13:35:19 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_tt_estado_cuenta" pageWidth="800" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="800" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c8f72adb-ae64-4bc5-a9ec-3b201dbfcff9">
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="170"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="stylecontent" mode="Opaque" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<style name="styleborder" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<subDataset name="detalle" uuid="dfa66e75-8332-4acd-8382-cb2b91bdd49c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+		<queryString>
+			<![CDATA[select 
+cuenta.DESCRIPCION ,
+ectadet.NO_TRANSACCION ,
+TRUNC(ectadet.FECHA_TRANSACCION) FECHA_TRANSACCION,
+ectadet.NO_DOCUMENTO ,
+ectadet.CONCEPTO ,
+ectadet.SALDO_INICIAL ,
+ectadet.DEBITO ,
+ectadet.CREDITO ,
+SALDO_FINAL from tt_estado_cuenta_det ectadet
+left join ct_cuentas_operativas cuenta on ectadet.SK_CUENTA_OPERATIVA_ORIGEN = cuenta.sk_cuentas_operativas
+where sk_estado_cuenta = 1]]>
+		</queryString>
+		<field name="DESCRIPCION" class="java.lang.String"/>
+		<field name="NO_TRANSACCION" class="java.math.BigDecimal"/>
+		<field name="FECHA_TRANSACCION" class="java.sql.Timestamp"/>
+		<field name="NO_DOCUMENTO" class="java.lang.String"/>
+		<field name="CONCEPTO" class="java.lang.String"/>
+		<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+		<field name="DEBITO" class="java.math.BigDecimal"/>
+		<field name="CREDITO" class="java.math.BigDecimal"/>
+		<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="p_sk_estado_cuenta" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_desde" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_hasta" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMG_SV" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="cuentaOpe" class="java.lang.Integer"/>
+	<parameter name="operacion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 
+cuenta.DESCRIPCION ,
+ectadet.NO_TRANSACCION ,
+TRUNC(ectadet.FECHA_TRANSACCION) FECHA_TRANSACCION,
+ectadet.NO_DOCUMENTO ,
+ectadet.CONCEPTO ,
+ectadet.SALDO_INICIAL ,
+ectadet.DEBITO ,
+ectadet.CREDITO ,
+SALDO_FINAL from tt_estado_cuenta_det ectadet
+left join ct_cuentas_operativas cuenta on ectadet.SK_CUENTA_OPERATIVA_ORIGEN = cuenta.sk_cuentas_operativas
+where sk_estado_cuenta =  $P{p_sk_estado_cuenta}
+and cuenta.sk_cuentas_operativas =  $P{cuentaOpe} 
+and ectadet.operacion =  $P{operacion} 
+and ectadet.sk_estado_cuenta_det NOT IN (select sk_estado_cuenta_det from tt_conciliacion_bancaria_det where sk_conciliacion_estado = 'CON')]]>
+	</queryString>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="NO_TRANSACCION" class="java.math.BigDecimal"/>
+	<field name="FECHA_TRANSACCION" class="java.sql.Timestamp"/>
+	<field name="NO_DOCUMENTO" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+	<field name="DEBITO" class="java.math.BigDecimal"/>
+	<field name="CREDITO" class="java.math.BigDecimal"/>
+	<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	<variable name="SALDO_INICIAL1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_INICIAL}]]></variableExpression>
+	</variable>
+	<variable name="DEBITO1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEBITO}]]></variableExpression>
+	</variable>
+	<variable name="CREDITO1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_FINAL1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SALDO_FINAL}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="70" height="20" backcolor="#BECFF1" uuid="d326822e-c943-45e1-a501-2711d7d59c4c"/>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NO_TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="0" width="70" height="20" backcolor="#BECFF1" uuid="5210f1b3-6d91-48dd-a21b-f49255e55e97">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_TRANSACCION})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="70" height="20" backcolor="#BECFF1" uuid="5567fe9e-be84-4924-b75c-bc3836897708">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NO_DOCUMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="210" y="0" width="110" height="20" backcolor="#BECFF1" uuid="608d3c10-b81a-4135-9272-5ca0076dc3ee">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="0" width="149" height="20" backcolor="#BECFF1" uuid="3c2174a2-e425-4833-83a3-b262d4577a9d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="469" y="0" width="70" height="20" backcolor="#BECFF1" uuid="e168a19f-bcb5-43f1-b8c9-9556534d9f4e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ " +$F{SALDO_INICIAL}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="539" y="0" width="70" height="20" backcolor="#BECFF1" uuid="d56e42fe-db4d-47c8-9173-bbf40bdb43fe">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ " +$F{DEBITO}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="609" y="0" width="70" height="20" backcolor="#BECFF1" uuid="365fef40-e536-454f-b81e-4dfa23378435">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ " +$F{CREDITO}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="679" y="0" width="70" height="20" backcolor="#BECFF1" uuid="52c13178-d845-43b5-b0cc-e75713a87903">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ " +$F{SALDO_FINAL}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="14">
+			<staticText>
+				<reportElement style="stylecontent" mode="Opaque" x="320" y="0" width="149" height="14" uuid="bdfc9c76-0cdf-410b-8162-741fcf238882"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="470" y="0" width="69" height="14" backcolor="#BECFF1" uuid="60cf2f24-9542-4266-b1e9-9d99227bafcb"/>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{SALDO_INICIAL1} == null)? "$ 0" : "$ " +$V{SALDO_INICIAL1}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="540" y="0" width="69" height="14" backcolor="#BECFF1" uuid="4bd06e8f-dffb-4275-9c6d-872383456b57"/>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{DEBITO1} == null)? "$ 0" : "$ " +$V{DEBITO1}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="609" y="0" width="70" height="14" backcolor="#BECFF1" uuid="3f65d4ab-2186-41e2-8f25-a36053cdc603"/>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{CREDITO1} == null)? "$ 0" : "$ " +$V{CREDITO1}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="679" y="0" width="70" height="14" backcolor="#BECFF1" uuid="f50ea7a1-6826-47d4-a120-a80b1000c4ef">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{SALDO_FINAL1} == null)? "$ 0" : "$ " +$V{SALDO_FINAL1}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2017-05-08T15:31:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_tt_conciliacion_bancaria" pageWidth="800" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8f72adb-ae64-4bc5-a9ec-3b201dbfcff9">
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="170"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="stylecontent" mode="Opaque" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<style name="styleborder" forecolor="#000000" backcolor="#BECFF1">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<leftPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<bottomPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+			<rightPen lineWidth="1.25" lineStyle="Solid" lineColor="#0099CC"/>
+		</box>
+	</style>
+	<subDataset name="detalle" uuid="dfa66e75-8332-4acd-8382-cb2b91bdd49c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAFI_II_FINANC"/>
+		<queryString>
+			<![CDATA[select 
+cuenta.DESCRIPCION ,
+ectadet.NO_TRANSACCION ,
+TRUNC(ectadet.FECHA_TRANSACCION) FECHA_TRANSACCION,
+ectadet.NO_DOCUMENTO ,
+ectadet.CONCEPTO ,
+ectadet.SALDO_INICIAL ,
+ectadet.DEBITO ,
+ectadet.CREDITO ,
+SALDO_FINAL from tt_estado_cuenta_det ectadet
+left join ct_cuentas_operativas cuenta on ectadet.SK_CUENTA_OPERATIVA_ORIGEN = cuenta.sk_cuentas_operativas
+where sk_estado_cuenta = 1]]>
+		</queryString>
+		<field name="DESCRIPCION" class="java.lang.String"/>
+		<field name="NO_TRANSACCION" class="java.math.BigDecimal"/>
+		<field name="FECHA_TRANSACCION" class="java.sql.Timestamp"/>
+		<field name="NO_DOCUMENTO" class="java.lang.String"/>
+		<field name="CONCEPTO" class="java.lang.String"/>
+		<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+		<field name="DEBITO" class="java.math.BigDecimal"/>
+		<field name="CREDITO" class="java.math.BigDecimal"/>
+		<field name="SALDO_FINAL" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="p_sk_conciliacion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_desde" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_hasta" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMG_SV" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="p_subreport" class="java.lang.String"/>
+	<parameter name="p_subreport_2" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 
+institucion.descripcion institucion,
+unidadFinanc.descripcion unidad_financiera,
+banco.DENOMINACION_BANCO,
+cuenta.NUMERO_CUENTA,
+cuenta.DESCRIPCION cuenta_nombre,
+tipoCuenta.descripcion tipo_cuenta,
+conban.tipo_operacion,
+conban.no_conciliacion,
+conban.fecha_carga,
+conban.tipo_conciliacion,
+(SELECT sum(debito) from tt_libro_banco_det where sk_libro_banco = conban.sk_libro_banco  ) debito_lb,
+(SELECT sum(credito) from tt_libro_banco_det where sk_libro_banco = conban.sk_libro_banco ) credito_lb,
+(SELECT sum(debito) from tt_estado_cuenta_det where sk_estado_cuenta = conban.sk_estado_cuenta  ) debito_ec,
+(SELECT sum(credito) from tt_estado_cuenta_det where sk_estado_cuenta = conban.sk_estado_cuenta ) credito_ec
+from tt_conciliacion_bancaria conban
+join tt_libro_banco libban on conban.sk_libro_banco = libban.sk_libro_banco
+join ct_cuentas_operativas cuenta on libban.SK_CUENTAS_OPERATIVAS = cuenta.SK_CUENTAS_OPERATIVAS
+join ct_tipo_cuenta tipoCuenta on cuenta.sk_tipo_cuenta = tipoCuenta.sk_tipo_cuenta
+join VTB_CI_INSTITUCION institucion on cuenta.SK_INSTITUCION = institucion.SK_INSTITUCION
+join VTB_CI_UNIDAD_FINANC unidadFinanc on cuenta.sk_unidad_financ = unidadFinanc.sk_unidad_financ
+join ct_banco banco on cuenta.sk_banco = banco.sk_banco
+join ct_tipo_banco tipoBanco on banco.sk_tipo_banco = tipoBanco.sk_tipo_banco
+where conban.sk_conciliacion =  $P{p_sk_conciliacion}]]>
+	</queryString>
+	<field name="INSTITUCION" class="java.lang.String"/>
+	<field name="UNIDAD_FINANCIERA" class="java.lang.String"/>
+	<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="CUENTA_NOMBRE" class="java.lang.String"/>
+	<field name="TIPO_CUENTA" class="java.lang.String"/>
+	<field name="TIPO_OPERACION" class="java.lang.String"/>
+	<field name="NO_CONCILIACION" class="java.math.BigDecimal"/>
+	<field name="FECHA_CARGA" class="java.sql.Timestamp"/>
+	<field name="TIPO_CONCILIACION" class="java.lang.String"/>
+	<field name="DEBITO_LB" class="java.math.BigDecimal"/>
+	<field name="CREDITO_LB" class="java.math.BigDecimal"/>
+	<field name="DEBITO_EC" class="java.math.BigDecimal"/>
+	<field name="CREDITO_EC" class="java.math.BigDecimal"/>
+	<pageHeader>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement style="stylecontent" mode="Transparent" x="226" y="55" width="251" height="16" uuid="9feb78b9-abf5-4d44-a7b8-7dab44b47f74"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE CONCILIACION BANCARIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="13" width="251" height="21" uuid="82a7ab66-98eb-4693-8a69-0390997bdcb8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="34" width="251" height="21" uuid="1eff37e9-5a61-47c9-8504-176c69a77a6b"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección General Tesorería]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="2" width="84" height="69" uuid="61aaca9b-93c6-48f6-84c0-1af551b402ca"/>
+				<imageExpression><![CDATA[$P{P_IMG_SV}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="235" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="360" y="64" width="80" height="14" uuid="a2fced04-0509-46bd-9580-83945319f413">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Tipo  de Cuenta]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="440" y="64" width="239" height="14" uuid="8ad2fd19-8a46-4751-a320-2bac6d5c8e92">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{TIPO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="36" width="80" height="14" uuid="2a440f43-4979-4832-9e8c-e9166b0d1692">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="36" width="258" height="14" uuid="3a8745d6-2bb9-4d51-a5ae-0bbffe6d875b">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DENOMINACION_BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="36" width="80" height="14" uuid="7fc49b61-f424-4783-9036-d6e237cf8ddc">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cta. Bancaria:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="440" y="36" width="239" height="14" uuid="c95b0a79-cd3d-4234-a24f-cb3c403582f4">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="64" width="80" height="14" uuid="8720612e-4e24-4dcf-8241-d3a6785818c6">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Nombre Cta.:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="64" width="258" height="14" uuid="eb15a23e-16ca-4fea-b470-f64e91a7d49f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CUENTA_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="92" width="79" height="14" uuid="e9e1c173-5f78-4850-bafa-c113fa5784c6">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[No. Conciliacion:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="439" y="92" width="241" height="14" uuid="693e503e-0882-4686-ac17-39c74939ca39">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NO_CONCILIACION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="stylecontent" mode="Opaque" x="310" y="150" width="437" height="14" uuid="2d401f95-75b0-4b89-8a9a-a89187ad83c8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ Saldos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="styleborder" x="0" y="164" width="310" height="14" uuid="87d24a20-6495-44dc-9cf4-3e65f52fd74c"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Creditos Libro Banco:]]></text>
+			</staticText>
+			<textField pattern="#,##0.###" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="310" y="164" width="437" height="14" uuid="73a3d4eb-e811-40dd-84f8-e6a7b907f228"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{CREDITO_LB}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="styleborder" x="0" y="178" width="310" height="14" uuid="3ebc9fcb-6158-4c6a-ae83-b3a123e6d9eb"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Debitos Libro Banco:]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="310" y="178" width="437" height="14" uuid="2b67156b-a7b6-4025-b4f5-e148f3bfd1d3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{DEBITO_LB}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="styleborder" x="0" y="192" width="310" height="14" uuid="ecff7b24-196d-4c58-986e-36d1012fac20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Creditos Estado de Cuenta:]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="310" y="192" width="437" height="14" uuid="218f443a-17a3-496d-a2d1-8289f93c13d9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{CREDITO_EC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="styleborder" x="0" y="206" width="310" height="14" uuid="a2816883-fca4-4e23-9f37-42d5f23d21d3"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Debitos Estado de Cuenta:]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="310" y="206" width="437" height="14" uuid="3e948cf6-4d79-49de-bd6e-8e0f9ab92ec5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{DEBITO_EC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="stylecontent" mode="Opaque" x="0" y="150" width="310" height="14" uuid="ce09f57c-9bb6-4093-8c05-3b00b406a42c"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ Detalle de Saldos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="8" width="80" height="14" uuid="1aa16cb9-61b8-402e-9cc1-3b45ba38502d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Institucion:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="8" width="258" height="14" uuid="12d80d99-78a3-4877-87da-4d74354c2b01">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="8" width="80" height="14" uuid="caee1be4-8108-4a84-a121-1026644eab21">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[UFI:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="440" y="8" width="239" height="14" uuid="f70ea25b-9c04-4652-9063-7f6d434dbc71">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{UNIDAD_FINANCIERA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="92" width="80" height="14" uuid="99a9d8f2-c359-410b-958a-d19e4ddd35ff">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Operacion:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="92" width="258" height="14" uuid="8b1e1612-c64a-463e-8d6d-4f4d4c5f57c9">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[($F{TIPO_OPERACION}.equals("C"))? "CONCILIACION" : "DESCONCILIACION"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="439" y="120" width="241" height="14" uuid="af884e25-40bc-417b-a426-fc45b71bb9f8">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[($F{TIPO_CONCILIACION}.equals("A"))? "AUTOMATICA" : "MANUAL"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="80" height="14" uuid="5feac4c4-ac35-4929-8739-3509fe70c6ac">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha Con/Des:	]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="80" y="120" width="258" height="14" uuid="3b0a60c5-4355-4a93-b494-dc5e4d4f4d17">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{FECHA_CARGA})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="120" width="79" height="14" uuid="8305b47d-ade3-4c01-8ade-c65c654aec25">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Tipo Conciliacion:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="749" height="34" uuid="ce436a76-a849-4c20-abba-1c33b4a38e0c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="fecha_desde">
+					<subreportParameterExpression><![CDATA[$P{fecha_desde}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha_hasta">
+					<subreportParameterExpression><![CDATA[$P{fecha_hasta}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="P_IMG_SV">
+					<subreportParameterExpression><![CDATA[$P{P_IMG_SV}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_sk_conciliacion">
+					<subreportParameterExpression><![CDATA[$P{p_sk_conciliacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{p_subreport}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="749" height="34" uuid="1b27a508-83f0-46f5-97ce-06f3f9614d07">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="fecha_desde">
+					<subreportParameterExpression><![CDATA[$P{fecha_desde}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha_hasta">
+					<subreportParameterExpression><![CDATA[$P{fecha_hasta}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="P_IMG_SV">
+					<subreportParameterExpression><![CDATA[$P{P_IMG_SV}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_sk_conciliacion">
+					<subreportParameterExpression><![CDATA[$P{p_sk_conciliacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{p_subreport_2}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>
