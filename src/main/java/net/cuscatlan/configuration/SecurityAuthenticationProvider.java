@@ -36,8 +36,8 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 
              SecurityUserDetails securityUser = new SecurityUserDetails();
 
-             //securityUser.setUsuario(userInfo.getIdEmpleado());
-             //securityUser.setNombre(userInfo.getNombreEmpleado());
+             securityUser.setUsuario(userInfo.getCorreousuario());
+             securityUser.setNombre(userInfo.getClaveusuario());
              return securityUser;
          } catch (Exception e) {
              e.printStackTrace();
