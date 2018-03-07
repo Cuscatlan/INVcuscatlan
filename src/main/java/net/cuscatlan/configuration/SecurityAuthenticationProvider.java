@@ -18,11 +18,17 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
      @Autowired
     InvusuarioRepository nombreclaseRepository;
 
-     public SecurityUserDetails dbAuthentication(String user) throws BadCredentialsException {
+     public SecurityUserDetails dbAuthentication(String user, String password) throws BadCredentialsException {
          System.out.println("entre ala autenticaci�n");
          try {
             Invusuario userInfo = nombreclaseRepository.findBynombre(user.trim());
-//             Object userInfo=null;
+
+             //Object userInfo=null;
+            //prueba
+            if (userInfo.getClaveusuario().trim().compareTo(password.trim()) != 0) {
+                throw new BadCredentialsException("Usuario o contrase�a invalido");
+            }
+
 
              if (userInfo == null) {
                  throw new BadCredentialsException("Usuario o contrase�a invalido");
@@ -49,7 +55,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
      public Authentication authenticate(Authentication authentication) throws AuthenticationException {
          String username = authentication.getName();
          String password = (String) authentication.getCredentials();
-         SecurityUserDetails user = dbAuthentication(username);
+         SecurityUserDetails user = dbAuthentication(username, password);
          user.setAuthorities(user.getAuthorities());
          Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
          return new UsernamePasswordAuthenticationToken(user, password, authorities);
